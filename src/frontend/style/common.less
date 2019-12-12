@@ -1,0 +1,65 @@
+@import (reference) './variables';
+
+.Scrollable {
+    max-height: 100%;
+    overflow: auto;
+}
+
+.CommonPage {
+    padding: 10px;
+}
+
+.Box {
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: lighten(@secondary-color, 65%);
+}
+
+.BlockButton {
+    width: 100%;
+    padding: 10px;
+}
+
+.Mb01 { margin-bottom: 0.5rem; }
+.Mb02 { margin-bottom: 1rem; }
+.Mb03 { margin-bottom: 1.5rem; }
+.Mb04 { margin-bottom: 2rem; }
+
+.Mt01 { margin-top: 0.5rem; }
+.Mt02 { margin-top: 1rem; }
+.Mt03 { margin-top: 1.5rem; }
+.Mt04 { margin-top: 2rem; }
+
+.Fgrow { flex-grow: 1 }
+
+.FloatingLabelContainer {
+    position: relative;
+    margin-top: 6px;
+
+    input {
+        position: relative;
+        z-index: 1;
+        background: none;
+
+        &::placeholder {
+            color: transparent;
+        }
+
+        &:focus,
+        &:not(:placeholder-shown) {
+            & + label {
+                transform: translate(-6px, -90%) scale(0.8);
+            }
+        }
+    }
+
+    label {
+        position: absolute;
+        left: 7px;
+        bottom: 9px;
+        color: fade(@base-font-color, 75%);
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+}

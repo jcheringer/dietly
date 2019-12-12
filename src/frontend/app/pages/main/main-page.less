@@ -1,0 +1,45 @@
+@import (reference) '../../../style/variables';
+
+@max-width: 900px;
+@header-height: 40px;
+
+header {
+    width: 100%;
+    height: @header-height;
+    background-color: @primary-color;
+
+    .header-content {
+        max-width: @max-width + 40px;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: auto;
+        padding: 0 20px;
+
+        .logo {
+            font-weight: bolder;
+            font-size: 2rem;
+            color: #6d4806;
+        }
+
+        ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+
+            li {
+                font-size: 1.4rem;
+                list-style: none;
+                margin: 10px;
+            }
+        }
+    }
+}
+
+main {
+    width: 100%;
+    height: calc(~"100% - " @header-height);
+    max-width: @max-width;
+    background-color: #fffdf4;
+}
