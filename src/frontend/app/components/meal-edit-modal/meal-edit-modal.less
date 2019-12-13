@@ -18,7 +18,6 @@
         max-width: 500px;
         max-height: 95%;
         background-color: white;
-        padding: 10px;
         border-radius: 3px;
         box-shadow: 2px 2px 2px fade(black, 50%);
         overflow-x: hidden;
@@ -37,55 +36,75 @@
             border: 1px solid;
             padding: 2px;
             border-radius: 2px;
+            cursor: pointer;
         }
 
         .MealEditWrapper {
-            width: calc(200% + 10px);
+            width: 200%;
             display: flex;
             transition: transform 0.3s ease;
 
             &.ItemEditing {
-                transform: translateX(calc(-50% - 5px));
+                transform: translateX(-50%);
             }
 
-            .MealItemList {
-                width: calc(100% - 10px);
-                margin-right: 5px;
+            .MealItemForm {
+                width: 50%;
+                padding: 10px;
 
                 .MealHeader {
                     display: flex;
                     margin-bottom: 10px;
                 }
 
-                .MealItem {
-                    display: flex;
-                    align-items: center;
-                    padding: 3px;
+                .MealItemList {
+                    margin-bottom: 10px;
 
-                    &:nth-child(odd) {
-                        background-color: lighten(@secondary-color, 65%);
-                    }
+                    .MealItem {
+                        display: flex;
+                        align-items: center;
+                        padding: 5px;
 
-                    &:nth-child(even) {
-                        background-color: lighten(@secondary-color, 72%);
-                    }
+                        &:nth-child(odd) {
+                            background-color: lighten(@secondary-color, 65%);
+                        }
 
-                    span {
-                        flex-grow: 1;
-                    }
+                        &:nth-child(even) {
+                            background-color: lighten(@secondary-color, 72%);
+                        }
 
-                    .EditIcon {
-                        border: 1px solid;
-                        padding: 2px;
-                        border-radius: 2px;
-                        background-color: white;
+                        &.AddItemButton {
+                            margin-top: 10px;
+                            cursor: pointer;
+
+                            span {
+                                font-weight: 700;
+                                text-align: center;
+                            }
+                        }
+
+                        span {
+                            flex-grow: 1;
+                        }
+
+                        .BorderedIcon {
+                            width: 19px;
+                            height: 19px;
+                            border: 1px solid;
+                            border-radius: 2px;
+                            background-color: white;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
 
             .MealItemEditor {
-                width: calc(100% - 10px);
-                margin-left: 5px;
+                width: 50%;
+                padding: 10px;
             }
         }
     }
