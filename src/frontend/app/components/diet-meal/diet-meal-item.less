@@ -1,0 +1,24 @@
+@import (reference) '../../../style/variables';
+
+.MealItemContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .MealItemName {
+        display: flex;
+        align-items: baseline;
+        flex-grow: 1;
+
+        hr {
+            height: 1px;
+            flex-grow: 1;
+            border: none;
+            background-image: linear-gradient(to right, @base-font-color 33%, rgba(255, 255, 255, 0) 0%);
+            background-position: bottom;
+            background-size: 3px 1px;
+            background-repeat: repeat-x;
+            margin: 0 10px 0;
+        }
+    }
+}

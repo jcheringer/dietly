@@ -1,7 +1,6 @@
 import React from 'react';
 
-import Style from './diet-meal.less';
-import CS from '../../../style/common.less';
+import Style from './diet-meal-item.less';
 
 export default function (props) {
     let checkbox = <input

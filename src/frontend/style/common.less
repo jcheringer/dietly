@@ -11,9 +11,9 @@
 
 .Box {
     border-radius: 3px;
-    padding: 10px;
     margin-bottom: 10px;
     background-color: lighten(@secondary-color, 65%);
+    overflow: hidden;
 }
 
 .BlockButton {
@@ -31,7 +31,22 @@
 .Mt03 { margin-top: 1.5rem; }
 .Mt04 { margin-top: 2rem; }
 
+.Pad01 { padding: 0.5rem; }
+.Pad02 { padding: 1rem; }
+
 .Fgrow { flex-grow: 1 }
+
+.BorderedIcon {
+    width: 19px;
+    height: 19px;
+    border: 1px solid;
+    border-radius: 2px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
 .FloatingLabelContainer {
     position: relative;
