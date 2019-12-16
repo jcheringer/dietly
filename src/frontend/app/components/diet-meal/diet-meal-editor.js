@@ -6,13 +6,15 @@ import Style from './diet-meal-editor.less';
 import CommonStyle from '../../../style/common.less';
 
 export default function (props) {
+    const blankItem = { name: '', amount: '' };
+
     const [mealTime, setMealTime] = useState(props.meal.time);
     const [mealName, setMealName] = useState(props.meal.name);
     const [receipts, setReceipts] = useState(props.meal.receipts);
     const [foods, setFoods] = useState(props.meal.foods);
     const [mealItems, setMealItems] = useState([]);
     const [isEditing, setEditing] = useState(false);
-    const [editingItem, setEditingItem] = useState(null);
+    const [editingItem, setEditingItem] = useState({ ...blankItem });
 
     const mealTimeChangeHandler = (event) => {
         setMealTime(event.target.value);
@@ -22,13 +24,12 @@ export default function (props) {
         setMealName(event.target.value)
     };
 
-    const editMealItemHandler = (editingItem) => {
+    const editMealItemHandler = (editingItem = { ...blankItem }) => {
         setEditingItem(editingItem);
         setEditing(true);
     };
 
     const cancelEditMealItemHandler = () => {
-        setEditingItem(null);
         setEditing(false);
     };
 

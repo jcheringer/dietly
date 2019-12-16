@@ -72,11 +72,41 @@ input[type=checkbox] {
 
 input {
     height: 30px;
-    padding: 5px;
     font-size: 1.3rem;
     font-family: 'Roboto', sans-serif;
     border: none;
     border-bottom: 1px solid @base-font-color;
+    padding: 5px;
     outline: none;
     margin-right: 5px;
+}
+
+select {
+    height: 30px;
+    font-size: 1.3rem;
+    font-family: 'Roboto', sans-serif;
+    border: none;
+    border-bottom: 1px solid @base-font-color;
+    border-radius: 0;
+    padding: 5px;
+    outline: none;
+    margin-right: 5px;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPScxLjEnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZycgeG1sbnM6eGxpbms9J2h0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0Jz48cGF0aCBmaWxsPScjNDQ0JyBkPSdNNy40MDYgNy44MjhsNC41OTQgNC41OTQgNC41OTQtNC41OTQgMS40MDYgMS40MDYtNiA2LTYtNnonPjwvcGF0aD48L3N2Zz4=");
+    background-position: 99% 50%;
+    background-repeat: no-repeat;
+    background-size: 16px;
+
+
+    &:after {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 5px;
+        background-color: red;
+    }
 }

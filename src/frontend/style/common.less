@@ -21,21 +21,6 @@
     padding: 10px;
 }
 
-.Mb01 { margin-bottom: 0.5rem; }
-.Mb02 { margin-bottom: 1rem; }
-.Mb03 { margin-bottom: 1.5rem; }
-.Mb04 { margin-bottom: 2rem; }
-
-.Mt01 { margin-top: 0.5rem; }
-.Mt02 { margin-top: 1rem; }
-.Mt03 { margin-top: 1.5rem; }
-.Mt04 { margin-top: 2rem; }
-
-.Pad01 { padding: 0.5rem; }
-.Pad02 { padding: 1rem; }
-
-.Fgrow { flex-grow: 1 }
-
 .BorderedIcon {
     width: 19px;
     height: 19px;
@@ -51,11 +36,15 @@
 .FloatingLabelContainer {
     position: relative;
     margin-top: 6px;
+    margin-bottom: 10px;
+    display: flex;
 
     input {
         position: relative;
         z-index: 1;
+        width: 100%;
         background: none;
+        flex-grow: 1;
 
         &::placeholder {
             color: transparent;
@@ -64,8 +53,17 @@
         &:focus,
         &:not(:placeholder-shown) {
             & + label {
-                transform: translate(-6px, -90%) scale(0.8);
+                transform: translate(-6px, -100%) scale(0.9);
             }
+        }
+    }
+
+    select {
+        width: 100%;
+        flex-grow: 1;
+
+        & + label {
+            transform: translate(-6px, -100%) scale(0.9);
         }
     }
 
@@ -78,3 +76,24 @@
         user-select: none;
     }
 }
+
+.Wd100 { width: 100%; }
+.Wd75 { width: 75%; }
+.Wd50 { width: 50%; }
+.Wd25 { width: 25%; }
+
+.Mb01 { margin-bottom: 0.5rem; }
+.Mb02 { margin-bottom: 1rem; }
+.Mb03 { margin-bottom: 1.5rem; }
+.Mb04 { margin-bottom: 2rem; }
+
+.Mt01 { margin-top: 0.5rem; }
+.Mt02 { margin-top: 1rem; }
+.Mt03 { margin-top: 1.5rem; }
+.Mt04 { margin-top: 2rem; }
+
+.Pad01 { padding: 0.5rem; }
+.Pad02 { padding: 1rem; }
+
+.DFlex { display: flex; }
+.Fgrow { flex-grow: 1 }
