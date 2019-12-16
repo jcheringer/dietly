@@ -6,7 +6,7 @@ import Style from './diet-meal-editor.less';
 import CommonStyle from '../../../style/common.less';
 
 export default function (props) {
-    const blankItem = { name: '', amount: '' };
+    const blankItem = { name: '', amount: '', measureUnit: 0 };
 
     const [mealTime, setMealTime] = useState(props.meal.time);
     const [mealName, setMealName] = useState(props.meal.name);

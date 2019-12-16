@@ -6,6 +6,7 @@ import CS from '../../../style/common.less';
 export default function (props) {
     const [name, setName] = useState(props.item.name);
     const [amount, setAmount] = useState(props.item.amount);
+    const [measureUnit, setMeasureUnit] = useState(props.item.measureUnit);
 
     const dummyHandler = () => {
 
@@ -13,7 +14,8 @@ export default function (props) {
 
     useEffect(() => {
         setName(props.item.name);
-        setAmount(props.item.amount);
+        setAmount(props.item.amount || '');
+        setMeasureUnit(props.item.measureUnit);
     }, [props.item]);
 
     return (
@@ -29,7 +31,7 @@ export default function (props) {
                         <label>Quantidade</label>
                     </div>
                     <div className={ [CS.FloatingLabelContainer, CS.Wd75].join(' ') }>
-                        <select>
+                        <select value={ measureUnit } onChange={ dummyHandler }>
                             <option value="0">À Vontade</option>
                             <option value="1">Unidade(s)</option>
                             <option value="2">Grama(s)</option>
