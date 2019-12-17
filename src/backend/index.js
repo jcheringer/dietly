@@ -33,6 +33,10 @@ app.use('/api/food', (req, res) => {
     res.json(foods);
 });
 
+app.use('/api/receipt', (req, res) => {
+    res.json(receipts);
+});
+
 app.use('/api/diet/:id', (req, res) => {
     const id = Number(req.params.id);
     const diet = diets.find(d => d.id === id) || {};

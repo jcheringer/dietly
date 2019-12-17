@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 
 import DashboardPage from '../dashboard/dashboard-page';
-import ReceiptsPage from '../receipts/receipts-page';
+import MenuPage from '../menu/menu-page';
 import DietsPage from '../diets/diets-page';
 import DietEditPage from '../diet-edit/diet-edit-page';
 
@@ -17,7 +17,7 @@ export default function () {
                     <ul>
                         <li><Link to="/">Dashboard</Link></li>
                         <li><Link to="/diets">Dietas</Link></li>
-                        <li><Link to="/receipts">Receitas</Link></li>
+                        <li><Link to="/menu">Cardápio</Link></li>
                     </ul>
                 </div>
             </header>
@@ -26,7 +26,7 @@ export default function () {
                     <Route path="/" component={ DashboardPage } exact />
                     <Route path="/diets" component={ DietsPage } />
                     <Route path="/diet/:dietId" component={ DietEditPage } />
-                    <Route path="/receipts" component={ ReceiptsPage } />
+                    <Route path="/menu" component={ MenuPage } />
                 </Switch>
             </main>
         </Fragment>

@@ -31,6 +31,12 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
+    &.RedIcon {
+        color: @warning-color;
+        background-color: lighten(@warning-color, 50%);
+        border-color: darken(@warning-color, 10%);
+    }
 }
 
 .FloatingLabelContainer {
