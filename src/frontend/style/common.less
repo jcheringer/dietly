@@ -77,6 +77,27 @@
     }
 }
 
+.BtnPrimary {
+    background-color: fade(@primary-color, 65%);
+    font-weight: 500;
+}
+
+.ActionContainer {
+    display: flex;
+
+    button {
+        flex-grow: 1;
+
+        &:first-child {
+            margin-right: 5px;
+        }
+
+        &:last-child {
+            margin-left: 5px;
+        }
+    }
+}
+
 .Wd100 { width: 100%; }
 .Wd75 { width: 75%; }
 .Wd50 { width: 50%; }

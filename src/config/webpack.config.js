@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/frontend/index.js',
@@ -35,8 +36,22 @@ module.exports = {
         ]
     },
     plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, '../frontend/static'),
+                to: path.resolve(__dirname, '../../public'),
+                ignore: [ '.*']
+            }
+        ]),
         new HtmlWebpackPlugin({
-            template: './src/frontend/static/index.html'
-        })
+            filename: path.resolve(__dirname, '../../public/index.html'),
+            template: path.resolve(__dirname, '../frontend/static/index.html'),
+            inject: true,
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+            },
+        }),
     ]
 };

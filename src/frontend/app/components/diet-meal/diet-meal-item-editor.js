@@ -8,10 +8,6 @@ export default function (props) {
     const [amount, setAmount] = useState(props.item.amount);
     const [measureUnit, setMeasureUnit] = useState(props.item.measureUnit);
 
-    const dummyHandler = () => {
-
-    };
-
     useEffect(() => {
         setName(props.item.name);
         setAmount(props.item.amount || '');
@@ -22,16 +18,12 @@ export default function (props) {
         <div className={ Style.MealItemEditor }>
             <div>
                 <div className={ [CS.FloatingLabelContainer, CS.Mb03].join(' ') }>
-                    <input type="text" placeholder="Nome" value={ name } onChange={ dummyHandler } />
+                    <input type="text" placeholder="Nome" value={ name } onChange={ (e) => setName(e.target.value) } />
                     <label>Nome</label>
                 </div>
                 <div className={ CS.DFlex }>
-                    <div className={ [CS.FloatingLabelContainer, CS.Wd25].join(' ') }>
-                        <input type="text" placeholder="Quantidade" value={ amount } onChange={ dummyHandler } />
-                        <label>Quantidade</label>
-                    </div>
                     <div className={ [CS.FloatingLabelContainer, CS.Wd75].join(' ') }>
-                        <select value={ measureUnit } onChange={ dummyHandler }>
+                        <select value={ measureUnit } onChange={ (e) => setMeasureUnit(e.target.value) }>
                             <option value="0">À Vontade</option>
                             <option value="1">Unidade(s)</option>
                             <option value="2">Grama(s)</option>
@@ -39,9 +31,16 @@ export default function (props) {
                         </select>
                         <label>Medida</label>
                     </div>
+                    <div className={ [CS.FloatingLabelContainer, CS.Wd25].join(' ') }>
+                        <input type="text" placeholder="Quantidade" value={ amount } onChange={ (e) => setAmount(e.target.value) } />
+                        <label>Quantidade</label>
+                    </div>
                 </div>
             </div>
-            <button onClick={ props.cancelEditHandler }>Cancelar</button>
+            <div className={ CS.ActionContainer }>
+                <button className={ CS.BtnPrimary }>Salvar</button>
+                <button onClick={ props.cancelEditHandler }>Cancelar</button>
+            </div>
         </div>
     )
 }
