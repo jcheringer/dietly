@@ -30,14 +30,15 @@
 
 .MenuItem {
     display: flex;
+    align-items: center;
     padding: 5px;
 
     &:nth-child(odd) {
-        background-color: lighten(@secondary-color, 75%);
+        background-color: lighten(@secondary-color, 65%);
     }
 
     &:nth-child(even) {
-        background-color: lighten(@secondary-color, 65%);
+        background-color: lighten(@secondary-color, 72%);
     }
 
     span {
@@ -48,4 +49,10 @@
         margin-left: 10px;
     }
 
+    &.AddItem {
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
 }
