@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/backend/index.js",
-    "front": "webpack --config ./src/config/webpack.config.js",
-    "front:watch": "webpack --watch --config ./src/config/webpack.config.js"
+    "back": "nodemon ./src/backend/index.js",
+    "front": "webpack --watch --config ./src/config/webpack.config.js",
+    "build": "webpack --config ./src/config/webpack.config.js",
+    "start": "node ./src/backend/index.js"
   },
   "nodemonConfig": {
     "ignore": [
