@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
 import axios from 'axios';
+
+import { getFoodList } from '../../store/actions/foods-action';
 
 import MenuItemList from './menu-item-list';
 import Modal from '../../components/modal/modal';
@@ -9,7 +12,7 @@ import ReceiptEditor from '../../components/receipt-editor/receipt-editor';
 import CS from '../../../style/common.less'
 import Style from './menu-page.less';
 
-export default function (props) {
+const menuPage = (props) => {
     const TABS = { FOOD: 'food', RECEIPT: 'receipt' };
     const blankFood = { name: '', measureUnits: [] };
     const blankReceipt = { name: '' };
@@ -49,14 +52,17 @@ export default function (props) {
     }
 
     useEffect(() => {
-        axios.get('api/food').then(response => {
-            setFoodList(response.data);
-        });
+        props.getFoodList();
 
         axios.get('api/receipt').then(response => {
             setReceiptList(response.data);
         });
     }, []);
+
+    useEffect(() => {
+        console.log(props.foodList);
+        setFoodList(props.foodList || []);
+    }, [props.foodList]);
 
     return (
         <div>
@@ -84,4 +90,19 @@ export default function (props) {
             ) : null }
         </div>
     )
-}
+};
+
+const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+        foodList: state.food.foodList
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getFoodList: () => dispatch(getFoodList())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(menuPage)
