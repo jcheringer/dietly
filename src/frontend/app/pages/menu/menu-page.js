@@ -11,7 +11,7 @@ import Style from './menu-page.less';
 
 export default function (props) {
     const TABS = { FOOD: 'food', RECEIPT: 'receipt' };
-    const blankFood = { name: '' };
+    const blankFood = { name: '', measureUnits: [] };
     const blankReceipt = { name: '' };
 
     const [currentTab, setCurrentTab] = useState(TABS.FOOD);
@@ -78,7 +78,7 @@ export default function (props) {
                 /> : null }
             { isEditing ? (
                 <Modal>
-                    { editingFood ? <FoodEditor cancelEditHandler={ cancelEditHandler } /> : null }
+                    { editingFood ? <FoodEditor food={ editingFood } cancelEditHandler={ cancelEditHandler } /> : null }
                     { editingReceipt ? <ReceiptEditor cancelEditHandler={ cancelEditHandler } /> : null }
                 </Modal>
             ) : null }

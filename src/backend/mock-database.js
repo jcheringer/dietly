@@ -9,7 +9,7 @@ const foods = [
     {
         id: 1,
         name: 'Ovo',
-        measureUnits: [{ id: 1, multiplier: 1 }]
+        measureUnits: [{ id: 1, multiplier: 1 }, { id: 2, multiplier: 0.02 }]
     },
     {
         id: 2,
@@ -94,7 +94,7 @@ const receipts = [
         foods: [
             { food: 2, measureUnit: 1, amount: 2 },
             { food: 3, measureUnit: 2, amount: 60 },
-            { food: 7, measureUnit: 3, amount: 1 },
+            { food: 7, measureUnit: 3, amount: 1 }
         ]
     }
 ];

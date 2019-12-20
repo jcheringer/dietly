@@ -51,6 +51,7 @@
         width: 100%;
         background: none;
         flex-grow: 1;
+        padding-bottom: 0;
 
         &::placeholder {
             color: transparent;
@@ -59,7 +60,9 @@
         &:focus,
         &:not(:placeholder-shown) {
             & + label {
-                transform: translate(-6px, -100%) scale(0.9);
+                left: 2px;
+                transform: translate(0, -130%);
+                font-size: 1.1rem;
             }
         }
     }
@@ -67,16 +70,19 @@
     select {
         width: 100%;
         flex-grow: 1;
+        padding-bottom: 0;
 
         & + label {
-            transform: translate(-6px, -100%) scale(0.9);
+            left: 2px;
+            transform: translate(0, -130%);
+            font-size: 1.1rem;
         }
     }
 
     label {
         position: absolute;
         left: 7px;
-        bottom: 9px;
+        bottom: 6px;
         color: fade(@base-font-color, 75%);
         transition: all 0.3s ease;
         user-select: none;
@@ -104,23 +110,117 @@
     }
 }
 
-.Wd100 { width: 100%; }
-.Wd75 { width: 75%; }
-.Wd50 { width: 50%; }
-.Wd25 { width: 25%; }
+.StrippedRow {
+    display: flex;
+    align-items: center;
+    padding: 5px;
 
-.Mb01 { margin-bottom: 0.5rem; }
-.Mb02 { margin-bottom: 1rem; }
-.Mb03 { margin-bottom: 1.5rem; }
-.Mb04 { margin-bottom: 2rem; }
+    span {
+        flex-grow: 1;
+    }
 
-.Mt01 { margin-top: 0.5rem; }
-.Mt02 { margin-top: 1rem; }
-.Mt03 { margin-top: 1.5rem; }
-.Mt04 { margin-top: 2rem; }
+    i {
+        margin-left: 5px;
+    }
 
-.Pad01 { padding: 0.5rem; }
-.Pad02 { padding: 1rem; }
+    &.Action {
+        cursor: pointer;
 
-.DFlex { display: flex; }
-.Fgrow { flex-grow: 1 }
+        span {
+            font-weight: 500;
+            text-align: center;
+        }
+    }
+
+    &:nth-child(odd) {
+        background-color: lighten(@secondary-color, 65%);
+    }
+
+    &:nth-child(even) {
+        background-color: lighten(@secondary-color, 72%);
+    }
+}
+
+.LightBg01 {
+    background-color: lighten(@secondary-color, 65%);
+}
+
+.LightBg02 {
+    background-color: lighten(@secondary-color, 72%);
+}
+
+.Wd100 {
+    width: 100%;
+}
+
+.Wd75 {
+    width: 75%;
+}
+
+.Wd50 {
+    width: 50%;
+}
+
+.Wd25 {
+    width: 25%;
+}
+
+.Mb01 {
+    margin-bottom: 0.5rem;
+}
+
+.Mb02 {
+    margin-bottom: 1rem;
+}
+
+.Mb03 {
+    margin-bottom: 1.5rem;
+}
+
+.Mb04 {
+    margin-bottom: 2rem;
+}
+
+.Mt01 {
+    margin-top: 0.5rem;
+}
+
+.Mt02 {
+    margin-top: 1rem;
+}
+
+.Mt03 {
+    margin-top: 1.5rem;
+}
+
+.Mt04 {
+    margin-top: 2rem;
+}
+
+.Pad01 {
+    padding: 0.5rem;
+}
+
+.Pad02 {
+    padding: 1rem;
+}
+
+.DFlex {
+    display: flex;
+}
+
+.Fgrow {
+    flex-grow: 1;
+}
+
+.AiCenter {
+    align-items: center;
+}
+
+.JcCenter {
+    justify-content: center;
+}
+
+.TexCenter {
+    text-align: center;
+}
