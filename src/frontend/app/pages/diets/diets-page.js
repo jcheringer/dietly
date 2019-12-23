@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import CS from '../../../style/common.less'
 
 const dietsPage = (props) => {
     const history = useHistory();
-    const newDietButtonClasses = [CS.BlockButton, CS.Mb02].join(' ');
+    const [dietList, setDietList] = useState([]);
 
     const moveToDiet = (dietId) => {
         history.push(`/diet/${ dietId }`);
@@ -18,10 +18,16 @@ const dietsPage = (props) => {
         props.getDietList();
     }, []);
 
+    useEffect(() => {
+        setDietList(props.dietList || []);
+    }, [props.dietList])
+
+    const newDietButtonClasses = [CS.BlockButton, CS.Mb02].join(' ');
+
     return (
         <div className={ CS.CommonPage }>
             <button onClick={ () => moveToDiet(0) } className={ newDietButtonClasses }>Criar Nova Dieta</button>
-            { props.dietList.map(diet => {
+            { dietList.map(diet => {
                 return (
                     <div key={ diet.id } onClick={ () => moveToDiet(diet.id) } className={ [CS.Box, CS.Pad02].join(' ') }>{ diet.name }</div>
                 )

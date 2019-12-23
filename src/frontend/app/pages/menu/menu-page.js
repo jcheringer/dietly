@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import { getFoodList } from '../../store/actions/foods-action';
+import { getReceiptList } from '../../store/actions/receipts-action';
 
 import MenuItemList from './menu-item-list';
 import Modal from '../../components/modal/modal';
 import FoodEditor from '../../components/food-editor/food-editor';
 import ReceiptEditor from '../../components/receipt-editor/receipt-editor';
 
-import CS from '../../../style/common.less'
 import Style from './menu-page.less';
 
 const menuPage = (props) => {
@@ -53,16 +52,16 @@ const menuPage = (props) => {
 
     useEffect(() => {
         props.getFoodList();
-
-        axios.get('api/receipt').then(response => {
-            setReceiptList(response.data);
-        });
+        props.getReceiptList();
     }, []);
 
     useEffect(() => {
-        console.log(props.foodList);
         setFoodList(props.foodList || []);
     }, [props.foodList]);
+
+    useEffect(() => {
+        setReceiptList(props.receiptList || []);
+    }, [props.receiptList]);
 
     return (
         <div>
@@ -93,15 +92,16 @@ const menuPage = (props) => {
 };
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
-        foodList: state.food.foodList
+        foodList: state.food.foodList,
+        receiptList: state.receipt.receiptList
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getFoodList: () => dispatch(getFoodList())
+        getFoodList: () => dispatch(getFoodList()),
+        getReceiptList: () => dispatch(getReceiptList())
     }
 };
 

@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-    switch (action) {
+    switch (action.type) {
         case GET_FOOD_LIST_SUCCESS: {
             return {
                 ...state,
