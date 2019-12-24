@@ -20,7 +20,7 @@ header {
         .logo {
             font-weight: bolder;
             font-size: 2rem;
-            color: #6d4806;
+            color: @secondary-color;
         }
 
         ul {
@@ -41,5 +41,5 @@ main {
     width: 100%;
     height: calc(~"100% - " @header-height);
     max-width: @max-width;
-    background-color: #fffdf4;
+    background-color: lighten(@primary-color, 42%);
 }

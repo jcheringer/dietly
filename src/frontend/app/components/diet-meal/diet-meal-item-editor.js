@@ -60,7 +60,7 @@ const dietMealItemEditor = (props) => {
     }, [props.item]);
 
     return (
-        <div className={ Style.MealItemEditor }>
+        <div>
             <div>
                 <div className={ [CS.FloatingLabelContainer, CS.Mb03].join(' ') }>
                     <ReactSelect
@@ -83,7 +83,7 @@ const dietMealItemEditor = (props) => {
                         <label>Medida</label>
                     </div>
                     <div className={ [CS.FloatingLabelContainer, CS.Wd25].join(' ') }>
-                        <input type="text" placeholder="Quantidade" value={ amount } onChange={ (e) => setAmount(e.target.value) } />
+                        <input type="number" placeholder="Quantidade" value={ amount } onChange={ (e) => setAmount(e.target.value) } />
                         <label>Quantidade</label>
                     </div>
                 </div>

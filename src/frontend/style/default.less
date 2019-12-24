@@ -31,6 +31,7 @@ a {
 }
 
 button {
+    min-height: 35px;
     padding: 7px 10px;
     border: 1px solid @secondary-color;
     background-color: lighten(@secondary-color, 70%);
@@ -71,7 +72,7 @@ input[type=checkbox] {
 }
 
 input {
-    height: 30px;
+    height: 35px;
     font-size: 1.3rem;
     font-family: 'Roboto', sans-serif;
     border: none;
@@ -82,7 +83,7 @@ input {
 }
 
 select {
-    height: 30px;
+    height: 35px;
     font-size: 1.3rem;
     font-family: 'Roboto', sans-serif;
     border: none;
@@ -101,20 +102,11 @@ select {
     background-repeat: no-repeat;
     background-size: 16px;
     background-color: transparent;
-
-
-    &:after {
-        content: '';
-        display: block;
-        width: 5px;
-        height: 5px;
-        background-color: red;
-    }
 }
 
 .ReactSelect {
     .ReactSelect__control {
-        min-height: 30px;
+        min-height: 35px;
         background-color: transparent;
         border: none;
         border-bottom: 1px solid;

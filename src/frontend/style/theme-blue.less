@@ -1,0 +1,70 @@
+body {
+    &.ThemeBlue {
+        @primary-color: #60a3f7;
+        @secondary-color: #2d4b77;
+
+        header {
+            background-color: @primary-color;
+
+            .logo {
+                color: @secondary-color;
+            }
+        }
+
+        main {
+            background-color: lighten(@primary-color, 42%);
+        }
+
+        button {
+            border: 1px solid fade(@secondary-color, 50%);
+            background-color: lighten(@secondary-color, 60%);
+        }
+
+        input[type=checkbox] {
+            &:checked {
+
+                &:after {
+                    border: 3px solid @primary-color;
+                    border-top: none;
+                    border-right: none;
+                }
+            }
+        }
+
+        .BtnPrimary {
+            background-color: fade(@primary-color, 45%);
+        }
+
+        .Box {
+            background-color: lighten(@secondary-color, 58%);
+        }
+
+        .StrippedRow {
+            border-bottom: 1px solid fade(@secondary-color, 50%);
+
+            &:nth-child(odd) {
+                background-color: lighten(@secondary-color, 62%);
+            }
+
+            &:nth-child(even) {
+                background-color: lighten(@secondary-color, 65%);
+            }
+
+            &.Action {
+                border: 1px solid fade(@secondary-color, 50%);
+            }
+        }
+
+        .MenuTabContainer {
+            background-color: fade(@primary-color, 50%);
+
+            li {
+                color: @secondary-color;
+
+                &.ActiveTab {
+                    border-bottom-color: @primary-color;
+                }
+            }
+        }
+    }
+}

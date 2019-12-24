@@ -6,6 +6,7 @@ import { MEAL_TYPE } from '../../util/constants';
 
 import Style from './diet-meal-editor.less';
 import CS from '../../../style/common.less';
+import MenuItemList from '../../pages/menu/menu-item-list';
 
 export default function (props) {
     const blankItem = { id: null, amount: '', measureUnit: 0 };
@@ -43,15 +44,15 @@ export default function (props) {
         setMealItems(items);
     }, [receipts, foods]);
 
-    const mealEditWrapperClasses = [Style.MealEditWrapper];
+    const mealEditWrapperClasses = [CS.SideSlider, Style.MealEditWrapper];
 
     if (isEditing) {
-        mealEditWrapperClasses.push(Style.ItemEditing);
+        mealEditWrapperClasses.push(CS.Editing);
     }
 
     return (
         <div className={ mealEditWrapperClasses.join(' ') }>
-            <div className={ Style.MealItemForm }>
+            <div className={ CS.SlideItem }>
                 <div className={ Style.MealHeader }>
                     <div className={ CS.FloatingLabelContainer }>
                         <input type="time" placeholder="Hora" value={ mealTime } onChange={ mealTimeChangeHandler } />
@@ -63,25 +64,21 @@ export default function (props) {
                     </div>
                 </div>
                 <div className={ Style.MealItemList }>
-                    { mealItems.map(item => {
-                        return (
-                            <div key={ item.id } className={ Style.MealItem }>
-                                <span>{ item.name } - { item.amountText }</span>
-                                <i onClick={ () => editMealItemHandler(item) } className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
-                            </div>
-                        )
-                    }) }
-                    <div onClick={ () => editMealItemHandler() } className={ [Style.MealItem, Style.AddItemButton].join(' ') }>
-                        <span>Inserir Alimento</span>
-                        <i className={ ['fas fa-plus', CS.BorderedIcon].join(' ') } />
-                    </div>
+                    <MenuItemList
+                        itemList={ mealItems }
+                        includeText="Inserir Alimento"
+                        editItemHandler={ editMealItemHandler }
+                        showAmount
+                    />
                 </div>
                 <div className={ CS.ActionContainer }>
                     <button className={ CS.BtnPrimary }>Salvar</button>
                     <button onClick={ () => props.mealCancelEditClickHandler(false) }>Cancelar</button>
                 </div>
             </div>
-            <DietMealItemEditor item={ editingItem } cancelEditHandler={ cancelEditMealItemHandler } />
+            <div className={ CS.SlideItem }>
+                <DietMealItemEditor item={ editingItem } cancelEditHandler={ cancelEditMealItemHandler } />
+            </div>
         </div>
     );
 }
