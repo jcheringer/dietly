@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import DietMealItemEditor from './diet-meal-item-editor';
 
+import { MEAL_TYPE } from '../../util/constants';
+
 import Style from './diet-meal-editor.less';
 import CS from '../../../style/common.less';
 
 export default function (props) {
-    const blankItem = { name: '', amount: '', measureUnit: 0 };
+    const blankItem = { id: null, amount: '', measureUnit: 0 };
 
     const [mealTime, setMealTime] = useState(props.meal.time);
     const [mealName, setMealName] = useState(props.meal.name);
@@ -35,8 +37,8 @@ export default function (props) {
 
     useEffect(() => {
         let items = [];
-        receipts.forEach(receipt => items.push({ ...receipt, type: 'receipt' }));
-        foods.forEach(food => items.push({ ...food, type: 'food' }));
+        receipts.forEach(receipt => items.push({ ...receipt, type: MEAL_TYPE.RECEIPT }));
+        foods.forEach(food => items.push({ ...food, type: MEAL_TYPE.FOOD }));
 
         setMealItems(items);
     }, [receipts, foods]);

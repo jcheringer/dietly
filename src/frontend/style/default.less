@@ -111,3 +111,46 @@ select {
         background-color: red;
     }
 }
+
+.ReactSelect {
+    .ReactSelect__control {
+        min-height: 30px;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid;
+        border-radius: 0;
+        outline: none !important;
+        box-shadow: none;
+        padding: 5px 5px 0;
+
+        &:hover, &:focus {
+            border-color: inherit;
+        }
+
+        .ReactSelect__value-container {
+            padding: 0;
+
+            .ReactSelect__input {
+                padding: 0;
+
+                input {
+                    height: auto;
+                }
+            }
+        }
+
+        .ReactSelect__indicators {
+            .ReactSelect__indicator-separator {
+                display: none;
+            }
+
+            .ReactSelect__indicator {
+                color: inherit;
+                padding: 0;
+            }
+        }
+    }
+    .ReactSelect__menu {
+        z-index: 100;
+    }
+}

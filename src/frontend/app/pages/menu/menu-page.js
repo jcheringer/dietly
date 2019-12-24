@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
+import ReactSelect from 'react-select';
 
 import { getFoodList } from '../../store/actions/foods-action';
 import { getReceiptList } from '../../store/actions/receipts-action';

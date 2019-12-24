@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import CS from '../../../style/common.less';
-import Style from '../diet-meal/diet-meal-editor.less';
 import DietMealItemEditor from '../diet-meal/diet-meal-item-editor';
 import MenuItemList from '../../pages/menu/menu-item-list';
 
+import { MEAL_TYPE } from '../../util/constants';
+
+import CS from '../../../style/common.less';
+
 export default function (props) {
-    const blankIngredient = { name: '', amount: '', measureUnit: 0 };
+    const blankIngredient = { id: null, amount: '', measureUnit: 0 };
 
     const [name, setName] = useState('');
     const [ingredients, setIngredients] = useState([]);
@@ -28,7 +30,7 @@ export default function (props) {
 
     useEffect(() => {
         setName(props.receipt.name);
-        setIngredients(props.receipt.ingredients);
+        setIngredients(props.receipt.ingredients.map(i => ({ ...i, type: MEAL_TYPE.FOOD })));
     }, [props.receipt]);
 
     const receiptEditorClasses = [CS.SideSlider];
@@ -56,7 +58,7 @@ export default function (props) {
                 </div>
             </div>
             <div className={ [CS.SlideItem, CS.Pad02].join(' ') }>
-                <DietMealItemEditor item={ editingItem } cancelEditHandler={ cancelEditMealItemHandler } />
+                <DietMealItemEditor item={ editingItem } type="food" cancelEditHandler={ cancelEditMealItemHandler } />
             </div>
         </div>
     )

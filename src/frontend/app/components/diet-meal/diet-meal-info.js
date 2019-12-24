@@ -12,7 +12,7 @@ export default function (props) {
 
     const editButton = <i
         onClick={ () => props.mealEditClickHandler(true) }
-        className={ ['fas fa-pencil-alt', Style.EditIcon, CommonStyle.BorderedIcon].join(' ') } />;
+        className={ ['fas fa-pencil-alt', CommonStyle.BorderedIcon].join(' ') } />;
 
     return (
         <div className={ Style.DietMealInfo }>

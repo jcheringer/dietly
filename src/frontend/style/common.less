@@ -13,7 +13,6 @@
     border-radius: 3px;
     margin-bottom: 10px;
     background-color: lighten(@secondary-color, 65%);
-    overflow: hidden;
 }
 
 .BlockButton {
@@ -67,7 +66,7 @@
         }
     }
 
-    select {
+    select, .ReactSelect {
         width: 100%;
         flex-grow: 1;
         padding-bottom: 0;
@@ -157,11 +156,26 @@
 
     &.Editing {
         transform: translateX(-50%);
+
+        .SlideItem {
+            &:first-child {
+                opacity: 0;
+            }
+
+            &:last-child {
+                opacity: 1;
+            }
+        }
     }
 
     .SlideItem {
         width: 50%;
         padding: 10px;
+        transition: opacity 0.3s ease;
+
+        &:last-child {
+            opacity: 0;
+        }
     }
 }
 
