@@ -47,14 +47,8 @@ export default function (props) {
         mealEditWrapperClasses.push(Style.ItemEditing);
     }
 
-    const style = {
-        display: 'flex'
-    };
-
     return (
         <div className={ mealEditWrapperClasses.join(' ') }>
-            {/*<i className={ ['fas fa-times', Style.CloseButton, CS.BorderedIcon].join(' ') }*/ }
-            {/*   onClick={ () => props.mealCancelEditClickHandler(false) } />*/ }
             <div className={ Style.MealItemForm }>
                 <div className={ Style.MealHeader }>
                     <div className={ CS.FloatingLabelContainer }>

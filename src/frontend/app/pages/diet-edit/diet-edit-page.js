@@ -8,6 +8,11 @@ import CS from '../../../style/common.less'
 import DietMealEditor from '../../components/diet-meal/diet-meal-editor';
 
 export default function () {
+    const blankDiet = {
+        name: '',
+        meals: []
+    };
+
     const blankMeal = {
         time: '',
         name: '',
@@ -19,11 +24,18 @@ export default function () {
     const [diet, setDiet] = useState(null);
     const [isInserting, setInserting] = useState(false);
 
-    const newMealHandler = () => {
-
+    const dietNameChangeHanlder = (event) => {
+        const newDiet = { ...diet };
+        newDiet.name = event.target.value;
+        setDiet(newDiet);
     };
 
     useEffect(() => {
+        if (!dietId || dietId <= 0) {
+            setDiet({ ...blankDiet });
+            return;
+        }
+
         axios.get(`/api/diet/${ dietId }`).then(response => {
             setDiet(response.data);
         });
@@ -33,7 +45,13 @@ export default function () {
         <div className={ CS.CommonPage }>
             { diet ? (
                 <div>
-                    <h3>{ diet.name }</h3>
+                    <div className={ [CS.DFlex, CS.AiCenter].join(' ') }>
+                        <div className={ [CS.FloatingLabelContainer, CS.Mb03, CS.Fgrow].join(' ') }>
+                            <input type="text" placeholder="Nome da Dieta" value={ diet.name } onChange={ dietNameChangeHanlder } />
+                            <label>Nome da Dieta</label>
+                        </div>
+                        <button className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
+                    </div>
                     { diet.meals.map(meal => {
                         return <DietMeal key={ meal.id } meal={ meal } editMode />
                     }) }

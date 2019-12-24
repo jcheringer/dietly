@@ -82,19 +82,19 @@ const receipts = [
     {
         id: 1,
         name: 'Crepioca',
-        foods: [
-            { food: 1, measureUnit: 1, amount: 1 },
-            { food: 3, measureUnit: 2, amount: 60 },
-            { food: 4, measureUnit: 3, amount: 3 }
+        ingredients: [
+            { id: 1, measureUnit: 1, amount: 1 },
+            { id: 3, measureUnit: 2, amount: 60 },
+            { id: 4, measureUnit: 3, amount: 3 }
         ]
     },
     {
         id: 2,
         name: 'Sanduiche de Patinho',
-        foods: [
-            { food: 2, measureUnit: 1, amount: 2 },
-            { food: 3, measureUnit: 2, amount: 60 },
-            { food: 7, measureUnit: 3, amount: 1 }
+        ingredients: [
+            { id: 2, measureUnit: 1, amount: 2 },
+            { id: 3, measureUnit: 2, amount: 60 },
+            { id: 7, measureUnit: 3, amount: 1 }
         ]
     }
 ];

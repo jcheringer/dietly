@@ -20,7 +20,7 @@ const dietsPage = (props) => {
 
     useEffect(() => {
         setDietList(props.dietList || []);
-    }, [props.dietList])
+    }, [props.dietList]);
 
     const newDietButtonClasses = [CS.BlockButton, CS.Mb02].join(' ');
 

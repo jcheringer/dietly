@@ -5,18 +5,18 @@ const app = express();
 const { measureUnits, foods, receipts, diets, dietSchedule } = require('./mock-database');
 
 //===== Functions //
-const mealNormalize = (meal, currentDiet) => {
+const mealNormalize = (meal, currentDiet, includeStatus = false) => {
     if (!meal.name && currentDiet) {
         const currentMeal = currentDiet.meals.find(cm => cm.id === meal.id);
         meal.name = currentMeal.name;
         meal.time = currentMeal.time;
     }
 
-    meal.receipts.forEach(receipt => mealItemNormalize(receipt, receipts));
-    meal.foods.forEach(food => mealItemNormalize(food, foods));
+    meal.receipts.forEach(receipt => mealItemNormalize(receipt, receipts, includeStatus));
+    meal.foods.forEach(food => mealItemNormalize(food, foods, includeStatus));
 };
 
-const mealItemNormalize = (item, itemList) => {
+const mealItemNormalize = (item, itemList, includeStatus = false) => {
     item.name = itemList.find(r => r.id === item.id).name;
     item.amountText = `${ item.amount } ${ measureUnits[item.measureUnit] }`;
 
@@ -24,7 +24,9 @@ const mealItemNormalize = (item, itemList) => {
         item.amountText = `${ measureUnits[item.measureUnit] }`;
     }
 
-    item.checked = item.checked || false;
+    if (includeStatus) {
+        item.checked = item.checked || false;
+    }
 };
 
 app.use(express.static(path.resolve(__dirname, '../../public')));
@@ -34,6 +36,10 @@ app.use('/api/food', (req, res) => {
 });
 
 app.use('/api/receipt', (req, res) => {
+    receipts.forEach(receipt => {
+        receipt.ingredients.forEach(ing => mealItemNormalize(ing, foods));
+    });
+
     res.json(receipts);
 });
 
@@ -58,7 +64,7 @@ app.use('/api/diet-schedule/:date', (req, res) => {
     const currentDiet = diets.find(d => d.active);
     const diet = dietOfDay ? dietOfDay.diet : currentDiet;
 
-    diet.meals.forEach(meal => mealNormalize(meal, currentDiet));
+    diet.meals.forEach(meal => mealNormalize(meal, currentDiet, true));
 
     res.json(diet.meals);
 });

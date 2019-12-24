@@ -10,11 +10,12 @@ import FoodEditor from '../../components/food-editor/food-editor';
 import ReceiptEditor from '../../components/receipt-editor/receipt-editor';
 
 import Style from './menu-page.less';
+import CS from '../../../style/common.less';
 
 const menuPage = (props) => {
     const TABS = { FOOD: 'food', RECEIPT: 'receipt' };
     const blankFood = { name: '', measureUnits: [] };
-    const blankReceipt = { name: '' };
+    const blankReceipt = { name: '', ingredients: [] };
 
     const [currentTab, setCurrentTab] = useState(TABS.FOOD);
     const [foodList, setFoodList] = useState([]);
@@ -69,22 +70,25 @@ const menuPage = (props) => {
                 <li onClick={ () => changeCurrentTab(TABS.FOOD) } className={ foodClass }>Alimentos</li>
                 <li onClick={ () => changeCurrentTab(TABS.RECEIPT) } className={ receiptClass }>Receitas</li>
             </ul>
-            { currentTab === TABS.FOOD ?
-                <MenuItemList
-                    itemList={ foodList }
-                    includeText="Incluir Alimento"
-                    editItemHandler={ editFoodHandler }
-                /> : null }
-            { currentTab === TABS.RECEIPT ?
-                <MenuItemList
-                    itemList={ receiptList }
-                    includeText="Criar Receita"
-                    editItemHandler={ editReceiptHandler }
-                /> : null }
+            <div className={ CS.Pad02 }>
+                { currentTab === TABS.FOOD ?
+                    <MenuItemList
+                        itemList={ foodList }
+                        includeText="Incluir Alimento"
+                        editItemHandler={ editFoodHandler }
+                    /> : null }
+                { currentTab === TABS.RECEIPT ?
+                    <MenuItemList
+                        itemList={ receiptList }
+                        includeText="Criar Receita"
+                        editItemHandler={ editReceiptHandler }
+                    /> : null }
+            </div>
             { isEditing ? (
                 <Modal>
                     { editingFood ? <FoodEditor food={ editingFood } cancelEditHandler={ cancelEditHandler } /> : null }
-                    { editingReceipt ? <ReceiptEditor cancelEditHandler={ cancelEditHandler } /> : null }
+                    { editingReceipt ?
+                        <ReceiptEditor receipt={ editingReceipt } cancelEditHandler={ cancelEditHandler } /> : null }
                 </Modal>
             ) : null }
         </div>
