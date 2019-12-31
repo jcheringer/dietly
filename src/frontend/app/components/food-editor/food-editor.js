@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import _ from 'lodash';
+
+import { saveFood } from '../../store/actions/foods-action';
+
+import MeasureUnitSelector from '../measure-unit-selector/measure-unit-selector';
 
 import CS from '../../../style/common.less';
 import Style from './food-editor.less';
 
-
-export default function (props) {
+const foodEditor = (props) => {
     const blankMeasure = { measureUnit: 1, multiplier: '' };
 
+    const [id, setId] = useState(null);
     const [name, setName] = useState('');
     const [measureUnit, setMeasureUnit] = useState(0);
     const [relativeMeasures, setRelativeMeasures] = useState([]);
@@ -15,7 +20,6 @@ export default function (props) {
     const nameChangeHandler = (e) => {
         setName(e.target.value);
     };
-
 
     const measureUnitChangeHandler = (e) => {
         setMeasureUnit(e.target.value);
@@ -43,6 +47,23 @@ export default function (props) {
         setRelativeMeasures(newRelativeMeasures);
     };
 
+    const saveFoodHandler = () => {
+        const food = {
+            name: name,
+            measureUnits: [
+                { id: measureUnit, multiplier: 1 },
+                ...relativeMeasures
+            ]
+        };
+
+        if (id) {
+            food.id = id;
+        }
+
+        props.saveFood(food);
+        props.cancelEditHandler();
+    };
+
     useEffect(() => {
         const measureUnit = props.food.measureUnits.find(m => m.multiplier === 1);
         const relativeUnits = props.food.measureUnits.filter(m => m.multiplier !== 1);
@@ -51,6 +72,7 @@ export default function (props) {
             setMeasureUnit(measureUnit.id);
         }
 
+        setId(props.food.id);
         setName(props.food.name);
         setRelativeMeasures(relativeUnits);
     }, [props.food]);
@@ -62,12 +84,7 @@ export default function (props) {
                 <label>Nome</label>
             </div>
             <div className={ [CS.FloatingLabelContainer].join(' ') }>
-                <select value={ measureUnit } onChange={ measureUnitChangeHandler }>
-                    <option value="0">À Vontade</option>
-                    <option value="1">Unidade(s)</option>
-                    <option value="2">Grama(s)</option>
-                    <option value="3">Colher(es)</option>
-                </select>
+                <MeasureUnitSelector value={ measureUnit } onChange={ measureUnitChangeHandler } />
                 <label>Medida Padrão</label>
             </div>
             <div className={ Style.RelativeMeasureContainer }>
@@ -79,14 +96,9 @@ export default function (props) {
                     return (
                         <div key={ index } className={ [CS.DFlex, CS.AiCenter, CS.Pad01].join(' ') }>
                             <div className={ [CS.FloatingLabelContainer, CS.Wd50].join(' ') }>
-                                <select
+                                <MeasureUnitSelector
                                     value={ measure.id }
-                                    onChange={ (event) => relativeMeasureUnitChangeHandler(index, event) }>
-                                    <option value="0">À Vontade</option>
-                                    <option value="1">Unidade(s)</option>
-                                    <option value="2">Grama(s)</option>
-                                    <option value="3">Colher(es)</option>
-                                </select>
+                                    onChange={ (event) => relativeMeasureUnitChangeHandler(index, event) } />
                                 <label>Medida Relativa</label>
                             </div>
                             <div className={ [CS.FloatingLabelContainer, CS.Wd50].join(' ') }>
@@ -103,9 +115,17 @@ export default function (props) {
                 }) }
             </div>
             <div className={ CS.ActionContainer }>
-                <button className={ CS.BtnPrimary }>Salvar</button>
+                <button onClick={ saveFoodHandler } className={ CS.BtnPrimary }>Salvar</button>
                 <button onClick={ props.cancelEditHandler }>Cancelar</button>
             </div>
         </div>
     )
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveFood: (food) => dispatch(saveFood(food))
+    }
+};
+
+export default connect(null, mapDispatchToProps)(foodEditor);

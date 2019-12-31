@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import ReactSelect from 'react-select';
 
-import { getFoodList } from '../../store/actions/foods-action';
+import { getFoodList, removeFood } from '../../store/actions/foods-action';
 import { getReceiptList } from '../../store/actions/receipts-action';
 
 import MenuItemList from './menu-item-list';
@@ -30,6 +29,10 @@ const menuPage = (props) => {
     const editFoodHandler = (food) => {
         setEditingFood(food || { ...blankFood });
         setEditing(true);
+    };
+
+    const removeFoodHandler = (food) => {
+        props.removeFood(food.id);
     };
 
     const editReceiptHandler = (receipt) => {
@@ -77,6 +80,7 @@ const menuPage = (props) => {
                         itemList={ foodList }
                         includeText="Incluir Alimento"
                         editItemHandler={ editFoodHandler }
+                        removeItemHandler={removeFoodHandler}
                     /> : null }
                 { currentTab === TABS.RECEIPT ?
                     <MenuItemList
@@ -106,7 +110,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getFoodList: () => dispatch(getFoodList()),
-        getReceiptList: () => dispatch(getReceiptList())
+        getReceiptList: () => dispatch(getReceiptList()),
+        removeFood: (foodId) => dispatch(removeFood(foodId))
     }
 };
 

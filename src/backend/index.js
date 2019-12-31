@@ -29,9 +29,44 @@ const mealItemNormalize = (item, itemList, includeStatus = false) => {
     }
 };
 
+app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../../public')));
 
-app.use('/api/food', (req, res) => {
+app.get('/api/food', (req, res) => {
+    res.json(foods);
+});
+
+app.post('/api/food', (req, res) => {
+    const newFood = {
+        id: foods[foods.length - 1].id + 1,
+        name: req.body.name,
+        measureUnits: req.body.measureUnits
+    };
+
+    foods.push(newFood);
+
+    res.json(foods);
+});
+
+app.put('/api/food', (req, res) => {
+    const food = {
+        id: req.body.id,
+        name: req.body.name,
+        measureUnits: req.body.measureUnits
+    };
+
+    const index = foods.findIndex(f => f.id === food.id);
+    foods[index] = food;
+
+    res.json(foods);
+});
+
+app.delete('/api/food/:id', (req, res) => {
+    const id = req.params.id;
+    const index = foods.findIndex(food => food.id === id);
+
+    foods.splice(index, 1);
+
     res.json(foods);
 });
 

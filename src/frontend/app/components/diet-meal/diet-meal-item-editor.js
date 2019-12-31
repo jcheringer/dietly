@@ -8,6 +8,7 @@ import Style from './diet-meal-editor.less';
 import CS from '../../../style/common.less';
 import { getFoodList } from '../../store/actions/foods-action';
 import { getReceiptList } from '../../store/actions/receipts-action';
+import MeasureUnitSelector from '../measure-unit-selector/measure-unit-selector';
 
 const dietMealItemEditor = (props) => {
     const [amount, setAmount] = useState(props.item.amount);
@@ -74,12 +75,7 @@ const dietMealItemEditor = (props) => {
                 </div>
                 <div className={ CS.DFlex }>
                     <div className={ [CS.FloatingLabelContainer, CS.Wd75].join(' ') }>
-                        <select value={ measureUnit } onChange={ (e) => setMeasureUnit(e.target.value) }>
-                            <option value="0">À Vontade</option>
-                            <option value="1">Unidade(s)</option>
-                            <option value="2">Grama(s)</option>
-                            <option value="3">Colher(es)</option>
-                        </select>
+                        <MeasureUnitSelector value={ measureUnit } onChange={ (e) => setMeasureUnit(e.target.value) } />
                         <label>Medida</label>
                     </div>
                     <div className={ [CS.FloatingLabelContainer, CS.Wd25].join(' ') }>

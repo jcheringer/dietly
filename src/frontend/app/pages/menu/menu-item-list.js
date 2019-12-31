@@ -16,7 +16,7 @@ const menuItemList = (props) => {
                     <div key={ item.id } className={ CS.StrippedRow }>
                         <span>{ name }</span>
                         <i onClick={ () => props.editItemHandler(item) } className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
-                        <i className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />
+                        <i onClick={ () => props.removeItemHandler(item) } className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />
                     </div>
                 )
             }) }
