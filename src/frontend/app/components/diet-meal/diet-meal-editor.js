@@ -44,7 +44,7 @@ export default function (props) {
         setMealItems(items);
     }, [receipts, foods]);
 
-    const mealEditWrapperClasses = [CS.SideSlider, Style.MealEditWrapper];
+    const mealEditWrapperClasses = [CS.SideSlider];
 
     if (isEditing) {
         mealEditWrapperClasses.push(CS.Editing);
@@ -53,7 +53,7 @@ export default function (props) {
     return (
         <div className={ mealEditWrapperClasses.join(' ') }>
             <div className={ CS.SlideItem }>
-                <div className={ Style.MealHeader }>
+                <div className={ [CS.DFlex, CS.Mb02].join(' ') }>
                     <div className={ CS.FloatingLabelContainer }>
                         <input type="time" placeholder="Hora" value={ mealTime } onChange={ mealTimeChangeHandler } />
                         <label>Hora</label>
@@ -63,15 +63,13 @@ export default function (props) {
                         <label>Nome</label>
                     </div>
                 </div>
-                <div className={ Style.MealItemList }>
-                    <MenuItemList
-                        itemList={ mealItems }
-                        includeText="Inserir Alimento"
-                        editItemHandler={ editMealItemHandler }
-                        showAmount
-                    />
-                </div>
-                <div className={ CS.ActionContainer }>
+                <MenuItemList
+                    itemList={ mealItems }
+                    includeText="Inserir Alimento"
+                    editItemHandler={ editMealItemHandler }
+                    showAmount
+                />
+                <div className={ [CS.ActionContainer, CS.Mt02].join(' ') }>
                     <button className={ CS.BtnPrimary }>Salvar</button>
                     <button onClick={ () => props.mealCancelEditClickHandler(false) }>Cancelar</button>
                 </div>
