@@ -4,6 +4,22 @@ import PropTypes from 'prop-types';
 import CS from '../../../style/common.less';
 
 const menuItemList = (props) => {
+    const itemEditClickHandler = (item) => {
+        if (!props.editItemHandler) {
+            return;
+        }
+
+        props.editItemHandler(item);
+    };
+
+    const itemRemoveClickHandler = (item) => {
+        if (!props.removeItemHandler) {
+            return;
+        }
+
+        props.removeItemHandler(item);
+    };
+
     return (
         <div>
             <div onClick={ () => props.editItemHandler() } className={ [CS.StrippedRow, CS.Action, CS.Mb02].join(' ') }>
@@ -15,8 +31,8 @@ const menuItemList = (props) => {
                 return (
                     <div key={ item.id } className={ CS.StrippedRow }>
                         <span>{ name }</span>
-                        <i onClick={ () => props.editItemHandler(item) } className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
-                        <i onClick={ () => props.removeItemHandler(item) } className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />
+                        <i onClick={ () => itemEditClickHandler(item) } className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
+                        <i onClick={ () => itemRemoveClickHandler(item) } className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />
                     </div>
                 )
             }) }

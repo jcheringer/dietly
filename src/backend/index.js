@@ -29,6 +29,14 @@ const mealItemNormalize = (item, itemList, includeStatus = false) => {
     }
 };
 
+const ingredientInputNormalize = (ingredient) => ({
+    id: Number(ingredient.id),
+    name: ingredient.name,
+    measureUnit: Number(ingredient.measureUnit),
+    amount: Number(ingredient.amount),
+    amountText: ingredient.amountText
+});
+
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../../public')));
 
@@ -70,10 +78,44 @@ app.delete('/api/food/:id', (req, res) => {
     res.json(foods);
 });
 
-app.use('/api/receipt', (req, res) => {
+app.get('/api/receipt', (req, res) => {
     receipts.forEach(receipt => {
         receipt.ingredients.forEach(ing => mealItemNormalize(ing, foods));
     });
+
+    res.json(receipts);
+});
+
+app.post('/api/receipt', (req, res) => {
+    const receipt = {
+        id: receipts[receipts.length - 1].id + 1,
+        name: req.body.name,
+        ingredients: req.body.ingredients.map(ingredientInputNormalize)
+    };
+
+    receipts.push(receipt);
+
+    res.json(receipts);
+});
+
+app.put('/api/receipt', (req, res) => {
+    const receipt = {
+        id: req.body.id,
+        name: req.body.name,
+        ingredients: req.body.ingredients.map(ingredientInputNormalize)
+    };
+
+    const index = receipts.findIndex(r => r.id === receipt.id);
+    receipts[index] = receipt;
+
+    res.json(receipts);
+});
+
+app.delete('/api/receipt/:id', (req, res) => {
+    const id = req.params.id;
+    const index = receipts.findIndex(receipt => receipt.id === id);
+
+    receipts.splice(index, 1);
 
     res.json(receipts);
 });

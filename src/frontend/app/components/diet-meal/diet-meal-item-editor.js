@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ReactSelect from 'react-select';
 
-import { MEAL_TYPE } from '../../util/constants';
+import { MEAL_TYPE, MEASURE_UNITS } from '../../util/constants';
 
 import Style from './diet-meal-editor.less';
 import CS from '../../../style/common.less';
@@ -18,6 +18,28 @@ const dietMealItemEditor = (props) => {
 
     const mealItemChangeHandler = (item) => {
         setMealItem(item);
+    };
+
+    const mealItemSaveHandler = () => {
+        if (!props.saveItemHandler) {
+            return;
+        }
+
+        const [type, id] = mealItem.value.split('|');
+        const list = type === MEAL_TYPE.FOOD ? props.foodList : props.receiptList;
+        const item = list.find(i => i.id === Number(id));
+        const name = item.name;
+        const measureUnitName = MEASURE_UNITS[measureUnit];
+        const amountText = Number(measureUnit) !== 0 ? `${ amount } ${ measureUnitName }` : `${ measureUnitName }`;
+
+        props.saveItemHandler({
+            id: Number(id),
+            name: name,
+            measureUnit: Number(measureUnit),
+            amount: Number(amount),
+            amountText: amountText,
+            type: type
+        });
     };
 
     useEffect(() => {
@@ -85,7 +107,7 @@ const dietMealItemEditor = (props) => {
                 </div>
             </div>
             <div className={ CS.ActionContainer }>
-                <button className={ CS.BtnPrimary }>Salvar</button>
+                <button onClick={ mealItemSaveHandler } className={ CS.BtnPrimary }>Salvar</button>
                 <button onClick={ props.cancelEditHandler }>Cancelar</button>
             </div>
         </div>

@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import DietMealItemEditor from '../diet-meal/diet-meal-item-editor';
 import MenuItemList from '../../pages/menu/menu-item-list';
+
+import { saveReceipt } from '../../store/actions/receipts-action';
 
 import { MEAL_TYPE } from '../../util/constants';
 
 import CS from '../../../style/common.less';
 
-export default function (props) {
+const receiptEditor = (props) => {
     const blankIngredient = { id: null, amount: '', measureUnit: 0 };
 
+    const [id, setId] = useState(null);
     const [name, setName] = useState('');
     const [ingredients, setIngredients] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -24,11 +29,49 @@ export default function (props) {
         setIsEditing(true);
     };
 
+    const removeIngredientHandler = (ingredient) => {
+        const newIngredients = _.cloneDeep(ingredients);
+        const idx = newIngredients.findIndex(i => i.id === ingredient.id);
+
+        newIngredients.splice(idx, 1);
+        setIngredients(newIngredients);
+    };
+
+    const saveMealItemHandler = (item) => {
+        const newIngredients = _.cloneDeep(ingredients);
+
+        const idx = newIngredients.findIndex(i => i.id === item.id);
+
+        if (idx !== -1) {
+            newIngredients[idx] = item;
+        } else {
+            newIngredients.push(item);
+        }
+
+        setIngredients(newIngredients);
+        setIsEditing(false);
+    };
+
+    const saveReceiptHeandler = () => {
+        const receipt = {
+            name: name,
+            ingredients: ingredients
+        };
+
+        if (id) {
+            receipt.id = id;
+        }
+
+        props.saveReceipt(receipt);
+        props.cancelEditHandler();
+    };
+
     const cancelEditMealItemHandler = () => {
         setIsEditing(false);
     };
 
     useEffect(() => {
+        setId(props.receipt.id);
         setName(props.receipt.name);
         setIngredients(props.receipt.ingredients.map(i => ({ ...i, type: MEAL_TYPE.FOOD })));
     }, [props.receipt]);
@@ -44,22 +87,35 @@ export default function (props) {
             <div className={ [CS.SlideItem, CS.Pad02].join(' ') }>
                 <div className={ [CS.FloatingLabelContainer, CS.Mb03].join(' ') }>
                     <input type="text" placeholder="Nome" value={ name } onChange={ nameChangeHandler } />
-                    <label>Nome</label>
+                    <label>Nome da Receita</label>
                 </div>
                 <MenuItemList
                     itemList={ ingredients }
                     includeText="Adicionar Ingrediente"
                     editItemHandler={ editIngredientClickHandler }
+                    removeItemHandler={ removeIngredientHandler }
                     showAmount
                 />
                 <div className={ [CS.ActionContainer, CS.Mt02].join(' ') }>
-                    <button className={ CS.BtnPrimary }>Salvar</button>
+                    <button onClick={ saveReceiptHeandler } className={ CS.BtnPrimary }>Salvar</button>
                     <button onClick={ props.cancelEditHandler }>Cancelar</button>
                 </div>
             </div>
             <div className={ [CS.SlideItem, CS.Pad02].join(' ') }>
-                <DietMealItemEditor item={ editingItem } type="food" cancelEditHandler={ cancelEditMealItemHandler } />
+                <DietMealItemEditor
+                    item={ editingItem }
+                    type="food"
+                    saveItemHandler={ saveMealItemHandler }
+                    cancelEditHandler={ cancelEditMealItemHandler } />
             </div>
         </div>
     )
-}
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveReceipt: (receipt) => dispatch(saveReceipt(receipt))
+    }
+};
+
+export default connect(null, mapDispatchToProps)(receiptEditor);

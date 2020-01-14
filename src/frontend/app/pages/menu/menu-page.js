@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 
 import { getFoodList, removeFood } from '../../store/actions/foods-action';
-import { getReceiptList } from '../../store/actions/receipts-action';
+import { getReceiptList, removeReceipt } from '../../store/actions/receipts-action';
 
 import MenuItemList from './menu-item-list';
 import Modal from '../../components/modal/modal';
@@ -38,6 +38,10 @@ const menuPage = (props) => {
     const editReceiptHandler = (receipt) => {
         setEditingReceipt(receipt || { ...blankReceipt });
         setEditing(true);
+    };
+
+    const removeReceiptHandler = (receipt) => {
+        props.removeReceipt(receipt.id);
     };
 
     const cancelEditHandler = () => {
@@ -80,13 +84,14 @@ const menuPage = (props) => {
                         itemList={ foodList }
                         includeText="Incluir Alimento"
                         editItemHandler={ editFoodHandler }
-                        removeItemHandler={removeFoodHandler}
+                        removeItemHandler={ removeFoodHandler }
                     /> : null }
                 { currentTab === TABS.RECEIPT ?
                     <MenuItemList
                         itemList={ receiptList }
                         includeText="Criar Receita"
                         editItemHandler={ editReceiptHandler }
+                        removeItemHandler={ removeReceiptHandler }
                     /> : null }
             </div>
             { isEditing ? (
@@ -111,7 +116,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getFoodList: () => dispatch(getFoodList()),
         getReceiptList: () => dispatch(getReceiptList()),
-        removeFood: (foodId) => dispatch(removeFood(foodId))
+        removeFood: (foodId) => dispatch(removeFood(foodId)),
+        removeReceipt: (receiptId) => dispatch(removeReceipt(receiptId))
     }
 };
 
