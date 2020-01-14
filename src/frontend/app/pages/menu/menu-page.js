@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getFoodList, removeFood } from '../../store/actions/foods-action';
 import { getReceiptList, removeReceipt } from '../../store/actions/receipts-action';
 
-import MenuItemList from './menu-item-list';
+import MealItemList from '../../components/meal-item-list/meal-item-list';
 import Modal from '../../components/modal/modal';
 import FoodEditor from '../../components/food-editor/food-editor';
 import ReceiptEditor from '../../components/receipt-editor/receipt-editor';
@@ -80,14 +80,14 @@ const menuPage = (props) => {
             </ul>
             <div className={ CS.Pad02 }>
                 { currentTab === TABS.FOOD ?
-                    <MenuItemList
+                    <MealItemList
                         itemList={ foodList }
                         includeText="Incluir Alimento"
                         editItemHandler={ editFoodHandler }
                         removeItemHandler={ removeFoodHandler }
                     /> : null }
                 { currentTab === TABS.RECEIPT ?
-                    <MenuItemList
+                    <MealItemList
                         itemList={ receiptList }
                         includeText="Criar Receita"
                         editItemHandler={ editReceiptHandler }

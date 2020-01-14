@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import DietMealInfo from './diet-meal-info';
-import DietMealEditor from './diet-meal-editor';
+import MealInfo from '../meal-info/meal-info';
+import MealEditor from '../meal-editor/meal-editor';
 
 import CommonStyle from '../../../style/common.less';
 
@@ -15,13 +15,13 @@ export default function (props) {
     return (
         <div className={ CommonStyle.Box }>
             { !isEditing ? (
-                <DietMealInfo
+                <MealInfo
                     meal={ props.meal }
                     editMode={ props.editMode }
                     mealEditClickHandler={ mealClickHandler }
                     mealItemChangeHandler={ props.mealItemChangeHandler } />
             ) : (
-                <DietMealEditor
+                <MealEditor
                     meal={ props.meal }
                     mealCancelEditClickHandler={ mealClickHandler } />
             ) }

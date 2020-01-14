@@ -3,7 +3,7 @@ import moment from 'moment';
 import axios from 'axios';
 import _ from 'lodash';
 
-import DietMeal from '../diet-meal/diet-meal';
+import Meal from '../meal/meal';
 import Style from './diet-schedule.less';
 
 export default function () {
@@ -40,7 +40,7 @@ export default function () {
                 <button onClick={ () => changeCurrentDate(1) }>Next</button>
             </div>
             { meals.map(meal => {
-                return <DietMeal
+                return <Meal
                     key={ meal.id }
                     meal={ meal }
                     mealItemChangeHandler={ mealItemChangeHandler }

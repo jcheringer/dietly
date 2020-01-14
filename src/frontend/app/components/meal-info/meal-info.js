@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import MealItem from './diet-meal-item';
+import MealInfoItem from './meal-info-item';
 
-import Style from './diet-meal-info.less';
+import Style from './meal-info.less';
 import CommonStyle from '../../../style/common.less';
 
 export default function (props) {
@@ -15,13 +15,13 @@ export default function (props) {
         className={ ['fas fa-pencil-alt', CommonStyle.BorderedIcon].join(' ') } />;
 
     return (
-        <div className={ Style.DietMealInfo }>
+        <div className={ Style.MealInfo }>
             <div className={ Style.MealHeader }>
                 <span className={ Style.MealName }>{ props.meal.time }: { props.meal.name }</span>
                 { props.editMode ? editButton : null }
             </div>
             { props.meal.receipts.map(receipt => {
-                return <MealItem
+                return <MealInfoItem
                     key={ receipt.id }
                     name={ receipt.name }
                     amountText={ receipt.amountText }
@@ -32,7 +32,7 @@ export default function (props) {
                 />
             }) }
             { props.meal.foods.map(food => {
-                return <MealItem
+                return <MealInfoItem
                     key={ food.id }
                     name={ food.name }
                     amountText={ food.amountText }

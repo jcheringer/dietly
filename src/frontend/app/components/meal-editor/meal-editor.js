@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import DietMealItemEditor from './diet-meal-item-editor';
+import MealItemEditor from '../meal-item-editor/meal-item-editor';
+import MealItemList from '../meal-item-list/meal-item-list';
 
 import { MEAL_TYPE } from '../../util/constants';
 
-import Style from './diet-meal-editor.less';
 import CS from '../../../style/common.less';
-import MenuItemList from '../../pages/menu/menu-item-list';
 
 export default function (props) {
     const blankItem = { id: null, amount: '', measureUnit: 0 };
@@ -63,7 +62,7 @@ export default function (props) {
                         <label>Nome</label>
                     </div>
                 </div>
-                <MenuItemList
+                <MealItemList
                     itemList={ mealItems }
                     includeText="Inserir Alimento"
                     editItemHandler={ editMealItemHandler }
@@ -75,7 +74,7 @@ export default function (props) {
                 </div>
             </div>
             <div className={ CS.SlideItem }>
-                <DietMealItemEditor item={ editingItem } cancelEditHandler={ cancelEditMealItemHandler } />
+                <MealItemEditor item={ editingItem } cancelEditHandler={ cancelEditMealItemHandler } />
             </div>
         </div>
     );

@@ -4,11 +4,11 @@ import ReactSelect from 'react-select';
 
 import { MEAL_TYPE, MEASURE_UNITS } from '../../util/constants';
 
-import Style from './diet-meal-editor.less';
-import CS from '../../../style/common.less';
 import { getFoodList } from '../../store/actions/foods-action';
 import { getReceiptList } from '../../store/actions/receipts-action';
 import MeasureUnitSelector from '../measure-unit-selector/measure-unit-selector';
+
+import CS from '../../../style/common.less';
 
 const dietMealItemEditor = (props) => {
     const [amount, setAmount] = useState(props.item.amount);

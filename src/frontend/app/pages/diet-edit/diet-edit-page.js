@@ -2,24 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-import DietMeal from '../../components/diet-meal/diet-meal';
+import Meal from '../../components/meal/meal';
+import MealEditor from '../../components/meal-editor/meal-editor';
 
 import CS from '../../../style/common.less'
-import DietMealEditor from '../../components/diet-meal/diet-meal-editor';
 
 export default function () {
-    const blankDiet = {
-        name: '',
-        meals: []
-    };
-
-    const blankMeal = {
-        time: '',
-        name: '',
-        receipts: [],
-        foods: []
-    };
-
+    const blankDiet = { name: '', meals: [] };
+    const blankMeal = { time: '', name: '', receipts: [], foods: [] };
     const { dietId } = useParams();
     const [diet, setDiet] = useState(null);
     const [isInserting, setInserting] = useState(false);
@@ -53,11 +43,11 @@ export default function () {
                         <button className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
                     </div>
                     { diet.meals.map(meal => {
-                        return <DietMeal key={ meal.id } meal={ meal } editMode />
+                        return <Meal key={ meal.id } meal={ meal } editMode />
                     }) }
                     <div className={ CS.Box }>
                         { isInserting ? (
-                            <DietMealEditor meal={ blankMeal } mealCancelEditClickHandler={ () => setInserting(false) } />
+                            <MealEditor meal={ blankMeal } mealCancelEditClickHandler={ () => setInserting(false) } />
                         ) : (
                             <div onClick={ () => setInserting(true) } className={ CS.Pad02 }>
                                 Nova Refeição

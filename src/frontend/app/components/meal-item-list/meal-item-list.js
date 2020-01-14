@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import CS from '../../../style/common.less';
 
-const menuItemList = (props) => {
+const mealItemList = (props) => {
     const itemEditClickHandler = (item) => {
         if (!props.editItemHandler) {
             return;
@@ -40,14 +40,14 @@ const menuItemList = (props) => {
     )
 };
 
-menuItemList.defaultProps = {
+mealItemList.defaultProps = {
     showAmount: false
 };
 
-menuItemList.propTypes = {
+mealItemList.propTypes = {
     includeText: PropTypes.string,
     showAmount: PropTypes.bool,
     editItemHandler: PropTypes.func
 };
 
-export default menuItemList;
+export default mealItemList;

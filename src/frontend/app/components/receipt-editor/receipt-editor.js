@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import DietMealItemEditor from '../diet-meal/diet-meal-item-editor';
-import MenuItemList from '../../pages/menu/menu-item-list';
+import MealItemEditor from '../meal-item-editor/meal-item-editor';
+import MealItemList from '../meal-item-list/meal-item-list';
 
 import { saveReceipt } from '../../store/actions/receipts-action';
 
@@ -89,7 +89,7 @@ const receiptEditor = (props) => {
                     <input type="text" placeholder="Nome" value={ name } onChange={ nameChangeHandler } />
                     <label>Nome da Receita</label>
                 </div>
-                <MenuItemList
+                <MealItemList
                     itemList={ ingredients }
                     includeText="Adicionar Ingrediente"
                     editItemHandler={ editIngredientClickHandler }
@@ -102,7 +102,7 @@ const receiptEditor = (props) => {
                 </div>
             </div>
             <div className={ [CS.SlideItem, CS.Pad02].join(' ') }>
-                <DietMealItemEditor
+                <MealItemEditor
                     item={ editingItem }
                     type="food"
                     saveItemHandler={ saveMealItemHandler }
