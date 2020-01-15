@@ -1,61 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
+
+import { getDiet, getDietList } from '../../store/actions/diets-action';
 
 import Meal from '../../components/meal/meal';
 import MealEditor from '../../components/meal-editor/meal-editor';
 
 import CS from '../../../style/common.less'
 
-export default function () {
-    const blankDiet = { name: '', meals: [] };
-    const blankMeal = { time: '', name: '', receipts: [], foods: [] };
-    const { dietId } = useParams();
+const dietEditPage = (props) => {
+    const blankMeal = { id: null, time: '', name: '', receipts: [], foods: [] };
+
+    const history = useHistory();
+    const params = useParams();
+    const dietId = Number(params.dietId);
     const [diet, setDiet] = useState(null);
     const [isInserting, setInserting] = useState(false);
 
-    const dietNameChangeHanlder = (event) => {
+    const dietNameChangeHandler = (event) => {
         const newDiet = { ...diet };
         newDiet.name = event.target.value;
         setDiet(newDiet);
     };
 
-    useEffect(() => {
-        if (!dietId || dietId <= 0) {
-            setDiet({ ...blankDiet });
-            return;
-        }
+    const saveDietClickHandler = () => {
+        const method = diet.id ? 'PUT' : 'POST';
 
-        axios.get(`/api/diet/${ dietId }`).then(response => {
-            setDiet(response.data);
+        axios({ url: '/api/diet', method: method, data: diet }).then(response => {
+            const savedDiet = response.data;
+
+            props.getDietList(true);
+
+            if (savedDiet.id !== dietId) {
+                history.push(`/diet/${ savedDiet.id }`);
+            }
         });
+    };
+
+    useEffect(() => {
+        props.getDiet(dietId);
     }, [dietId]);
+
+    useEffect(() => {
+        setDiet(props.diet);
+    }, [props.diet]);
 
     return (
         <div className={ CS.CommonPage }>
-            { diet ? (
+            { diet && (!diet.id || diet.id === dietId) ? (
                 <div>
                     <div className={ [CS.DFlex, CS.AiCenter].join(' ') }>
                         <div className={ [CS.FloatingLabelContainer, CS.Mb03, CS.Fgrow].join(' ') }>
-                            <input type="text" placeholder="Nome da Dieta" value={ diet.name } onChange={ dietNameChangeHanlder } />
+                            <input type="text" placeholder="Nome da Dieta" value={ diet.name } onChange={ dietNameChangeHandler } />
                             <label>Nome da Dieta</label>
                         </div>
-                        <button className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
+                        <button onClick={ saveDietClickHandler } className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
                     </div>
                     { diet.meals.map(meal => {
-                        return <Meal key={ meal.id } meal={ meal } editMode />
+                        return <Meal key={ meal.id } meal={ meal } dietId={ dietId } editMode />
                     }) }
-                    <div className={ CS.Box }>
-                        { isInserting ? (
-                            <MealEditor meal={ blankMeal } mealCancelEditClickHandler={ () => setInserting(false) } />
-                        ) : (
-                            <div onClick={ () => setInserting(true) } className={ CS.Pad02 }>
-                                Nova Refeição
-                            </div>
-                        ) }
-                    </div>
+                    { diet.id ? (
+                        <div className={ CS.Box }>
+                            { isInserting ? (
+                                <MealEditor meal={ blankMeal } dietId={ dietId } mealCancelEditClickHandler={ () => setInserting(false) } />
+                            ) : (
+                                <div onClick={ () => setInserting(true) } className={ CS.Pad02 }>
+                                    Nova Refeição
+                                </div>
+                            ) }
+                        </div>
+                    ) : null }
                 </div>
             ) : null }
         </div>
     )
-}
+};
+
+const mapStateToProps = (state) => {
+    return {
+        diet: state.dietState.diet
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getDiet: (dietId) => dispatch(getDiet(dietId)),
+        getDietList: (forceUpdate) => dispatch(getDietList(forceUpdate))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(dietEditPage);

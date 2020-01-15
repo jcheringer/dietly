@@ -3,7 +3,7 @@ import { GET_FOOD_LIST, SAVE_FOOD, REMOVE_FOOD } from './action-types';
 
 export const getFoodList = (forceUpdate = false) => {
     return (dispatch, getState) => {
-        const foodList = getState().food.foodList;
+        const foodList = getState().foodState.foodList;
 
         if (foodList && !forceUpdate) {
             return;

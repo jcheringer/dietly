@@ -38,7 +38,7 @@ const dietsPage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        dietList: state.diet.dietList
+        dietList: state.dietState.dietList
     }
 };
 

@@ -107,8 +107,8 @@ const menuPage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        foodList: state.food.foodList,
-        receiptList: state.receipt.receiptList
+        foodList: state.foodState.foodList,
+        receiptList: state.receiptState.receiptList
     }
 };
 

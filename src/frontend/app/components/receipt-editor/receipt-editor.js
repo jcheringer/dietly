@@ -37,6 +37,20 @@ const receiptEditor = (props) => {
         setIngredients(newIngredients);
     };
 
+    const saveReceiptHeandler = () => {
+        const receipt = {
+            name: name,
+            ingredients: ingredients
+        };
+
+        if (id) {
+            receipt.id = id;
+        }
+
+        props.saveReceipt(receipt);
+        props.cancelEditHandler();
+    };
+
     const saveMealItemHandler = (item) => {
         const newIngredients = _.cloneDeep(ingredients);
 
@@ -50,20 +64,6 @@ const receiptEditor = (props) => {
 
         setIngredients(newIngredients);
         setIsEditing(false);
-    };
-
-    const saveReceiptHeandler = () => {
-        const receipt = {
-            name: name,
-            ingredients: ingredients
-        };
-
-        if (id) {
-            receipt.id = id;
-        }
-
-        props.saveReceipt(receipt);
-        props.cancelEditHandler();
     };
 
     const cancelEditMealItemHandler = () => {

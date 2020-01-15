@@ -23,6 +23,7 @@ export default function (props) {
             ) : (
                 <MealEditor
                     meal={ props.meal }
+                    dietId={ props.dietId }
                     mealCancelEditClickHandler={ mealClickHandler } />
             ) }
         </div>

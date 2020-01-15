@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const getReceiptList = (forceUpdate = false) => {
     return (dispatch, getState) => {
-        const receiptList = getState().receipt.receiptList;
+        const receiptList = getState().receiptState.receiptList;
 
         if (receiptList && !forceUpdate) {
             return;

@@ -1,7 +1,8 @@
-import { GET_DIET_LIST_SUCCESS } from '../actions/action-types';
+import { GET_DIET_LIST_SUCCESS, GET_DIET_SUCCESS } from '../actions/action-types';
 
 const initialState = {
-    dietList: null
+    dietList: null,
+    diet: null
 };
 
 export default (state = initialState, action) => {
@@ -10,6 +11,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 dietList: action.data
+            }
+        }
+        case GET_DIET_SUCCESS: {
+            return {
+                ...state,
+                diet: action.data
             }
         }
         default:

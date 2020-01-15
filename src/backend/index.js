@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 const { measureUnits, foods, receipts, diets, dietSchedule } = require('./mock-database');
+const blankDiet = { name: '', meals: [] };
 
 //===== Functions //
 const mealNormalize = (meal, currentDiet, includeStatus = false) => {
@@ -120,9 +121,9 @@ app.delete('/api/receipt/:id', (req, res) => {
     res.json(receipts);
 });
 
-app.use('/api/diet/:id', (req, res) => {
+app.get('/api/diet/:id', (req, res) => {
     const id = Number(req.params.id);
-    const diet = diets.find(d => d.id === id) || {};
+    const diet = diets.find(d => d.id === id) || blankDiet;
 
     if (diet && diet.meals) {
         diet.meals.forEach(meal => mealNormalize(meal));
@@ -131,8 +132,75 @@ app.use('/api/diet/:id', (req, res) => {
     res.json(diet);
 });
 
-app.use('/api/diet', (req, res) => {
+app.post('/api/diet', (req, res) => {
+    const id = diets[diets.length - 1].id + 1;
+
+    const diet = {
+        id: id,
+        name: req.body.name || `Dieta ${ id }`,
+        meals: req.body.meals
+    };
+
+    diets.push(diet);
+
+    res.json(diet);
+});
+
+app.put('/api/diet', (req, res) => {
+    const diet = {
+        id: req.body.id,
+        name: req.body.name,
+        meals: req.body.meals
+    };
+
+    const index = diets.findIndex(d => d.id === diet.id);
+    diets[index] = diet;
+
+    res.json(diet);
+});
+
+app.get('/api/diet', (req, res) => {
     res.json(diets);
+});
+
+app.post('/api/meal', (req, res) => {
+    const dietId = req.body.dietId;
+
+    const diet = diets.find(d => d.id === dietId);
+    const meals = diet.meals;
+    const id = meals.length ? meals[meals.length - 1].id + 1 : 1;
+
+    const meal = {
+        id: id,
+        name: req.body.meal.name,
+        time: req.body.meal.time,
+        receipts: req.body.meal.receipts,
+        foods: req.body.meal.foods
+    };
+
+    meals.push(meal);
+
+    res.json(diet);
+});
+
+app.put('/api/meal', (req, res) => {
+    const dietId = req.body.dietId;
+    const mealId = req.body.meal.id;
+
+    const diet = diets.find(d => d.id === dietId);
+    const idx = diet.meals.findIndex(m => m.id === mealId);
+
+    const meal = {
+        id: req.body.meal.id,
+        name: req.body.meal.name,
+        time: req.body.meal.time,
+        receipts: req.body.meal.receipts,
+        foods: req.body.meal.foods
+    };
+
+    diet.meals[idx] = meal;
+
+    res.json(diet);
 });
 
 app.use('/api/diet-schedule/:date', (req, res) => {
@@ -144,6 +212,10 @@ app.use('/api/diet-schedule/:date', (req, res) => {
     diet.meals.forEach(meal => mealNormalize(meal, currentDiet, true));
 
     res.json(diet.meals);
+});
+
+app.use('/api/*', (req, res) => {
+    res.sendStatus(500).end();
 });
 
 app.use('/*', (req, res) => {
