@@ -18,7 +18,7 @@ export default function (props) {
         <div className={ Style.MealInfo }>
             <div className={ Style.MealHeader }>
                 <span className={ Style.MealName }>{ props.meal.time }: { props.meal.name }</span>
-                { props.editMode ? editButton : null }
+                { props.editMode && editButton }
             </div>
             { props.meal.receipts.map(receipt => {
                 return <MealInfoItem

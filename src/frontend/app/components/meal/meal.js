@@ -19,12 +19,12 @@ export default function (props) {
                 editMode={ props.editMode }
                 mealEditClickHandler={ mealClickHandler }
                 mealItemChangeHandler={ props.mealItemChangeHandler } />
-            { isEditing ? (
+            { isEditing && (
                 <MealEditor
                     meal={ props.meal }
                     dietId={ props.dietId }
                     mealCancelEditClickHandler={ mealClickHandler } />
-            ) : null }
+            ) }
         </div>
     )
 }

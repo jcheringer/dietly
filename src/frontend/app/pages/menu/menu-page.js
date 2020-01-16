@@ -79,28 +79,33 @@ const menuPage = (props) => {
                 <li onClick={ () => changeCurrentTab(TABS.RECEIPT) } className={ receiptClass }>Receitas</li>
             </ul>
             <div className={ CS.Pad02 }>
-                { currentTab === TABS.FOOD ?
+                { currentTab === TABS.FOOD && (
                     <MealItemList
                         itemList={ foodList }
                         includeText="Incluir Alimento"
                         editItemHandler={ editFoodHandler }
                         removeItemHandler={ removeFoodHandler }
-                    /> : null }
-                { currentTab === TABS.RECEIPT ?
+                    />
+                ) }
+                { currentTab === TABS.RECEIPT && (
                     <MealItemList
                         itemList={ receiptList }
                         includeText="Criar Receita"
                         editItemHandler={ editReceiptHandler }
                         removeItemHandler={ removeReceiptHandler }
-                    /> : null }
+                    />
+                ) }
             </div>
-            { isEditing ? (
+            { isEditing && (
                 <Modal>
-                    { editingFood ? <FoodEditor food={ editingFood } cancelEditHandler={ cancelEditHandler } /> : null }
-                    { editingReceipt ?
-                        <ReceiptEditor receipt={ editingReceipt } cancelEditHandler={ cancelEditHandler } /> : null }
+                    { editingFood && (
+                        <FoodEditor food={ editingFood } cancelEditHandler={ cancelEditHandler } />
+                    ) }
+                    { editingReceipt && (
+                        <ReceiptEditor receipt={ editingReceipt } cancelEditHandler={ cancelEditHandler } />
+                    ) }
                 </Modal>
-            ) : null }
+            ) }
         </div>
     )
 };

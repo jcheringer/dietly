@@ -49,7 +49,7 @@ const dietEditPage = (props) => {
 
     return (
         <div className={ CS.CommonPage }>
-            { diet && (!diet.id || diet.id === dietId) ? (
+            { diet && (!diet.id || diet.id === dietId) && (
                 <div>
                     <div className={ [CS.DFlex, CS.AiCenter].join(' ') }>
                         <div className={ [CS.FloatingLabelContainer, CS.Mb03, CS.Fgrow].join(' ') }>
@@ -61,7 +61,7 @@ const dietEditPage = (props) => {
                     { diet.meals.map(meal => {
                         return <Meal key={ meal.id } meal={ meal } dietId={ dietId } editMode />
                     }) }
-                    { diet.id ? (
+                    { diet.id && (
                         <div className={ CS.Box }>
                             { isInserting ? (
                                 <MealEditor meal={ blankMeal } dietId={ dietId } mealCancelEditClickHandler={ () => setInserting(false) } />
@@ -71,9 +71,9 @@ const dietEditPage = (props) => {
                                 </div>
                             ) }
                         </div>
-                    ) : null }
+                    ) }
                 </div>
-            ) : null }
+            ) }
         </div>
     )
 };
