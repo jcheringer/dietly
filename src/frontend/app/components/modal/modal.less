@@ -1,5 +1,6 @@
 .Modal {
     position: fixed;
+    z-index: 200;
     top: 0;
     left: 0;
     width: 100%;
@@ -17,6 +18,7 @@
         background-color: white;
         border-radius: 3px;
         box-shadow: 2px 2px 2px fade(black, 50%);
-        margin-top: -20%;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 }
