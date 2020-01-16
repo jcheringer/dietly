@@ -6,18 +6,18 @@ const { measureUnits, foods, receipts, diets, dietSchedule } = require('./mock-d
 const blankDiet = { name: '', meals: [] };
 
 //===== Functions //
-const mealNormalize = (meal, currentDiet, includeStatus = false) => {
+const mealOutputNormalize = (meal, currentDiet, includeStatus = false) => {
     if (!meal.name && currentDiet) {
         const currentMeal = currentDiet.meals.find(cm => cm.id === meal.id);
         meal.name = currentMeal.name;
         meal.time = currentMeal.time;
     }
 
-    meal.receipts.forEach(receipt => mealItemNormalize(receipt, receipts, includeStatus));
-    meal.foods.forEach(food => mealItemNormalize(food, foods, includeStatus));
+    meal.receipts.forEach(receipt => mealItemOutputNormalize(receipt, receipts, includeStatus));
+    meal.foods.forEach(food => mealItemOutputNormalize(food, foods, includeStatus));
 };
 
-const mealItemNormalize = (item, itemList, includeStatus = false) => {
+const mealItemOutputNormalize = (item, itemList, includeStatus = false) => {
     item.name = itemList.find(r => r.id === item.id).name;
     item.amountText = `${ item.amount } ${ measureUnits[item.measureUnit] }`;
 
@@ -27,6 +27,23 @@ const mealItemNormalize = (item, itemList, includeStatus = false) => {
 
     if (includeStatus) {
         item.checked = item.checked || false;
+    }
+};
+
+const mealInputNormalize = (meal, keepStatus) => {
+    delete meal.name;
+    delete meal.time;
+
+    meal.receipts.forEach(receipt => mealItemInputNormalize(receipt, keepStatus));
+    meal.foods.forEach(food => mealItemInputNormalize(food, keepStatus));
+};
+
+const mealItemInputNormalize = (item, keepStatus = false) => {
+    delete item.name;
+    delete item.amountText;
+
+    if (!keepStatus) {
+        delete item.checked;
     }
 };
 
@@ -81,7 +98,7 @@ app.delete('/api/food/:id', (req, res) => {
 
 app.get('/api/receipt', (req, res) => {
     receipts.forEach(receipt => {
-        receipt.ingredients.forEach(ing => mealItemNormalize(ing, foods));
+        receipt.ingredients.forEach(ing => mealItemOutputNormalize(ing, foods));
     });
 
     res.json(receipts);
@@ -126,7 +143,7 @@ app.get('/api/diet/:id', (req, res) => {
     const diet = diets.find(d => d.id === id) || blankDiet;
 
     if (diet && diet.meals) {
-        diet.meals.forEach(meal => mealNormalize(meal));
+        diet.meals.forEach(meal => mealOutputNormalize(meal));
     }
 
     res.json(diet);
@@ -203,15 +220,50 @@ app.put('/api/meal', (req, res) => {
     res.json(diet);
 });
 
-app.use('/api/diet-schedule/:date', (req, res) => {
+app.get('/api/schedule/:date', (req, res) => {
     const date = req.params.date;
     const dietOfDay = dietSchedule.find(ds => ds.date === date);
-    const currentDiet = diets.find(d => d.active);
+    let currentDiet = diets.find(d => d.active);
     const diet = dietOfDay ? dietOfDay.diet : currentDiet;
 
-    diet.meals.forEach(meal => mealNormalize(meal, currentDiet, true));
+    if (dietOfDay && currentDiet.id !== dietOfDay.diet.id) {
+        currentDiet = diets.find(d => d.id === dietOfDay.diet.id);
+    }
 
-    res.json(diet.meals);
+    diet.meals.forEach(meal => mealOutputNormalize(meal, currentDiet, true));
+
+    const schedule = {
+        date: date,
+        diet: {
+            id: diet.id,
+            meals: diet.meals
+        }
+    };
+
+    res.json(schedule);
+});
+
+app.post('/api/schedule', (req, res) => {
+    const date = req.body.date;
+    const idx = dietSchedule.findIndex(ds => ds.date === date);
+
+    const schedule = {
+        date: req.body.date,
+        diet: {
+            id: req.body.diet.id,
+            meals: req.body.diet.meals
+        }
+    };
+
+    schedule.diet.meals.forEach(meal => mealInputNormalize(meal, true));
+
+    if (idx !== -1) {
+        dietSchedule[idx] = schedule;
+    } else {
+        dietSchedule.push(schedule);
+    }
+
+    res.json(schedule)
 });
 
 app.use('/api/*', (req, res) => {

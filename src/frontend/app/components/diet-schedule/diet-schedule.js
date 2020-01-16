@@ -8,6 +8,7 @@ import Style from './diet-schedule.less';
 
 export default function () {
     const [currentDate, setCurrentDate] = useState(moment());
+    const [dietId, setDietId] = useState(null);
     const [meals, setMeals] = useState([]);
 
     const changeCurrentDate = (amount) => {
@@ -24,11 +25,28 @@ export default function () {
         item.checked = !item.checked;
 
         setMeals(mealsCopy);
+
+        const schedule = {
+            date: currentDate.format('YYYY-MM-DD'),
+            diet: {
+                id: dietId,
+                meals: mealsCopy
+            }
+        };
+
+        axios.post('/api/schedule', schedule).catch(() => {
+            //TODO: Send an error message
+            item.checked = !item.checked;
+            setMeals(mealsCopy);
+        });
     };
 
     useEffect(() => {
-        axios.get(`/api/diet-schedule/${ currentDate.format('YYYY-MM-DD') }`).then(response => {
-            setMeals(response.data);
+        const date = currentDate.format('YYYY-MM-DD');
+
+        axios.get(`/api/schedule/${ date }`).then(response => {
+            setDietId(response.data.diet.id);
+            setMeals(response.data.diet.meals);
         });
     }, [currentDate]);
 
