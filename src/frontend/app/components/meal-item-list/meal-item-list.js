@@ -29,7 +29,7 @@ const mealItemList = (props) => {
             { props.itemList.map(item => {
                 const name = props.showAmount ? `${ item.name } - ${ item.amountText }` : `${ item.name }`;
                 return (
-                    <div key={ item.id } className={ CS.StrippedRow }>
+                    <div key={ `${ item.type }-${ item.id }` } className={ CS.StrippedRow }>
                         <span>{ name }</span>
                         <i onClick={ () => itemEditClickHandler(item) } className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
                         <i onClick={ () => itemRemoveClickHandler(item) } className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />

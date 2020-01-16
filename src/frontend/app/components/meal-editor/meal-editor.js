@@ -8,6 +8,7 @@ import { getDiet } from '../../store/actions/diets-action';
 
 import MealItemEditor from '../meal-item-editor/meal-item-editor';
 import MealItemList from '../meal-item-list/meal-item-list';
+import Modal from '../../components/modal/modal';
 
 import { MEAL_TYPE } from '../../util/constants';
 
@@ -49,7 +50,7 @@ const mealEditor = (props) => {
     const saveMealItemHandler = (item) => {
         const newMealItems = _.cloneDeep(mealItems);
 
-        const idx = newMealItems.findIndex(i => i.id === item.id);
+        const idx = newMealItems.findIndex(i => i.id === item.id && i.type === item.type);
 
         if (idx !== -1) {
             newMealItems[idx] = item;
@@ -100,37 +101,39 @@ const mealEditor = (props) => {
     }
 
     return (
-        <div className={ mealEditWrapperClasses.join(' ') }>
-            <div className={ CS.SlideItem }>
-                <div className={ [CS.DFlex, CS.Mb02].join(' ') }>
-                    <div className={ CS.FloatingLabelContainer }>
-                        <input type="time" placeholder="Hora" value={ mealTime } onChange={ mealTimeChangeHandler } />
-                        <label>Hora</label>
+        <Modal>
+            <div className={ mealEditWrapperClasses.join(' ') }>
+                <div className={ CS.SlideItem }>
+                    <div className={ [CS.DFlex, CS.Mb02].join(' ') }>
+                        <div className={ CS.FloatingLabelContainer }>
+                            <input type="time" placeholder="Hora" value={ mealTime } onChange={ mealTimeChangeHandler } />
+                            <label>Hora</label>
+                        </div>
+                        <div className={ CS.FloatingLabelContainer }>
+                            <input type="text" placeholder="Nome" value={ mealName } onChange={ mealNameChangeHandler } />
+                            <label>Nome</label>
+                        </div>
                     </div>
-                    <div className={ CS.FloatingLabelContainer }>
-                        <input type="text" placeholder="Nome" value={ mealName } onChange={ mealNameChangeHandler } />
-                        <label>Nome</label>
+                    <MealItemList
+                        itemList={ mealItems }
+                        includeText="Inserir Alimento"
+                        editItemHandler={ editMealItemHandler }
+                        removeItemHandler={ removeMealItemHandler }
+                        showAmount
+                    />
+                    <div className={ [CS.ActionContainer, CS.Mt02].join(' ') }>
+                        <button onClick={ mealSaveClickHandler } className={ CS.BtnPrimary }>Salvar</button>
+                        <button onClick={ () => props.mealCancelEditClickHandler(false) }>Cancelar</button>
                     </div>
                 </div>
-                <MealItemList
-                    itemList={ mealItems }
-                    includeText="Inserir Alimento"
-                    editItemHandler={ editMealItemHandler }
-                    removeItemHandler={ removeMealItemHandler }
-                    showAmount
-                />
-                <div className={ [CS.ActionContainer, CS.Mt02].join(' ') }>
-                    <button onClick={ mealSaveClickHandler } className={ CS.BtnPrimary }>Salvar</button>
-                    <button onClick={ () => props.mealCancelEditClickHandler(false) }>Cancelar</button>
+                <div className={ CS.SlideItem }>
+                    <MealItemEditor
+                        item={ editingItem }
+                        saveItemHandler={ saveMealItemHandler }
+                        cancelEditHandler={ cancelEditMealItemHandler } />
                 </div>
             </div>
-            <div className={ CS.SlideItem }>
-                <MealItemEditor
-                    item={ editingItem }
-                    saveItemHandler={ saveMealItemHandler }
-                    cancelEditHandler={ cancelEditMealItemHandler } />
-            </div>
-        </div>
+        </Modal>
     );
 };
 

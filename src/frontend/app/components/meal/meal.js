@@ -14,18 +14,17 @@ export default function (props) {
 
     return (
         <div className={ CommonStyle.Box }>
-            { !isEditing ? (
-                <MealInfo
-                    meal={ props.meal }
-                    editMode={ props.editMode }
-                    mealEditClickHandler={ mealClickHandler }
-                    mealItemChangeHandler={ props.mealItemChangeHandler } />
-            ) : (
+            <MealInfo
+                meal={ props.meal }
+                editMode={ props.editMode }
+                mealEditClickHandler={ mealClickHandler }
+                mealItemChangeHandler={ props.mealItemChangeHandler } />
+            { isEditing ? (
                 <MealEditor
                     meal={ props.meal }
                     dietId={ props.dietId }
                     mealCancelEditClickHandler={ mealClickHandler } />
-            ) }
+            ) : null }
         </div>
     )
 }
