@@ -5,7 +5,7 @@ import ReactSelect from 'react-select';
 import { MEAL_TYPE, MEASURE_UNITS } from '../../util/constants';
 
 import { getFoodList } from '../../store/actions/foods-action';
-import { getReceiptList } from '../../store/actions/receipts-action';
+import { getRecipeList } from '../../store/actions/recipes-action';
 import MeasureUnitSelector from '../measure-unit-selector/measure-unit-selector';
 
 import CS from '../../../style/common.less';
@@ -26,7 +26,7 @@ const dietMealItemEditor = (props) => {
         }
 
         const [type, id] = mealItem.value.split('|');
-        const list = type === MEAL_TYPE.FOOD ? props.foodList : props.receiptList;
+        const list = type === MEAL_TYPE.FOOD ? props.foodList : props.recipeList;
         const item = list.find(i => i.id === Number(id));
         const name = item.name;
         const measureUnitName = MEASURE_UNITS[measureUnit];
@@ -44,7 +44,7 @@ const dietMealItemEditor = (props) => {
 
     useEffect(() => {
         props.getFoodList();
-        props.getReceiptList();
+        props.getRecipeList();
     }, []);
 
     useEffect(() => {
@@ -55,18 +55,18 @@ const dietMealItemEditor = (props) => {
             }
         });
 
-        const receipts = props.receiptList.map(receipt => {
+        const recipes = props.recipeList.map(recipe => {
             return {
-                label: receipt.name,
-                value: `${ MEAL_TYPE.RECEIPT }|${ receipt.id }`
+                label: recipe.name,
+                value: `${ MEAL_TYPE.RECIPE }|${ recipe.id }`
             }
         });
 
         setOptions([
             { label: 'Alimentos', options: foods, type: MEAL_TYPE.FOOD },
-            { label: 'Receitas', options: receipts, type: MEAL_TYPE.RECEIPT }
+            { label: 'Receitas', options: recipes, type: MEAL_TYPE.RECIPE }
         ])
-    }, [props.foodList, props.receiptList]);
+    }, [props.foodList, props.recipeList]);
 
     useEffect(() => {
         let selectedItem = null;
@@ -117,14 +117,14 @@ const dietMealItemEditor = (props) => {
 const mapStateToProps = (state) => {
     return {
         foodList: state.foodState.foodList || [],
-        receiptList: state.receiptState.receiptList || []
+        recipeList: state.recipeState.recipeList || []
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getFoodList: () => dispatch(getFoodList()),
-        getReceiptList: () => dispatch(getReceiptList())
+        getRecipeList: () => dispatch(getRecipeList())
     }
 };
 

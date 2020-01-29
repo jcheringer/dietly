@@ -2,27 +2,27 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 
 import { getFoodList, removeFood } from '../../store/actions/foods-action';
-import { getReceiptList, removeReceipt } from '../../store/actions/receipts-action';
+import { getRecipeList, removeRecipe } from '../../store/actions/recipes-action';
 
 import MealItemList from '../../components/meal-item-list/meal-item-list';
 import Modal from '../../components/modal/modal';
 import FoodEditor from '../../components/food-editor/food-editor';
-import ReceiptEditor from '../../components/receipt-editor/receipt-editor';
+import RecipeEditor from '../../components/recipe-editor/recipe-editor';
 
 import Style from './menu-page.less';
 import CS from '../../../style/common.less';
 
 const menuPage = (props) => {
-    const TABS = { FOOD: 'food', RECEIPT: 'receipt' };
+    const TABS = { FOOD: 'food', RECIPE: 'recipe' };
     const blankFood = { name: '', measureUnits: [] };
-    const blankReceipt = { name: '', ingredients: [] };
+    const blankRecipe = { name: '', ingredients: [] };
 
     const [currentTab, setCurrentTab] = useState(TABS.FOOD);
     const [foodList, setFoodList] = useState([]);
-    const [receiptList, setReceiptList] = useState([]);
+    const [recipeList, setRecipeList] = useState([]);
     const [isEditing, setEditing] = useState(false);
     const [editingFood, setEditingFood] = useState(null);
-    const [editingReceipt, setEditingReceipt] = useState(null);
+    const [editingRecipe, setEditingRecipe] = useState(null);
 
     const changeCurrentTab = (tab) => setCurrentTab(tab);
 
@@ -35,33 +35,33 @@ const menuPage = (props) => {
         props.removeFood(food.id);
     };
 
-    const editReceiptHandler = (receipt) => {
-        setEditingReceipt(receipt || { ...blankReceipt });
+    const editRecipeHandler = (recipe) => {
+        setEditingRecipe(recipe || { ...blankRecipe });
         setEditing(true);
     };
 
-    const removeReceiptHandler = (receipt) => {
-        props.removeReceipt(receipt.id);
+    const removeRecipeHandler = (recipe) => {
+        props.removeRecipe(recipe.id);
     };
 
     const cancelEditHandler = () => {
-        setEditingReceipt(null);
+        setEditingRecipe(null);
         setEditingFood(null);
         setEditing(false);
     };
 
     let foodClass;
-    let receiptClass;
+    let recipeClass;
 
     if (currentTab === TABS.FOOD) {
         foodClass = Style.ActiveTab;
-    } else if (currentTab === TABS.RECEIPT) {
-        receiptClass = Style.ActiveTab;
+    } else if (currentTab === TABS.RECIPE) {
+        recipeClass = Style.ActiveTab;
     }
 
     useEffect(() => {
         props.getFoodList();
-        props.getReceiptList();
+        props.getRecipeList();
     }, []);
 
     useEffect(() => {
@@ -69,14 +69,14 @@ const menuPage = (props) => {
     }, [props.foodList]);
 
     useEffect(() => {
-        setReceiptList(props.receiptList || []);
-    }, [props.receiptList]);
+        setRecipeList(props.recipeList || []);
+    }, [props.recipeList]);
 
     return (
         <div>
             <ul className={ Style.MenuTabContainer }>
                 <li onClick={ () => changeCurrentTab(TABS.FOOD) } className={ foodClass }>Alimentos</li>
-                <li onClick={ () => changeCurrentTab(TABS.RECEIPT) } className={ receiptClass }>Receitas</li>
+                <li onClick={ () => changeCurrentTab(TABS.RECIPE) } className={ recipeClass }>Receitas</li>
             </ul>
             <div className={ CS.Pad02 }>
                 { currentTab === TABS.FOOD && (
@@ -87,12 +87,12 @@ const menuPage = (props) => {
                         removeItemHandler={ removeFoodHandler }
                     />
                 ) }
-                { currentTab === TABS.RECEIPT && (
+                { currentTab === TABS.RECIPE && (
                     <MealItemList
-                        itemList={ receiptList }
+                        itemList={ recipeList }
                         includeText="Criar Receita"
-                        editItemHandler={ editReceiptHandler }
-                        removeItemHandler={ removeReceiptHandler }
+                        editItemHandler={ editRecipeHandler }
+                        removeItemHandler={ removeRecipeHandler }
                     />
                 ) }
             </div>
@@ -101,8 +101,8 @@ const menuPage = (props) => {
                     { editingFood && (
                         <FoodEditor food={ editingFood } cancelEditHandler={ cancelEditHandler } />
                     ) }
-                    { editingReceipt && (
-                        <ReceiptEditor receipt={ editingReceipt } cancelEditHandler={ cancelEditHandler } />
+                    { editingRecipe && (
+                        <RecipeEditor recipe={ editingRecipe } cancelEditHandler={ cancelEditHandler } />
                     ) }
                 </Modal>
             ) }
@@ -113,16 +113,16 @@ const menuPage = (props) => {
 const mapStateToProps = (state) => {
     return {
         foodList: state.foodState.foodList,
-        receiptList: state.receiptState.receiptList
+        recipeList: state.recipeState.recipeList
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getFoodList: () => dispatch(getFoodList()),
-        getReceiptList: () => dispatch(getReceiptList()),
+        getRecipeList: () => dispatch(getRecipeList()),
         removeFood: (foodId) => dispatch(removeFood(foodId)),
-        removeReceipt: (receiptId) => dispatch(removeReceipt(receiptId))
+        removeRecipe: (recipeId) => dispatch(removeRecipe(recipeId))
     }
 };
 

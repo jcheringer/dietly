@@ -20,7 +20,7 @@ const mealEditor = (props) => {
     const [mealId, setMealId] = useState(props.meal.id);
     const [mealTime, setMealTime] = useState(props.meal.time);
     const [mealName, setMealName] = useState(props.meal.name);
-    const [receipts] = useState(props.meal.receipts);
+    const [recipes] = useState(props.meal.recipes);
     const [foods] = useState(props.meal.foods);
     const [mealItems, setMealItems] = useState([]);
     const [isEditing, setEditing] = useState(false);
@@ -64,13 +64,13 @@ const mealEditor = (props) => {
 
     const mealSaveClickHandler = () => {
         const foods = mealItems.filter(i => i.type === MEAL_TYPE.FOOD);
-        const receipts = mealItems.filter(i => i.type === MEAL_TYPE.RECEIPT);
+        const recipes = mealItems.filter(i => i.type === MEAL_TYPE.RECIPE);
 
         const meal = {
             id: mealId,
             name: mealName,
             time: mealTime,
-            receipts: receipts,
+            recipes: recipes,
             foods: foods
         };
 
@@ -88,11 +88,11 @@ const mealEditor = (props) => {
 
     useEffect(() => {
         let items = [];
-        receipts.forEach(receipt => items.push({ ...receipt, type: MEAL_TYPE.RECEIPT }));
+        recipes.forEach(recipe => items.push({ ...recipe, type: MEAL_TYPE.RECIPE }));
         foods.forEach(food => items.push({ ...food, type: MEAL_TYPE.FOOD }));
 
         setMealItems(items);
-    }, [receipts, foods]);
+    }, [recipes, foods]);
 
     const mealEditWrapperClasses = [CS.SideSlider];
 

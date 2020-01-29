@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-const { measureUnits, foods, receipts, diets, dietSchedule } = require('./mock-database');
+const { measureUnits, foods, recipes, diets, dietSchedule } = require('./mock-database');
 const blankDiet = { name: '', meals: [] };
 
 //===== Functions //
@@ -13,7 +13,7 @@ const mealOutputNormalize = (meal, currentDiet, includeStatus = false) => {
         meal.time = currentMeal.time;
     }
 
-    meal.receipts.forEach(receipt => mealItemOutputNormalize(receipt, receipts, includeStatus));
+    meal.recipes.forEach(recipe => mealItemOutputNormalize(recipe, recipes, includeStatus));
     meal.foods.forEach(food => mealItemOutputNormalize(food, foods, includeStatus));
 };
 
@@ -34,7 +34,7 @@ const mealInputNormalize = (meal, keepStatus) => {
     delete meal.name;
     delete meal.time;
 
-    meal.receipts.forEach(receipt => mealItemInputNormalize(receipt, keepStatus));
+    meal.recipes.forEach(recipe => mealItemInputNormalize(recipe, keepStatus));
     meal.foods.forEach(food => mealItemInputNormalize(food, keepStatus));
 };
 
@@ -96,46 +96,46 @@ app.delete('/api/food/:id', (req, res) => {
     res.json(foods);
 });
 
-app.get('/api/receipt', (req, res) => {
-    receipts.forEach(receipt => {
-        receipt.ingredients.forEach(ing => mealItemOutputNormalize(ing, foods));
+app.get('/api/recipe', (req, res) => {
+    recipes.forEach(recipe => {
+        recipe.ingredients.forEach(ing => mealItemOutputNormalize(ing, foods));
     });
 
-    res.json(receipts);
+    res.json(recipes);
 });
 
-app.post('/api/receipt', (req, res) => {
-    const receipt = {
-        id: receipts[receipts.length - 1].id + 1,
+app.post('/api/recipe', (req, res) => {
+    const recipe = {
+        id: recipes[recipes.length - 1].id + 1,
         name: req.body.name,
         ingredients: req.body.ingredients.map(ingredientInputNormalize)
     };
 
-    receipts.push(receipt);
+    recipes.push(recipe);
 
-    res.json(receipts);
+    res.json(recipes);
 });
 
-app.put('/api/receipt', (req, res) => {
-    const receipt = {
+app.put('/api/recipe', (req, res) => {
+    const recipe = {
         id: req.body.id,
         name: req.body.name,
         ingredients: req.body.ingredients.map(ingredientInputNormalize)
     };
 
-    const index = receipts.findIndex(r => r.id === receipt.id);
-    receipts[index] = receipt;
+    const index = recipes.findIndex(r => r.id === recipe.id);
+    recipes[index] = recipe;
 
-    res.json(receipts);
+    res.json(recipes);
 });
 
-app.delete('/api/receipt/:id', (req, res) => {
+app.delete('/api/recipe/:id', (req, res) => {
     const id = req.params.id;
-    const index = receipts.findIndex(receipt => receipt.id === id);
+    const index = recipes.findIndex(recipe => recipe.id === id);
 
-    receipts.splice(index, 1);
+    recipes.splice(index, 1);
 
-    res.json(receipts);
+    res.json(recipes);
 });
 
 app.get('/api/diet/:id', (req, res) => {
@@ -191,7 +191,7 @@ app.post('/api/meal', (req, res) => {
         id: id,
         name: req.body.meal.name,
         time: req.body.meal.time,
-        receipts: req.body.meal.receipts,
+        recipes: req.body.meal.recipes,
         foods: req.body.meal.foods
     };
 
@@ -211,7 +211,7 @@ app.put('/api/meal', (req, res) => {
         id: req.body.meal.id,
         name: req.body.meal.name,
         time: req.body.meal.time,
-        receipts: req.body.meal.receipts,
+        recipes: req.body.meal.recipes,
         foods: req.body.meal.foods
     };
 

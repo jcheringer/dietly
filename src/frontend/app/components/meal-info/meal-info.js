@@ -20,14 +20,14 @@ export default function (props) {
                 <span className={ Style.MealName }>{ props.meal.time }: { props.meal.name }</span>
                 { props.editMode && editButton }
             </div>
-            { props.meal.receipts.map(receipt => {
+            { props.meal.recipes.map(recipe => {
                 return <MealInfoItem
-                    key={ receipt.id }
-                    name={ receipt.name }
-                    amountText={ receipt.amountText }
+                    key={ recipe.id }
+                    name={ recipe.name }
+                    amountText={ recipe.amountText }
                     hideCheck={ props.editMode }
-                    checked={ receipt.checked }
-                    value={ getItemValue(receipt, 'receipts') }
+                    checked={ recipe.checked }
+                    value={ getItemValue(recipe, 'recipes') }
                     mealItemChangeHandler={ props.mealItemChangeHandler }
                 />
             }) }

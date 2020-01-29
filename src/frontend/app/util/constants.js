@@ -1,6 +1,6 @@
 export const MEAL_TYPE = {
     FOOD: 'food',
-    RECEIPT: 'receipt'
+    RECIPE: 'recipe'
 };
 
 export const MEASURE_UNITS = {

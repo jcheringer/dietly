@@ -11,7 +11,7 @@ import MealEditor from '../../components/meal-editor/meal-editor';
 import CS from '../../../style/common.less'
 
 const dietEditPage = (props) => {
-    const blankMeal = { id: null, time: '', name: '', receipts: [], foods: [] };
+    const blankMeal = { id: null, time: '', name: '', recipes: [], foods: [] };
 
     const history = useHistory();
     const params = useParams();

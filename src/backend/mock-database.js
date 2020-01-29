@@ -78,7 +78,7 @@ const foods = [
     }
 ];
 
-const receipts = [
+const recipes = [
     {
         id: 1,
         name: 'Crepioca',
@@ -109,14 +109,14 @@ const diets = [
                 id: 1,
                 name: 'Desjejum',
                 time: '09:30',
-                receipts: [{ id: 1, measureUnit: 1, amount: 1 }],
+                recipes: [{ id: 1, measureUnit: 1, amount: 1 }],
                 foods: []
             },
             {
                 id: 2,
                 name: 'Lanche Manhã',
                 time: '11:30',
-                receipts: [],
+                recipes: [],
                 foods: [
                     { id: 5, measureUnit: 1, amount: 1 },
                     { id: 6, measureUnit: 3, amount: 2 }
@@ -126,7 +126,7 @@ const diets = [
                 id: 3,
                 name: 'Almoço',
                 time: '13:30',
-                receipts: [],
+                recipes: [],
                 foods: [
                     { id: 8, measureUnit: 2, amount: 160 },
                     { id: 9, measureUnit: 2, amount: 80 },
@@ -149,12 +149,12 @@ const dietSchedule = [
             meals: [
                 {
                     id: 1,
-                    receipts: [{ id: 1, measureUnit: 1, amount: 1, checked: true }],
+                    recipes: [{ id: 1, measureUnit: 1, amount: 1, checked: true }],
                     foods: []
                 },
                 {
                     id: 2,
-                    receipts: [],
+                    recipes: [],
                     foods: [
                         { id: 5, measureUnit: 1, amount: 1, checked: true },
                         { id: 6, measureUnit: 3, amount: 2, checked: false }
@@ -162,7 +162,7 @@ const dietSchedule = [
                 },
                 {
                     id: 3,
-                    receipts: [],
+                    recipes: [],
                     foods: [
                         { id: 8, measureUnit: 2, amount: 160 },
                         { id: 9, measureUnit: 2, amount: 80 },
@@ -181,7 +181,7 @@ const dietSchedule = [
 module.exports = {
     measureUnits,
     foods,
-    receipts,
+    recipes,
     diets,
     dietSchedule
 };

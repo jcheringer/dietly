@@ -5,13 +5,13 @@ import _ from 'lodash';
 import MealItemEditor from '../meal-item-editor/meal-item-editor';
 import MealItemList from '../meal-item-list/meal-item-list';
 
-import { saveReceipt } from '../../store/actions/receipts-action';
+import { saveRecipe } from '../../store/actions/recipes-action';
 
 import { MEAL_TYPE } from '../../util/constants';
 
 import CS from '../../../style/common.less';
 
-const receiptEditor = (props) => {
+const recipeEditor = (props) => {
     const blankIngredient = { id: null, amount: '', measureUnit: 0 };
 
     const [id, setId] = useState(null);
@@ -37,17 +37,17 @@ const receiptEditor = (props) => {
         setIngredients(newIngredients);
     };
 
-    const saveReceiptHeandler = () => {
-        const receipt = {
+    const saveRecipeHeandler = () => {
+        const recipe = {
             name: name,
             ingredients: ingredients
         };
 
         if (id) {
-            receipt.id = id;
+            recipe.id = id;
         }
 
-        props.saveReceipt(receipt);
+        props.saveRecipe(recipe);
         props.cancelEditHandler();
     };
 
@@ -71,19 +71,19 @@ const receiptEditor = (props) => {
     };
 
     useEffect(() => {
-        setId(props.receipt.id);
-        setName(props.receipt.name);
-        setIngredients(props.receipt.ingredients.map(i => ({ ...i, type: MEAL_TYPE.FOOD })));
-    }, [props.receipt]);
+        setId(props.recipe.id);
+        setName(props.recipe.name);
+        setIngredients(props.recipe.ingredients.map(i => ({ ...i, type: MEAL_TYPE.FOOD })));
+    }, [props.recipe]);
 
-    const receiptEditorClasses = [CS.SideSlider];
+    const recipeEditorClasses = [CS.SideSlider];
 
     if (isEditing) {
-        receiptEditorClasses.push(CS.Editing);
+        recipeEditorClasses.push(CS.Editing);
     }
 
     return (
-        <div className={ receiptEditorClasses.join(' ') }>
+        <div className={ recipeEditorClasses.join(' ') }>
             <div className={ [CS.SlideItem, CS.Pad02].join(' ') }>
                 <div className={ [CS.FloatingLabelContainer, CS.Mb03].join(' ') }>
                     <input type="text" placeholder="Nome" value={ name } onChange={ nameChangeHandler } />
@@ -97,7 +97,7 @@ const receiptEditor = (props) => {
                     showAmount
                 />
                 <div className={ [CS.ActionContainer, CS.Mt02].join(' ') }>
-                    <button onClick={ saveReceiptHeandler } className={ CS.BtnPrimary }>Salvar</button>
+                    <button onClick={ saveRecipeHeandler } className={ CS.BtnPrimary }>Salvar</button>
                     <button onClick={ props.cancelEditHandler }>Cancelar</button>
                 </div>
             </div>
@@ -114,8 +114,8 @@ const receiptEditor = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        saveReceipt: (receipt) => dispatch(saveReceipt(receipt))
+        saveRecipe: (recipe) => dispatch(saveRecipe(recipe))
     }
 };
 
-export default connect(null, mapDispatchToProps)(receiptEditor);
+export default connect(null, mapDispatchToProps)(recipeEditor);
