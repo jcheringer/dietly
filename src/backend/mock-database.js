@@ -141,7 +141,17 @@ const diets = [
     }
 ];
 
-const dietSchedule = [
+const dietSchedule = {
+    1: 1,
+    2: null,
+    3: null,
+    4: null,
+    5: 1,
+    6: null,
+    7: null,
+};
+
+const dietDiary = [
     {
         date: '2019-12-04',
         diet: {
@@ -183,5 +193,6 @@ module.exports = {
     foods,
     recipes,
     diets,
+    dietDiary,
     dietSchedule
 };

@@ -4,7 +4,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 import Meal from '../meal/meal';
-import Style from './diet-schedule.less';
+import Style from './diet-diary.less';
 
 export default function () {
     const [currentDate, setCurrentDate] = useState(moment());
@@ -26,7 +26,7 @@ export default function () {
 
         setMeals(mealsCopy);
 
-        const schedule = {
+        const diary = {
             date: currentDate.format('YYYY-MM-DD'),
             diet: {
                 id: dietId,
@@ -34,7 +34,7 @@ export default function () {
             }
         };
 
-        axios.post('/api/schedule', schedule).catch(() => {
+        axios.post('/api/diary', diary).catch(() => {
             //TODO: Send an error message
             item.checked = !item.checked;
             setMeals(mealsCopy);
@@ -44,15 +44,15 @@ export default function () {
     useEffect(() => {
         const date = currentDate.format('YYYY-MM-DD');
 
-        axios.get(`/api/schedule/${ date }`).then(response => {
+        axios.get(`/api/diary/${ date }`).then(response => {
             setDietId(response.data.diet.id);
             setMeals(response.data.diet.meals);
         });
     }, [currentDate]);
 
     return (
-        <div className={ Style.DietSchedule }>
-            <div className={ Style.ScheduleTitle }>
+        <div className={ Style.DietDiary }>
+            <div className={ Style.DiaryTitle }>
                 <button onClick={ () => changeCurrentDate(-1) }>Prev</button>
                 <h3>{ currentDate.format('dddd, DD [de] MMMM') }</h3>
                 <button onClick={ () => changeCurrentDate(1) }>Next</button>

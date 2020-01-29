@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { GET_DIET, GET_DIET_LIST } from './action-types';
+import { GET_DIET, GET_DIET_LIST, GET_DIET_SCHEDULE, SAVE_DIET_SCHEDULE } from './action-types';
 
 export const getDietList = (forceUpdate = false) => {
     return (dispatch, getState) => {
-        const dietList = getState().dietState.dietList;
-
-        if (dietList && !forceUpdate) {
+        if (!forceUpdate && getState().dietState.dietList) {
             return;
         }
 
@@ -22,3 +20,21 @@ export const getDiet = (dietId) => (dispatch) => {
         promise: axios.get(`/api/diet/${ dietId }`)
     });
 };
+
+export const getDietSchedule = (forceUpdate = false) => {
+    return (dispatch, getState) => {
+        if (!forceUpdate && getState().dietState.dietSchedule) {
+            return;
+        }
+
+        return dispatch({
+            type: GET_DIET_SCHEDULE,
+            promise: axios.get('/api/schedule')
+        });
+    }
+};
+
+export const saveDietSchedule = (day, dietId) => (dispatch) => dispatch({
+    type: SAVE_DIET_SCHEDULE,
+    promise: axios.put(`/api/schedule/${ day }`, { dietId })
+});

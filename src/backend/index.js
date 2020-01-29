@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-const { measureUnits, foods, recipes, diets, dietSchedule } = require('./mock-database');
+const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
 const blankDiet = { name: '', meals: [] };
 
 //===== Functions //
@@ -220,9 +220,9 @@ app.put('/api/meal', (req, res) => {
     res.json(diet);
 });
 
-app.get('/api/schedule/:date', (req, res) => {
+app.get('/api/diary/:date', (req, res) => {
     const date = req.params.date;
-    const dietOfDay = dietSchedule.find(ds => ds.date === date);
+    const dietOfDay = dietDiary.find(ds => ds.date === date);
     let currentDiet = diets.find(d => d.active);
     const diet = dietOfDay ? dietOfDay.diet : currentDiet;
 
@@ -232,7 +232,7 @@ app.get('/api/schedule/:date', (req, res) => {
 
     diet.meals.forEach(meal => mealOutputNormalize(meal, currentDiet, true));
 
-    const schedule = {
+    const diary = {
         date: date,
         diet: {
             id: diet.id,
@@ -240,14 +240,14 @@ app.get('/api/schedule/:date', (req, res) => {
         }
     };
 
-    res.json(schedule);
+    res.json(diary);
 });
 
-app.post('/api/schedule', (req, res) => {
+app.post('/api/diary', (req, res) => {
     const date = req.body.date;
-    const idx = dietSchedule.findIndex(ds => ds.date === date);
+    const idx = dietDiary.findIndex(ds => ds.date === date);
 
-    const schedule = {
+    const diary = {
         date: req.body.date,
         diet: {
             id: req.body.diet.id,
@@ -255,15 +255,24 @@ app.post('/api/schedule', (req, res) => {
         }
     };
 
-    schedule.diet.meals.forEach(meal => mealInputNormalize(meal, true));
+    diary.diet.meals.forEach(meal => mealInputNormalize(meal, true));
 
     if (idx !== -1) {
-        dietSchedule[idx] = schedule;
+        dietDiary[idx] = diary;
     } else {
-        dietSchedule.push(schedule);
+        dietDiary.push(diary);
     }
 
-    res.json(schedule)
+    res.json(diary);
+});
+
+app.get('/api/schedule', (req, res) => {
+    res.json(dietSchedule);
+});
+
+app.put('/api/schedule/:day', (req, res) => {
+    dietSchedule[req.params.day] = req.body.dietId;
+    res.json(dietSchedule);
 });
 
 app.use('/api/*', (req, res) => {

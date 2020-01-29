@@ -7,6 +7,7 @@ import { getDiet, getDietList } from '../../store/actions/diets-action';
 
 import Meal from '../../components/meal/meal';
 import MealEditor from '../../components/meal-editor/meal-editor';
+import DietScheduler from '../../components/diet-scheduler/diet-scheduler';
 
 import CS from '../../../style/common.less'
 
@@ -58,6 +59,7 @@ const dietEditPage = (props) => {
                         </div>
                         <button onClick={ saveDietClickHandler } className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
                     </div>
+                    <DietScheduler dietId={ diet.id } />
                     { diet.meals.map(meal => {
                         return <Meal key={ meal.id } meal={ meal } dietId={ dietId } editMode />
                     }) }
