@@ -59,7 +59,7 @@ const dietEditPage = (props) => {
                         </div>
                         <button onClick={ saveDietClickHandler } className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
                     </div>
-                    <DietScheduler dietId={ diet.id } />
+                    { diet.id && <DietScheduler dietId={ diet.id } /> }
                     { diet.meals.map(meal => {
                         return <Meal key={ meal.id } meal={ meal } dietId={ dietId } editMode />
                     }) }

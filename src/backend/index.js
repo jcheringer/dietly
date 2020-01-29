@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const moment = require('moment');
 const app = express();
 
 const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
@@ -222,23 +223,28 @@ app.put('/api/meal', (req, res) => {
 
 app.get('/api/diary/:date', (req, res) => {
     const date = req.params.date;
-    const dietOfDay = dietDiary.find(ds => ds.date === date);
-    let currentDiet = diets.find(d => d.active);
-    const diet = dietOfDay ? dietOfDay.diet : currentDiet;
+    const weekDay = moment(date).isoWeekday();
+    const savedDiet = dietDiary.find(ds => ds.date === date);
+    let dietOfDay = diets.find(d => d.id === dietSchedule[weekDay]);
+    const diet = savedDiet ? savedDiet.diet : dietOfDay;
 
-    if (dietOfDay && currentDiet.id !== dietOfDay.diet.id) {
-        currentDiet = diets.find(d => d.id === dietOfDay.diet.id);
+    if (savedDiet && (!dietOfDay || dietOfDay.id !== savedDiet.diet.id)) {
+        dietOfDay = diets.find(d => d.id === savedDiet.diet.id);
     }
 
-    diet.meals.forEach(meal => mealOutputNormalize(meal, currentDiet, true));
-
     const diary = {
-        date: date,
-        diet: {
+        date: date
+    };
+
+    if (diet) {
+        diet.meals.forEach(meal => mealOutputNormalize(meal, dietOfDay, true));
+
+        diary.diet = {
             id: diet.id,
             meals: diet.meals
         }
-    };
+    }
+
 
     res.json(diary);
 });

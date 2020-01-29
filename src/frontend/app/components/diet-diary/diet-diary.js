@@ -5,11 +5,13 @@ import _ from 'lodash';
 
 import Meal from '../meal/meal';
 import Style from './diet-diary.less';
+import CS from '../../../style/common.less';
 
 export default function () {
     const [currentDate, setCurrentDate] = useState(moment());
     const [dietId, setDietId] = useState(null);
     const [meals, setMeals] = useState([]);
+    const [noDiet, setNoDiet] = useState(false);
 
     const changeCurrentDate = (amount) => {
         const newDate = currentDate.clone().add(amount, 'day');
@@ -42,9 +44,20 @@ export default function () {
     };
 
     useEffect(() => {
+        setNoDiet(false);
+        setDietId(null);
+        setMeals([]);
+
         const date = currentDate.format('YYYY-MM-DD');
 
         axios.get(`/api/diary/${ date }`).then(response => {
+            const diet = response.data.diet;
+
+            if (!diet) {
+                setNoDiet(true);
+                return;
+            }
+
             setDietId(response.data.diet.id);
             setMeals(response.data.diet.meals);
         });
@@ -57,6 +70,11 @@ export default function () {
                 <h3>{ currentDate.format('dddd, DD [de] MMMM') }</h3>
                 <button onClick={ () => changeCurrentDate(1) }>Next</button>
             </div>
+            { noDiet && (
+                <div className={ [CS.Box, CS.Pad02, CS.TexCenter].join(' ') }>
+                    Nenhuma dieta definida para { currentDate.format('dddd') }
+                </div>
+            ) }
             { meals.map(meal => {
                 return <Meal
                     key={ meal.id }

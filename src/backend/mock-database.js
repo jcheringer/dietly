@@ -143,12 +143,12 @@ const diets = [
 
 const dietSchedule = {
     1: 1,
-    2: null,
-    3: null,
-    4: null,
+    2: 1,
+    3: 1,
+    4: 1,
     5: 1,
-    6: null,
-    7: null,
+    6: 1,
+    7: 1,
 };
 
 const dietDiary = [
