@@ -1,10 +1,19 @@
 const path = require('path');
 const express = require('express');
 const moment = require('moment');
-const app = express();
+const dotenv = require('dotenv');
+
+const db = require('./dao');
+const foodService = require('./service/food-service');
 
 const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
 const blankDiet = { name: '', meals: [] };
+
+dotenv.config({ path: path.join(__dirname, '../config/config.env') });
+
+const app = express();
+
+db.connect();
 
 //===== Functions //
 const mealOutputNormalize = (meal, currentDiet, includeStatus = false) => {
@@ -59,42 +68,34 @@ const ingredientInputNormalize = (ingredient) => ({
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../../public')));
 
-app.get('/api/food', (req, res) => {
-    res.json(foods);
+app.get('/api/food', async (req, res) => {
+    const foodList = await foodService.list();
+    res.json(foodList);
 });
 
-app.post('/api/food', (req, res) => {
+app.post('/api/food', async (req, res) => {
     const newFood = {
-        id: foods[foods.length - 1].id + 1,
         name: req.body.name,
         measureUnits: req.body.measureUnits
     };
 
-    foods.push(newFood);
-
-    res.json(foods);
+    await foodService.insert(newFood);
+    res.json(await foodService.list());
 });
 
-app.put('/api/food', (req, res) => {
+app.put('/api/food', async (req, res) => {
     const food = {
-        id: req.body.id,
         name: req.body.name,
         measureUnits: req.body.measureUnits
     };
 
-    const index = foods.findIndex(f => f.id === food.id);
-    foods[index] = food;
-
-    res.json(foods);
+    await foodService.update(req.body.id, food);
+    res.json(await foodService.list());
 });
 
-app.delete('/api/food/:id', (req, res) => {
-    const id = req.params.id;
-    const index = foods.findIndex(food => food.id === id);
-
-    foods.splice(index, 1);
-
-    res.json(foods);
+app.delete('/api/food/:id', async (req, res) => {
+    await foodService.delete(req.params.id);
+    res.json(await foodService.list());
 });
 
 app.get('/api/recipe', (req, res) => {
