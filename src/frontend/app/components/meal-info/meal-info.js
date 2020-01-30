@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import MealInfoItem from './meal-info-item';
 
 import Style from './meal-info.less';
-import CommonStyle from '../../../style/common.less';
+import CS from '../../../style/common.less';
 
 export default function (props) {
     const getItemValue = (item, type) => {
         return JSON.stringify({ mealId: props.meal.id, itemId: item.id, type: type });
     };
 
-    const editButton = <i
-        onClick={ () => props.mealEditClickHandler(true) }
-        className={ ['fas fa-pencil-alt', CommonStyle.BorderedIcon].join(' ') } />;
+    const mealEditClickHandler = () => {
+        if (!props.mealEditClickHandler) {
+            return;
+        }
+
+        props.mealEditClickHandler(true);
+    };
+
+    const mealRemoveClickHandler = () => {
+        if (!props.mealRemoveClickHandler) {
+            return;
+        }
+
+        props.mealRemoveClickHandler(props.meal);
+    };
 
     return (
         <div className={ Style.MealInfo }>
             <div className={ Style.MealHeader }>
                 <span className={ Style.MealName }>{ props.meal.time }: { props.meal.name }</span>
-                { props.editMode && editButton }
+                { props.editMode && (
+                    <Fragment>
+                        <i onClick={ mealEditClickHandler }
+                           className={ ['fas fa-pencil-alt', CS.BorderedIcon].join(' ') } />
+                        <i onClick={ mealRemoveClickHandler }
+                           className={ ['far fa-trash-alt', CS.Ml01, CS.BorderedIcon, CS.RedIcon].join(' ') } />
+                    </Fragment>
+                ) }
             </div>
             { props.meal.recipes.map(recipe => {
                 return <MealInfoItem

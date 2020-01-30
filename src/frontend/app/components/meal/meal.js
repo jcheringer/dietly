@@ -18,6 +18,7 @@ export default function (props) {
                 meal={ props.meal }
                 editMode={ props.editMode }
                 mealEditClickHandler={ mealClickHandler }
+                mealRemoveClickHandler={ props.mealRemoveClickHandler }
                 mealItemChangeHandler={ props.mealItemChangeHandler } />
             { isEditing && (
                 <MealEditor
