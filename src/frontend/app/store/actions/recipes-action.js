@@ -18,7 +18,7 @@ export const getRecipeList = (forceUpdate = false) => {
 
 export const saveRecipe = (recipe) => {
     return (dispatch) => {
-        const method = recipe.id ? 'PUT' : 'POST';
+        const method = recipe._id ? 'PUT' : 'POST';
 
         return dispatch({
             type: SAVE_RECIPE,

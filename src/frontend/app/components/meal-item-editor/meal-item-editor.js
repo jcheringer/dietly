@@ -25,15 +25,15 @@ const dietMealItemEditor = (props) => {
             return;
         }
 
-        const [type, id] = mealItem.value.split('|');
+        const [type, _id] = mealItem.value.split('|');
         const list = type === MEAL_TYPE.FOOD ? props.foodList : props.recipeList;
-        const item = list.find(i => i.id === Number(id));
+        const item = list.find(i => i._id === _id);
         const name = item.name;
         const measureUnitName = MEASURE_UNITS[measureUnit];
         const amountText = Number(measureUnit) !== 0 ? `${ amount } ${ measureUnitName }` : `${ measureUnitName }`;
 
         props.saveItemHandler({
-            id: Number(id),
+            _id: _id,
             name: name,
             measureUnit: Number(measureUnit),
             amount: Number(amount),
@@ -51,14 +51,14 @@ const dietMealItemEditor = (props) => {
         const foods = props.foodList.map(food => {
             return {
                 label: food.name,
-                value: `${ MEAL_TYPE.FOOD }|${ food.id }`
+                value: `${ MEAL_TYPE.FOOD }|${ food._id }`
             }
         });
 
         const recipes = props.recipeList.map(recipe => {
             return {
                 label: recipe.name,
-                value: `${ MEAL_TYPE.RECIPE }|${ recipe.id }`
+                value: `${ MEAL_TYPE.RECIPE }|${ recipe._id }`
             }
         });
 
@@ -71,9 +71,9 @@ const dietMealItemEditor = (props) => {
     useEffect(() => {
         let selectedItem = null;
 
-        if (props.item.id) {
+        if (props.item._id) {
             const group = options.find(o => o.type === props.item.type);
-            const itemId = `${ props.item.type }|${ props.item.id }`;
+            const itemId = `${ props.item.type }|${ props.item._id }`;
             selectedItem = group.options.find(item => item.value === itemId);
         }
 

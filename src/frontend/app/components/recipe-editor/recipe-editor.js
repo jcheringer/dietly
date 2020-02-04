@@ -12,9 +12,9 @@ import { MEAL_TYPE } from '../../util/constants';
 import CS from '../../../style/common.less';
 
 const recipeEditor = (props) => {
-    const blankIngredient = { id: null, amount: '', measureUnit: 0 };
+    const blankIngredient = { _id: null, amount: '', measureUnit: 0 };
 
-    const [id, setId] = useState(null);
+    const [_id, setId] = useState(null);
     const [name, setName] = useState('');
     const [ingredients, setIngredients] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
@@ -31,7 +31,7 @@ const recipeEditor = (props) => {
 
     const removeIngredientHandler = (ingredient) => {
         const newIngredients = _.cloneDeep(ingredients);
-        const idx = newIngredients.findIndex(i => i.id === ingredient.id);
+        const idx = newIngredients.findIndex(i => i._id === ingredient._id);
 
         newIngredients.splice(idx, 1);
         setIngredients(newIngredients);
@@ -43,8 +43,8 @@ const recipeEditor = (props) => {
             ingredients: ingredients
         };
 
-        if (id) {
-            recipe.id = id;
+        if (_id) {
+            recipe._id = _id;
         }
 
         props.saveRecipe(recipe);
@@ -54,7 +54,7 @@ const recipeEditor = (props) => {
     const saveMealItemHandler = (item) => {
         const newIngredients = _.cloneDeep(ingredients);
 
-        const idx = newIngredients.findIndex(i => i.id === item.id);
+        const idx = newIngredients.findIndex(i => i._id === item._id);
 
         if (idx !== -1) {
             newIngredients[idx] = item;
@@ -71,7 +71,7 @@ const recipeEditor = (props) => {
     };
 
     useEffect(() => {
-        setId(props.recipe.id);
+        setId(props.recipe._id);
         setName(props.recipe.name);
         setIngredients(props.recipe.ingredients.map(i => ({ ...i, type: MEAL_TYPE.FOOD })));
     }, [props.recipe]);

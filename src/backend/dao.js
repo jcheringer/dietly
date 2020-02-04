@@ -15,7 +15,7 @@ const DAO = {
             return;
         }
 
-        mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useCreateIndex: true }).then(() => {
+        mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }).then(() => {
             console.log('Successfuly connected to DB.');
         }).catch((error) => {
             console.log('Failed to connect to DB.', error);

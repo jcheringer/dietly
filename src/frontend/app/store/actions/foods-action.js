@@ -18,7 +18,7 @@ export const getFoodList = (forceUpdate = false) => {
 
 export const saveFood = (food) => {
     return (dispatch) => {
-        const method = food.id ? 'PUT' : 'POST';
+        const method = food._id ? 'PUT' : 'POST';
 
         dispatch({
             type: SAVE_FOOD,

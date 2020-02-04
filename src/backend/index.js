@@ -5,6 +5,9 @@ const dotenv = require('dotenv');
 
 const db = require('./dao');
 const foodService = require('./service/food-service');
+const recipeService = require('./service/recipe-service');
+
+const util = require('./util/util');
 
 const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
 const blankDiet = { name: '', meals: [] };
@@ -14,56 +17,6 @@ dotenv.config({ path: path.join(__dirname, '../config/config.env') });
 const app = express();
 
 db.connect();
-
-//===== Functions //
-const mealOutputNormalize = (meal, currentDiet, includeStatus = false) => {
-    if (!meal.name && currentDiet) {
-        const currentMeal = currentDiet.meals.find(cm => cm.id === meal.id);
-        meal.name = currentMeal.name;
-        meal.time = currentMeal.time;
-    }
-
-    meal.recipes.forEach(recipe => mealItemOutputNormalize(recipe, recipes, includeStatus));
-    meal.foods.forEach(food => mealItemOutputNormalize(food, foods, includeStatus));
-};
-
-const mealItemOutputNormalize = (item, itemList, includeStatus = false) => {
-    item.name = itemList.find(r => r.id === item.id).name;
-    item.amountText = `${ item.amount } ${ measureUnits[item.measureUnit] }`;
-
-    if (!item.amount) {
-        item.amountText = `${ measureUnits[item.measureUnit] }`;
-    }
-
-    if (includeStatus) {
-        item.checked = item.checked || false;
-    }
-};
-
-const mealInputNormalize = (meal, keepStatus) => {
-    delete meal.name;
-    delete meal.time;
-
-    meal.recipes.forEach(recipe => mealItemInputNormalize(recipe, keepStatus));
-    meal.foods.forEach(food => mealItemInputNormalize(food, keepStatus));
-};
-
-const mealItemInputNormalize = (item, keepStatus = false) => {
-    delete item.name;
-    delete item.amountText;
-
-    if (!keepStatus) {
-        delete item.checked;
-    }
-};
-
-const ingredientInputNormalize = (ingredient) => ({
-    id: Number(ingredient.id),
-    name: ingredient.name,
-    measureUnit: Number(ingredient.measureUnit),
-    amount: Number(ingredient.amount),
-    amountText: ingredient.amountText
-});
 
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../../public')));
@@ -89,55 +42,43 @@ app.put('/api/food', async (req, res) => {
         measureUnits: req.body.measureUnits
     };
 
-    await foodService.update(req.body.id, food);
+    await foodService.update(req.body._id, food);
     res.json(await foodService.list());
 });
 
-app.delete('/api/food/:id', async (req, res) => {
-    await foodService.delete(req.params.id);
+app.delete('/api/food/:_id', async (req, res) => {
+    await foodService.delete(req.params._id);
     res.json(await foodService.list());
 });
 
-app.get('/api/recipe', (req, res) => {
-    recipes.forEach(recipe => {
-        recipe.ingredients.forEach(ing => mealItemOutputNormalize(ing, foods));
-    });
-
-    res.json(recipes);
+app.get('/api/recipe', async (req, res) => {
+    const recipeList = await recipeService.list();
+    res.json(recipeList);
 });
 
-app.post('/api/recipe', (req, res) => {
+app.post('/api/recipe', async (req, res) => {
     const recipe = {
-        id: recipes[recipes.length - 1].id + 1,
         name: req.body.name,
-        ingredients: req.body.ingredients.map(ingredientInputNormalize)
+        ingredients: req.body.ingredients.map(util.mealItemInputNormalize)
     };
 
-    recipes.push(recipe);
-
-    res.json(recipes);
+    await recipeService.insert(recipe);
+    res.json(await recipeService.list());
 });
 
-app.put('/api/recipe', (req, res) => {
+app.put('/api/recipe', async (req, res) => {
     const recipe = {
-        id: req.body.id,
         name: req.body.name,
-        ingredients: req.body.ingredients.map(ingredientInputNormalize)
+        ingredients: req.body.ingredients.map(util.mealItemInputNormalize)
     };
 
-    const index = recipes.findIndex(r => r.id === recipe.id);
-    recipes[index] = recipe;
-
-    res.json(recipes);
+    await recipeService.update(req.body._id, recipe);
+    res.json(await recipeService.list());
 });
 
-app.delete('/api/recipe/:id', (req, res) => {
-    const id = req.params.id;
-    const index = recipes.findIndex(recipe => recipe.id === id);
-
-    recipes.splice(index, 1);
-
-    res.json(recipes);
+app.delete('/api/recipe/:_id', async (req, res) => {
+    await recipeService.delete(req.params._id);
+    res.json(await recipeService.list());
 });
 
 app.get('/api/diet/:id', (req, res) => {
@@ -145,7 +86,7 @@ app.get('/api/diet/:id', (req, res) => {
     const diet = diets.find(d => d.id === id) || blankDiet;
 
     if (diet && diet.meals) {
-        diet.meals.forEach(meal => mealOutputNormalize(meal));
+        diet.meals.forEach(meal => util.mealOutputNormalize(meal));
     }
 
     res.json(diet);
@@ -238,7 +179,7 @@ app.get('/api/diary/:date', (req, res) => {
     };
 
     if (diet) {
-        diet.meals.forEach(meal => mealOutputNormalize(meal, dietOfDay, true));
+        diet.meals.forEach(meal => util.mealOutputNormalize(meal, dietOfDay, true));
 
         diary.diet = {
             id: diet.id,
@@ -262,7 +203,7 @@ app.post('/api/diary', (req, res) => {
         }
     };
 
-    diary.diet.meals.forEach(meal => mealInputNormalize(meal, true));
+    diary.diet.meals.forEach(meal => util.mealInputNormalize(meal, true));
 
     if (idx !== -1) {
         dietDiary[idx] = diary;

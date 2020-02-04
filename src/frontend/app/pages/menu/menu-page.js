@@ -32,7 +32,7 @@ const menuPage = (props) => {
     };
 
     const removeFoodHandler = (food) => {
-        props.removeFood(food.id);
+        props.removeFood(food._id);
     };
 
     const editRecipeHandler = (recipe) => {
@@ -41,7 +41,7 @@ const menuPage = (props) => {
     };
 
     const removeRecipeHandler = (recipe) => {
-        props.removeRecipe(recipe.id);
+        props.removeRecipe(recipe._id);
     };
 
     const cancelEditHandler = () => {

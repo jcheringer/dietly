@@ -12,7 +12,7 @@ import Style from './food-editor.less';
 const foodEditor = (props) => {
     const blankMeasure = { measureUnit: 1, multiplier: '' };
 
-    const [id, setId] = useState(null);
+    const [_id, setId] = useState(null);
     const [name, setName] = useState('');
     const [measureUnit, setMeasureUnit] = useState(0);
     const [relativeMeasures, setRelativeMeasures] = useState([]);
@@ -56,8 +56,8 @@ const foodEditor = (props) => {
             ]
         };
 
-        if (id) {
-            food.id = id;
+        if (_id) {
+            food._id = _id;
         }
 
         props.saveFood(food);
@@ -72,7 +72,7 @@ const foodEditor = (props) => {
             setMeasureUnit(measureUnit.id);
         }
 
-        setId(props.food.id);
+        setId(props.food._id);
         setName(props.food.name);
         setRelativeMeasures(relativeUnits);
     }, [props.food]);

@@ -2,7 +2,7 @@ const Food = require('../model/food');
 
 module.exports = {
     async list() {
-        return Food.find().exec();
+        return Food.find().lean().exec();
     },
     async insert(data) {
         return new Food(data).save();
