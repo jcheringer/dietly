@@ -6,11 +6,11 @@ const dotenv = require('dotenv');
 const db = require('./dao');
 const foodService = require('./service/food-service');
 const recipeService = require('./service/recipe-service');
+const dietService = require('./service/diet-service');
 
 const util = require('./util/util');
 
 const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
-const blankDiet = { name: '', meals: [] };
 
 dotenv.config({ path: path.join(__dirname, '../config/config.env') });
 
@@ -46,8 +46,8 @@ app.put('/api/food', async (req, res) => {
     res.json(await foodService.list());
 });
 
-app.delete('/api/food/:_id', async (req, res) => {
-    await foodService.delete(req.params._id);
+app.delete('/api/food/:id', async (req, res) => {
+    await foodService.delete(req.params.id);
     res.json(await foodService.list());
 });
 
@@ -76,90 +76,36 @@ app.put('/api/recipe', async (req, res) => {
     res.json(await recipeService.list());
 });
 
-app.delete('/api/recipe/:_id', async (req, res) => {
-    await recipeService.delete(req.params._id);
+app.delete('/api/recipe/:id', async (req, res) => {
+    await recipeService.delete(req.params.id);
     res.json(await recipeService.list());
 });
 
-app.get('/api/diet/:id', (req, res) => {
-    const id = Number(req.params.id);
-    const diet = diets.find(d => d.id === id) || blankDiet;
+app.get('/api/diet/:id', async (req, res) => {
+    res.json(await dietService.get(req.params.id));
+});
 
-    if (diet && diet.meals) {
-        diet.meals.forEach(meal => util.mealOutputNormalize(meal));
-    }
-
+app.post('/api/diet', async (req, res) => {
+    const diet = await dietService.insert(req.body);
     res.json(diet);
 });
 
-app.post('/api/diet', (req, res) => {
-    const id = diets[diets.length - 1].id + 1;
-
-    const diet = {
-        id: id,
-        name: req.body.name || `Dieta ${ id }`,
-        meals: req.body.meals
-    };
-
-    diets.push(diet);
-
+app.put('/api/diet', async (req, res) => {
+    const diet = await dietService.update(req.body._id, req.body);
     res.json(diet);
 });
 
-app.put('/api/diet', (req, res) => {
-    const diet = {
-        id: req.body.id,
-        name: req.body.name,
-        meals: req.body.meals
-    };
+app.get('/api/diet', async (req, res) => {
+    res.json(await dietService.list());
+});
 
-    const index = diets.findIndex(d => d.id === diet.id);
-    diets[index] = diet;
-
+app.post('/api/meal', async (req, res) => {
+    const diet = await dietService.mealUpsert(req.body.dietId, null, req.body);
     res.json(diet);
 });
 
-app.get('/api/diet', (req, res) => {
-    res.json(diets);
-});
-
-app.post('/api/meal', (req, res) => {
-    const dietId = req.body.dietId;
-
-    const diet = diets.find(d => d.id === dietId);
-    const meals = diet.meals;
-    const id = meals.length ? meals[meals.length - 1].id + 1 : 1;
-
-    const meal = {
-        id: id,
-        name: req.body.meal.name,
-        time: req.body.meal.time,
-        recipes: req.body.meal.recipes,
-        foods: req.body.meal.foods
-    };
-
-    meals.push(meal);
-
-    res.json(diet);
-});
-
-app.put('/api/meal', (req, res) => {
-    const dietId = req.body.dietId;
-    const mealId = req.body.meal.id;
-
-    const diet = diets.find(d => d.id === dietId);
-    const idx = diet.meals.findIndex(m => m.id === mealId);
-
-    const meal = {
-        id: req.body.meal.id,
-        name: req.body.meal.name,
-        time: req.body.meal.time,
-        recipes: req.body.meal.recipes,
-        foods: req.body.meal.foods
-    };
-
-    diet.meals[idx] = meal;
-
+app.put('/api/meal', async (req, res) => {
+    const diet = await dietService.mealUpsert(req.body.dietId, req.body.meal._id, req.body);
     res.json(diet);
 });
 

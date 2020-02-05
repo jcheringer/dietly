@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ReactSelect from 'react-select';
 
-import { MEAL_TYPE, MEASURE_UNITS } from '../../util/constants';
+import { MEAL_TYPE, MEASURE_UNITS } from '../../../../constants';
 
 import { getFoodList } from '../../store/actions/foods-action';
 import { getRecipeList } from '../../store/actions/recipes-action';

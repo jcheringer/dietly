@@ -29,7 +29,7 @@ const dietsPage = (props) => {
             <button onClick={ () => moveToDiet(0) } className={ newDietButtonClasses }>Criar Nova Dieta</button>
             { dietList.map(diet => {
                 return (
-                    <div key={ diet.id } onClick={ () => moveToDiet(diet.id) } className={ [CS.Box, CS.Pad03].join(' ') }>{ diet.name }</div>
+                    <div key={ diet._id } onClick={ () => moveToDiet(diet._id) } className={ [CS.Box, CS.Pad03].join(' ') }>{ diet.name }</div>
                 )
             }) }
         </div>

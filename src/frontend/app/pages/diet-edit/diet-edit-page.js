@@ -18,8 +18,8 @@ const dietEditPage = (props) => {
 
     const history = useHistory();
     const params = useParams();
-    const dietId = Number(params.dietId);
-    const [diet, setDiet] = useState(null);
+    const dietId = params.dietId;
+    const [diet, setDiet] = useState({ name: '', meals: [] });
     const [isInserting, setInserting] = useState(false);
 
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -32,15 +32,15 @@ const dietEditPage = (props) => {
     };
 
     const saveDietClickHandler = (diet) => {
-        const method = diet.id ? 'PUT' : 'POST';
+        const method = diet._id ? 'PUT' : 'POST';
 
         axios({ url: '/api/diet', method: method, data: diet }).then(response => {
             const savedDiet = response.data;
 
             props.getDietList(true);
 
-            if (savedDiet.id !== dietId) {
-                history.push(`/diet/${ savedDiet.id }`);
+            if (savedDiet._id !== dietId) {
+                history.push(`/diet/${ savedDiet._id }`);
             }
         });
     };
@@ -49,7 +49,7 @@ const dietEditPage = (props) => {
         setConfirmClickHandler(() => {
             return () => {
                 const newDiet = _.cloneDeep(diet);
-                const idx = newDiet.meals.findIndex(m => m.id === meal.id);
+                const idx = newDiet.meals.findIndex(m => m._id === meal._id);
 
                 newDiet.meals.splice(idx, 1);
                 setDiet(newDiet);
@@ -70,6 +70,10 @@ const dietEditPage = (props) => {
     }, [dietId]);
 
     useEffect(() => {
+        if (!props.diet) {
+            return
+        }
+
         setDiet(props.diet);
     }, [props.diet]);
 
@@ -80,7 +84,7 @@ const dietEditPage = (props) => {
                     confirmClickHandler={ confirmClickHandler }
                     cancelClickHandler={ cancelConfirmClickHandler } />
             ) }
-            { diet && (!diet.id || diet.id === dietId) && (
+            { diet && (!diet._id || diet._id === dietId) && (
                 <div>
                     <div className={ [CS.DFlex, CS.AiCenter].join(' ') }>
                         <div className={ [CS.FloatingLabelContainer, CS.Mb03, CS.Fgrow].join(' ') }>
@@ -89,16 +93,16 @@ const dietEditPage = (props) => {
                         </div>
                         <button onClick={ () => saveDietClickHandler(diet) } className={ [CS.BtnPrimary, CS.Mb02].join(' ') }>Salvar</button>
                     </div>
-                    { diet.id && <DietScheduler dietId={ diet.id } /> }
+                    { diet._id && <DietScheduler dietId={ diet._id } /> }
                     { diet.meals.map(meal => {
                         return <Meal
-                            key={ meal.id }
+                            key={ meal._id }
                             meal={ meal }
                             dietId={ dietId }
                             mealRemoveClickHandler={ mealRemoveClickHandler }
                             editMode />
                     }) }
-                    { diet.id && (
+                    { diet._id && (
                         <div className={ CS.Box }>
                             { isInserting ? (
                                 <MealEditor meal={ blankMeal } dietId={ dietId } mealCancelEditClickHandler={ () => setInserting(false) } />

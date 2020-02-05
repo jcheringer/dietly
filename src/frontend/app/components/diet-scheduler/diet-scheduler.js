@@ -42,7 +42,7 @@ const dietScheduler = (props) => {
 };
 
 dietScheduler.propTypes = {
-    dietId: propTypes.number.isRequired
+    dietId: propTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({

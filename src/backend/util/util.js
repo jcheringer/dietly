@@ -1,16 +1,18 @@
-const { MEASURE_UNITS } = require('./constants');
+const foodService = require('../service/food-service');
+const recipeService = require('../service/recipe-service');
 
+const { MEASURE_UNITS, MEAL_TYPE } = require('../../constants');
 
-module.exports = {
-    mealOutputNormalize: (meal, currentDiet, includeStatus = false) => {
+const utils = {
+    mealOutputNormalize: (meal, currentDiet, foods, recipes, includeStatus = false) => {
         if (!meal.name && currentDiet) {
             const currentMeal = currentDiet.meals.find(cm => cm._id === meal._id);
             meal.name = currentMeal.name;
             meal.time = currentMeal.time;
         }
 
-        meal.recipes = meal.recipes.map(recipe => mealItemOutputNormalize(recipe, recipes, includeStatus));
-        meal.foods = meal.foods.map(food => mealItemOutputNormalize(food, foods, includeStatus));
+        meal.recipes = meal.recipes.map(recipe => utils.mealItemOutputNormalize(recipe, recipes, includeStatus));
+        meal.foods = meal.foods.map(food => utils.mealItemOutputNormalize(food, foods, includeStatus));
     },
 
     mealItemOutputNormalize: (item, itemList, includeStatus = false) => {
@@ -21,12 +23,18 @@ module.exports = {
         }
 
         const normalizedItem = {
-            _id: item.food._id,
-            name: item.food.name,
             measureUnit: item.measureUnit,
             amount: item.amount,
             amountText: amountText
         };
+
+        if (item.food) {
+            normalizedItem._id = item.food._id;
+            normalizedItem.name = item.food.name;
+        } else if (item.recipe) {
+            normalizedItem._id = item.recipe._id;
+            normalizedItem.name = item.recipe.name;
+        }
 
         if (includeStatus) {
             normalizedItem.checked = item.checked || false;
@@ -35,20 +43,34 @@ module.exports = {
         return normalizedItem;
     },
 
-    mealInputNormalize: (meal, keepStatus) => {
-        return {
+    mealInputNormalize: (meal, keepNameAndTime = true, keepStatus = false) => {
+        const normalizedMeal = {
             id: meal._id,
-            recipes: meal.recipes.map(recipe => mealItemInputNormalize(recipe, keepStatus)),
-            foods: meal.foods.map(food => mealItemInputNormalize(food, keepStatus))
+            recipes: meal.recipes.map(recipe => utils.mealItemInputNormalize(recipe, keepStatus, MEAL_TYPE.RECIPE)),
+            foods: meal.foods.map(food => utils.mealItemInputNormalize(food, keepStatus, MEAL_TYPE.FOOD))
+        };
+
+        if (keepNameAndTime) {
+            normalizedMeal.name = meal.name;
+            normalizedMeal.time = meal.time;
         }
+
+        return normalizedMeal;
     },
 
-    mealItemInputNormalize: (item, keepStatus = false) => {
+    mealItemInputNormalize: (item, keepStatus = false, type) => {
         const normalizedItem = {
-            food: item._id,
             measureUnit: item.measureUnit,
             amount: item.amount
         };
+
+        const itemType = item.type || type;
+
+        if (itemType === MEAL_TYPE.FOOD) {
+            normalizedItem.food = item._id;
+        } else if (itemType === MEAL_TYPE.RECIPE) {
+            normalizedItem.recipe = item._id;
+        }
 
         if (keepStatus) {
             normalizedItem.checked = item.checked;
@@ -65,3 +87,5 @@ module.exports = {
         amountText: ingredient.amountText
     })
 };
+
+module.exports = utils;

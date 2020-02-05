@@ -10,14 +10,14 @@ import MealItemEditor from '../meal-item-editor/meal-item-editor';
 import MealItemList from '../meal-item-list/meal-item-list';
 import Modal from '../../components/modal/modal';
 
-import { MEAL_TYPE } from '../../util/constants';
+import { MEAL_TYPE } from '../../../../constants';
 
 import CS from '../../../style/common.less';
 
 const mealEditor = (props) => {
-    const blankItem = { id: null, amount: '', measureUnit: 0 };
+    const blankItem = { _id: null, amount: '', measureUnit: 0 };
 
-    const [mealId, setMealId] = useState(props.meal.id);
+    const [mealId, setMealId] = useState(props.meal._id);
     const [mealTime, setMealTime] = useState(props.meal.time);
     const [mealName, setMealName] = useState(props.meal.name);
     const [recipes] = useState(props.meal.recipes);
@@ -41,7 +41,7 @@ const mealEditor = (props) => {
 
     const removeMealItemHandler = (item) => {
         const newMealItems = _.cloneDeep(mealItems);
-        const idx = newMealItems.findIndex(i => i.id === item.id);
+        const idx = newMealItems.findIndex(i => i._id === item._id);
 
         newMealItems.splice(idx, 1);
         setMealItems(newMealItems);
@@ -50,7 +50,7 @@ const mealEditor = (props) => {
     const saveMealItemHandler = (item) => {
         const newMealItems = _.cloneDeep(mealItems);
 
-        const idx = newMealItems.findIndex(i => i.id === item.id && i.type === item.type);
+        const idx = newMealItems.findIndex(i => i._id === item._id && i.type === item.type);
 
         if (idx !== -1) {
             newMealItems[idx] = item;
@@ -67,7 +67,7 @@ const mealEditor = (props) => {
         const recipes = mealItems.filter(i => i.type === MEAL_TYPE.RECIPE);
 
         const meal = {
-            id: mealId,
+            _id: mealId,
             name: mealName,
             time: mealTime,
             recipes: recipes,
@@ -144,7 +144,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 mealEditor.propTypes = {
-    dietId: PropTypes.number.isRequired,
+    dietId: PropTypes.string.isRequired,
     meal: PropTypes.object.isRequired
 };
 

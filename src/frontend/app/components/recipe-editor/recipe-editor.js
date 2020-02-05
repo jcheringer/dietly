@@ -7,7 +7,7 @@ import MealItemList from '../meal-item-list/meal-item-list';
 
 import { saveRecipe } from '../../store/actions/recipes-action';
 
-import { MEAL_TYPE } from '../../util/constants';
+import { MEAL_TYPE } from '../../../../constants';
 
 import CS from '../../../style/common.less';
 
