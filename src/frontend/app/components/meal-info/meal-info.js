@@ -7,7 +7,7 @@ import CS from '../../../style/common.less';
 
 export default function (props) {
     const getItemValue = (item, type) => {
-        return JSON.stringify({ mealId: props.meal.id, itemId: item.id, type: type });
+        return JSON.stringify({ mealId: props.meal._id, itemId: item._id, type: type });
     };
 
     const mealEditClickHandler = () => {
@@ -41,7 +41,7 @@ export default function (props) {
             </div>
             { props.meal.recipes.map(recipe => {
                 return <MealInfoItem
-                    key={ recipe.id }
+                    key={ recipe._id }
                     name={ recipe.name }
                     amountText={ recipe.amountText }
                     hideCheck={ props.editMode }
@@ -52,7 +52,7 @@ export default function (props) {
             }) }
             { props.meal.foods.map(food => {
                 return <MealInfoItem
-                    key={ food.id }
+                    key={ food._id }
                     name={ food.name }
                     amountText={ food.amountText }
                     hideCheck={ props.editMode }

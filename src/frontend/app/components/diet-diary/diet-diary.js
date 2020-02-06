@@ -21,8 +21,8 @@ export default function () {
     const mealItemChangeHandler = (event) => {
         const { mealId, itemId, type } = JSON.parse(event.target.value);
         const mealsCopy = _.cloneDeep(meals);
-        const meal = mealsCopy.find(m => m.id === mealId);
-        const item = meal[type].find(item => item.id === itemId);
+        const meal = mealsCopy.find(m => m._id === mealId);
+        const item = meal[type].find(item => item._id === itemId);
 
         item.checked = !item.checked;
 
@@ -31,7 +31,7 @@ export default function () {
         const diary = {
             date: currentDate.format('YYYY-MM-DD'),
             diet: {
-                id: dietId,
+                _id: dietId,
                 meals: mealsCopy
             }
         };
@@ -58,7 +58,7 @@ export default function () {
                 return;
             }
 
-            setDietId(response.data.diet.id);
+            setDietId(response.data.diet._id);
             setMeals(response.data.diet.meals);
         });
     }, [currentDate]);
@@ -77,7 +77,7 @@ export default function () {
             ) }
             { meals.map(meal => {
                 return <Meal
-                    key={ meal.id }
+                    key={ meal._id }
                     meal={ meal }
                     mealItemChangeHandler={ mealItemChangeHandler }
                 />

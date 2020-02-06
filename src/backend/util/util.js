@@ -1,12 +1,9 @@
-const foodService = require('../service/food-service');
-const recipeService = require('../service/recipe-service');
-
 const { MEASURE_UNITS, MEAL_TYPE } = require('../../constants');
 
 const utils = {
     mealOutputNormalize: (meal, currentDiet, foods, recipes, includeStatus = false) => {
         if (!meal.name && currentDiet) {
-            const currentMeal = currentDiet.meals.find(cm => cm._id === meal._id);
+            const currentMeal = currentDiet.meals.find(cm => cm._id.toString() === meal._id.toString());
             meal.name = currentMeal.name;
             meal.time = currentMeal.time;
         }
@@ -45,7 +42,7 @@ const utils = {
 
     mealInputNormalize: (meal, keepNameAndTime = true, keepStatus = false) => {
         const normalizedMeal = {
-            id: meal._id,
+            _id: meal._id,
             recipes: meal.recipes.map(recipe => utils.mealItemInputNormalize(recipe, keepStatus, MEAL_TYPE.RECIPE)),
             foods: meal.foods.map(food => utils.mealItemInputNormalize(food, keepStatus, MEAL_TYPE.FOOD))
         };
@@ -77,15 +74,7 @@ const utils = {
         }
 
         return normalizedItem;
-    },
-
-    ingredientInputNormalize: (ingredient) => ({
-        id: ingredient._id,
-        name: ingredient.name,
-        measureUnit: Number(ingredient.measureUnit),
-        amount: Number(ingredient.amount),
-        amountText: ingredient.amountText
-    })
+    }
 };
 
 module.exports = utils;

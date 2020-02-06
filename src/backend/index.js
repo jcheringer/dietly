@@ -7,10 +7,10 @@ const db = require('./dao');
 const foodService = require('./service/food-service');
 const recipeService = require('./service/recipe-service');
 const dietService = require('./service/diet-service');
+const dietScheduleService = require('./service/diet-schedule-service');
+const diaryService = require('./service/diary-service');
 
 const util = require('./util/util');
-
-const { measureUnits, foods, recipes, diets, dietDiary, dietSchedule } = require('./mock-database');
 
 dotenv.config({ path: path.join(__dirname, '../config/config.env') });
 
@@ -109,64 +109,23 @@ app.put('/api/meal', async (req, res) => {
     res.json(diet);
 });
 
-app.get('/api/diary/:date', (req, res) => {
-    const date = req.params.date;
-    const weekDay = moment(date).isoWeekday();
-    const savedDiet = dietDiary.find(ds => ds.date === date);
-    let dietOfDay = diets.find(d => d.id === dietSchedule[weekDay]);
-    const diet = savedDiet ? savedDiet.diet : dietOfDay;
-
-    if (savedDiet && (!dietOfDay || dietOfDay.id !== savedDiet.diet.id)) {
-        dietOfDay = diets.find(d => d.id === savedDiet.diet.id);
-    }
-
-    const diary = {
-        date: date
-    };
-
-    if (diet) {
-        diet.meals.forEach(meal => util.mealOutputNormalize(meal, dietOfDay, true));
-
-        diary.diet = {
-            id: diet.id,
-            meals: diet.meals
-        }
-    }
-
-
-    res.json(diary);
+app.get('/api/schedule', async (req, res) => {
+    res.json(await dietScheduleService.get());
 });
 
-app.post('/api/diary', (req, res) => {
-    const date = req.body.date;
-    const idx = dietDiary.findIndex(ds => ds.date === date);
-
-    const diary = {
-        date: req.body.date,
-        diet: {
-            id: req.body.diet.id,
-            meals: req.body.diet.meals
-        }
-    };
-
-    diary.diet.meals.forEach(meal => util.mealInputNormalize(meal, true));
-
-    if (idx !== -1) {
-        dietDiary[idx] = diary;
-    } else {
-        dietDiary.push(diary);
-    }
-
-    res.json(diary);
-});
-
-app.get('/api/schedule', (req, res) => {
+app.put('/api/schedule/:day', async (req, res) => {
+    const dietSchedule = await dietScheduleService.update(req.params.day, req.body.dietId);
     res.json(dietSchedule);
 });
 
-app.put('/api/schedule/:day', (req, res) => {
-    dietSchedule[req.params.day] = req.body.dietId;
-    res.json(dietSchedule);
+app.get('/api/diary/:date', async (req, res) => {
+    const diary = await diaryService.get(req.params.date);
+    res.json(diary);
+});
+
+app.post('/api/diary', async (req, res) => {
+    const diary = await diaryService.update(req.body);
+    res.json(diary);
 });
 
 app.use('/api/*', (req, res) => {

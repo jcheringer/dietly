@@ -34,7 +34,7 @@ const dietService = {
 
         diet.meals = diet.meals.map(util.mealInputNormalize);
 
-        const newDiet =  await new Diet(diet).save();
+        const newDiet = await new Diet(diet).save();
 
         return dietService.get(newDiet._id);
     },
@@ -64,6 +64,7 @@ const dietService = {
         };
 
         if (mealId) {
+            meal._id = mealId;
             const idx = diet.meals.findIndex(m => m._id.toString() === mealId);
             diet.meals[idx] = meal;
         } else {
