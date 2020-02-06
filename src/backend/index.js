@@ -8,6 +8,7 @@ const recipeService = require('./service/recipe-service');
 const dietService = require('./service/diet-service');
 const dietScheduleService = require('./service/diet-schedule-service');
 const diaryService = require('./service/diary-service');
+const userService = require('./service/user-service');
 
 const util = require('./util/util');
 
@@ -123,6 +124,11 @@ app.get('/api/diary/:date', async (req, res) => {
 app.post('/api/diary', async (req, res) => {
     const diary = await diaryService.update(req.body);
     res.json(diary);
+});
+
+app.post('/api/login', async (req, res) => {
+    const user = await userService.googleLogin(req.body);
+    res.json(user);
 });
 
 app.use('/api/*', (req, res) => {
