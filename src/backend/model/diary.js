@@ -12,9 +12,7 @@ const diarySchema = new mongoose.Schema({
         },
         meals: [
             {
-                _id: {
-                    type: mongoose.Schema.Types.ObjectId
-                },
+                _id: mongoose.Schema.Types.ObjectId,
                 recipes: [{
                     _id: false,
                     recipe: {

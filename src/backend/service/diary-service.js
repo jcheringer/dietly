@@ -15,8 +15,8 @@ const diaryService = {
 
         let dietOfDay = await dietService.get(dietOfDayId);
         const savedDiet = await Diary
-            .findOne({ date: date }
-            ).populate('diet.meals.foods.food diet.meals.recipes.recipe')
+            .findOne({ date: date })
+            .populate('diet.meals.foods.food diet.meals.recipes.recipe')
             .lean()
             .exec();
 

@@ -1,6 +1,5 @@
 const path = require('path');
 const express = require('express');
-const moment = require('moment');
 const dotenv = require('dotenv');
 
 const db = require('./dao');
@@ -22,8 +21,7 @@ app.use(express.json());
 app.use(express.static(path.resolve(__dirname, '../../public')));
 
 app.get('/api/food', async (req, res) => {
-    const foodList = await foodService.list();
-    res.json(foodList);
+    res.json(await foodService.list());
 });
 
 app.post('/api/food', async (req, res) => {
@@ -52,8 +50,7 @@ app.delete('/api/food/:id', async (req, res) => {
 });
 
 app.get('/api/recipe', async (req, res) => {
-    const recipeList = await recipeService.list();
-    res.json(recipeList);
+    res.json(await recipeService.list());
 });
 
 app.post('/api/recipe', async (req, res) => {
