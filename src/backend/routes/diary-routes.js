@@ -5,7 +5,9 @@ const diaryService = require('../service/diary-service');
 
 router.get('/:date', middleware.validateUser, async (req, res, next) => {
     try {
-        const diary = await diaryService.get(req.params.date);
+        const userId = res.locals.userData.id;
+        const diary = await diaryService.get(req.params.date, userId);
+
         res.json(diary);
     } catch (e) {
         next(e);
@@ -14,7 +16,9 @@ router.get('/:date', middleware.validateUser, async (req, res, next) => {
 
 router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
-        const diary = await diaryService.update(req.body);
+        const userId = res.locals.userData.id;
+        const diary = await diaryService.update(req.body, userId);
+
         res.json(diary);
     } catch (e) {
         next(e);

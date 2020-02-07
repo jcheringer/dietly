@@ -5,7 +5,9 @@ const dietService = require('../service/diet-service');
 
 router.post('/meal', middleware.validateUser, async (req, res, next) => {
     try {
-        const diet = await dietService.mealUpsert(req.body.dietId, null, req.body);
+        const userId = res.locals.userData.id;
+        const diet = await dietService.mealUpsert(req.body.dietId, null, req.body, userId);
+
         res.json(diet);
     } catch (e) {
         next(e);
@@ -14,7 +16,9 @@ router.post('/meal', middleware.validateUser, async (req, res, next) => {
 
 router.put('/meal', middleware.validateUser, async (req, res, next) => {
     try {
-        const diet = await dietService.mealUpsert(req.body.dietId, req.body.meal._id, req.body);
+        const userId = res.locals.userData.id;
+        const diet = await dietService.mealUpsert(req.body.dietId, req.body.meal._id, req.body, userId);
+
         res.json(diet);
     } catch (e) {
         next(e);
@@ -23,7 +27,8 @@ router.put('/meal', middleware.validateUser, async (req, res, next) => {
 
 router.get('/:id', middleware.validateUser, async (req, res, next) => {
     try {
-        res.json(await dietService.get(req.params.id));
+        const userId = res.locals.userData.id;
+        res.json(await dietService.get(req.params.id, userId));
     } catch (e) {
         next(e);
     }
@@ -31,7 +36,9 @@ router.get('/:id', middleware.validateUser, async (req, res, next) => {
 
 router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
-        const diet = await dietService.insert(req.body);
+        const userId = res.locals.userData.id;
+        const diet = await dietService.insert(req.body, userId);
+
         res.json(diet);
     } catch (e) {
         next(e);
@@ -40,7 +47,9 @@ router.post('/', middleware.validateUser, async (req, res, next) => {
 
 router.put('/', middleware.validateUser, async (req, res, next) => {
     try {
-        const diet = await dietService.update(req.body._id, req.body);
+        const userId = res.locals.userData.id;
+        const diet = await dietService.update(req.body._id, req.body, userId);
+
         res.json(diet);
     } catch (e) {
         next(e);
@@ -49,7 +58,9 @@ router.put('/', middleware.validateUser, async (req, res, next) => {
 
 router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
-        res.json(await dietService.list());
+        const userId = res.locals.userData.id;
+
+        res.json(await dietService.list(userId));
     } catch (e) {
         next(e);
     }

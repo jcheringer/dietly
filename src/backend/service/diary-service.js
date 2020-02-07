@@ -8,14 +8,14 @@ const foodService = require('./food-service');
 const recipeService = require('./recipe-service');
 
 const diaryService = {
-    async get(date) {
-        const dietSchedule = await dietScheduleService.get();
+    async get(date, userId) {
+        const dietSchedule = await dietScheduleService.get(userId);
         const momentDate = moment(date);
         const dietOfDayId = dietSchedule[momentDate.isoWeekday()];
 
-        let dietOfDay = await dietService.get(dietOfDayId);
+        let dietOfDay = await dietService.get(dietOfDayId, userId);
         const savedDiet = await Diary
-            .findOne({ date: date })
+            .findOne({ date: date, user: userId })
             .populate('diet.meals.foods.food diet.meals.recipes.recipe')
             .lean()
             .exec();
@@ -23,7 +23,7 @@ const diaryService = {
         const diet = savedDiet ? savedDiet.diet : dietOfDay;
 
         if (savedDiet && (!dietOfDay || dietOfDay._id.toString() !== savedDiet.diet._id.toString())) {
-            dietOfDay = await dietService.get(savedDiet.diet._id);
+            dietOfDay = await dietService.get(savedDiet.diet._id, userId);
         }
 
         const diary = {
@@ -32,8 +32,8 @@ const diaryService = {
 
         if (diet) {
             if (!diet.name) {
-                const foods = await foodService.list();
-                const recipes = await recipeService.list();
+                const foods = await foodService.list(userId);
+                const recipes = await recipeService.list(userId);
 
                 diet.meals.forEach(meal => util.mealOutputNormalize(meal, dietOfDay, foods, recipes, true));
             }
@@ -46,10 +46,11 @@ const diaryService = {
 
         return diary;
     },
-    async update(data) {
-        const currentDiary = await Diary.findOne({ date: data.date }).lean().exec();
+    async update(data, userId) {
+        const currentDiary = await Diary.findOne({ date: data.date, user: userId }).lean().exec();
 
         const diary = {
+            user: userId,
             date: data.date,
             diet: {
                 _id: data.diet._id,
@@ -60,12 +61,12 @@ const diaryService = {
         diary.diet.meals = diary.diet.meals.map(meal => util.mealInputNormalize(meal, false, true));
 
         if (currentDiary) {
-            await Diary.findByIdAndUpdate(currentDiary._id, diary);
+            await Diary.findOneAndUpdate({ _id: currentDiary._id, user: userId }, diary);
         } else {
             await new Diary(diary).save();
         }
 
-        return diaryService.get(data.date);
+        return diaryService.get(data.date, userId);
     }
 };
 

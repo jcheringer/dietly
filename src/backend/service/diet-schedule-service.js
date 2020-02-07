@@ -11,32 +11,34 @@ const blankSchedule = {
 };
 
 const dietScheduleService = {
-    async get(hideId = true) {
-        const query = DietSchedule.findOne();
+    async get(userId, hideId = true) {
+        const query = DietSchedule.findOne({ user: userId });
 
         if (hideId) {
-            query.select('-_id -__v')
+            query.select('-_id -__v -user')
         }
 
         const dietSchedule = await query.lean().exec();
 
         if (!dietSchedule) {
-            return blankSchedule;
+            return { ...blankSchedule };
         }
 
         return dietSchedule;
     },
-    async update(day, dietId) {
-        const dietSchedule = await dietScheduleService.get(false);
+    async update(day, dietId, userId) {
+        const dietSchedule = await dietScheduleService.get(userId, false);
         dietSchedule[day] = dietId;
 
         if (!dietSchedule._id) {
+            dietSchedule.user = userId;
             await new DietSchedule(dietSchedule).save();
         } else {
-            await DietSchedule.findByIdAndUpdate(dietSchedule._id, dietSchedule, { new: true }).exec();
+            const condition = { _id: dietSchedule._id, user: userId };
+            await DietSchedule.findOneAndUpdate(condition, dietSchedule, { new: true }).exec();
         }
 
-        return await dietScheduleService.get();
+        return await dietScheduleService.get(userId);
     }
 };
 

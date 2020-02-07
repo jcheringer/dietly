@@ -35,7 +35,7 @@ const dietScheduleSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: Diet
     }
-}, { collection: 'diat-schedule' });
+}, { collection: 'diet-schedule' });
 
 const DietSchedule = mongoose.model('DietSchedule', dietScheduleSchema);
 
