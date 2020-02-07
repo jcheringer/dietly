@@ -1,11 +1,12 @@
 const router = require('express').Router();
 
-const foodService = require('../service/food-service');
 const middleware = require('./middlewares');
+const foodService = require('../service/food-service');
 
 router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
         const userId = res.locals.userData.id;
+
         res.json(await foodService.list(userId));
     } catch (e) {
         next(e);
@@ -14,13 +15,10 @@ router.get('/', middleware.validateUser, async (req, res, next) => {
 
 router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
-        const newFood = {
-            name: req.body.name,
-            measureUnits: req.body.measureUnits
-        };
+        const userId = res.locals.userData.id;
+        await foodService.insert(req.body,userId);
 
-        await foodService.insert(newFood);
-        res.json(await foodService.list());
+        res.json(await foodService.list(userId));
     } catch (e) {
         next(e);
     }
@@ -28,13 +26,10 @@ router.post('/', middleware.validateUser, async (req, res, next) => {
 
 router.put('/', middleware.validateUser, async (req, res, next) => {
     try {
-        const food = {
-            name: req.body.name,
-            measureUnits: req.body.measureUnits
-        };
+        const userId = res.locals.userData.id;
+        await foodService.update(req.body._id, req.body, userId);
 
-        await foodService.update(req.body._id, food);
-        res.json(await foodService.list());
+        res.json(await foodService.list(userId));
     } catch (e) {
         next(e)
     }
@@ -42,8 +37,10 @@ router.put('/', middleware.validateUser, async (req, res, next) => {
 
 router.delete('/:id', middleware.validateUser, async (req, res, next) => {
     try {
-        await foodService.delete(req.params.id);
-        res.json(await foodService.list());
+        const userId = res.locals.userData.id;
+        await foodService.delete(req.params.id, userId);
+
+        res.json(await foodService.list(userId));
     } catch (e) {
         next(e);
     }

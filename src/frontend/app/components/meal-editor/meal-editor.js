@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import _ from 'lodash';
 
+import http from '../../service/http-service';
 import { getDiet } from '../../store/actions/diets-action';
-
 import MealItemEditor from '../meal-item-editor/meal-item-editor';
 import MealItemList from '../meal-item-list/meal-item-list';
 import Modal from '../../components/modal/modal';
@@ -76,7 +75,7 @@ const mealEditor = (props) => {
 
         const method = mealId ? 'PUT' : 'POST';
 
-        axios({ url: '/api/diet/meal', method: method, data: { dietId: props.dietId, meal: meal } }).then(() => {
+        http({ url: '/api/diet/meal', method: method, data: { dietId: props.dietId, meal: meal } }).then(() => {
             props.getDiet(props.dietId);
             props.mealCancelEditClickHandler(false);
         });

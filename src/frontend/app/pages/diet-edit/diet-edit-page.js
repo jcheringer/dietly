@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import _ from 'lodash';
 
 import { getDiet, getDietList } from '../../store/actions/diets-action';
-
+import http from '../../service/http-service';
 import Meal from '../../components/meal/meal';
 import MealEditor from '../../components/meal-editor/meal-editor';
 import ConfirmationModal from '../../components/modal/confirmation-modal';
@@ -34,7 +33,7 @@ const dietEditPage = (props) => {
     const saveDietClickHandler = (diet) => {
         const method = diet._id ? 'PUT' : 'POST';
 
-        axios({ url: '/api/diet', method: method, data: diet }).then(response => {
+        http({ url: '/api/diet', method: method, data: diet }).then(response => {
             const savedDiet = response.data;
 
             props.getDietList(true);

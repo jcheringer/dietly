@@ -1,8 +1,9 @@
 const router = require('express').Router();
 
+const middleware = require('./middlewares');
 const dietScheduleService = require('../service/diet-schedule-service');
 
-router.get('/', async (req, res, next) => {
+router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
         res.json(await dietScheduleService.get());
     } catch (e) {
@@ -10,7 +11,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.put('/:day', async (req, res, next) => {
+router.put('/:day', middleware.validateUser, async (req, res, next) => {
     try {
         const dietSchedule = await dietScheduleService.update(req.params.day, req.body.dietId);
         res.json(dietSchedule);

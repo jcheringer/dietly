@@ -1,4 +1,5 @@
-import axios from 'axios';
+import http from '../../service/http-service';
+
 import { GET_DIET, GET_DIET_LIST, GET_DIET_SCHEDULE, SAVE_DIET_SCHEDULE } from './action-types';
 
 export const getDietList = (forceUpdate = false) => {
@@ -9,7 +10,7 @@ export const getDietList = (forceUpdate = false) => {
 
         return dispatch({
             type: GET_DIET_LIST,
-            promise: axios.get('/api/diet')
+            promise: http.get('/api/diet')
         });
     }
 };
@@ -17,7 +18,7 @@ export const getDietList = (forceUpdate = false) => {
 export const getDiet = (dietId) => (dispatch) => {
     return dispatch({
         type: GET_DIET,
-        promise: axios.get(`/api/diet/${ dietId }`)
+        promise: http.get(`/api/diet/${ dietId }`)
     });
 };
 
@@ -29,12 +30,12 @@ export const getDietSchedule = (forceUpdate = false) => {
 
         return dispatch({
             type: GET_DIET_SCHEDULE,
-            promise: axios.get('/api/schedule')
+            promise: http.get('/api/schedule')
         });
     }
 };
 
 export const saveDietSchedule = (day, dietId) => (dispatch) => dispatch({
     type: SAVE_DIET_SCHEDULE,
-    promise: axios.put(`/api/schedule/${ day }`, { dietId })
+    promise: http.put(`/api/schedule/${ day }`, { dietId })
 });

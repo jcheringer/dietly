@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 const Food = require('../model/food');
 const Recipe = require('../model/recipe');
+const User = require('./user');
 
 const dietSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: User
+    },
     name: String,
     meals: [
         {

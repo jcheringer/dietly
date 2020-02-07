@@ -1,8 +1,9 @@
 const router = require('express').Router();
 
+const middleware = require('./middlewares');
 const dietService = require('../service/diet-service');
 
-router.post('/meal', async (req, res, next) => {
+router.post('/meal', middleware.validateUser, async (req, res, next) => {
     try {
         const diet = await dietService.mealUpsert(req.body.dietId, null, req.body);
         res.json(diet);
@@ -11,7 +12,7 @@ router.post('/meal', async (req, res, next) => {
     }
 });
 
-router.put('/meal', async (req, res, next) => {
+router.put('/meal', middleware.validateUser, async (req, res, next) => {
     try {
         const diet = await dietService.mealUpsert(req.body.dietId, req.body.meal._id, req.body);
         res.json(diet);
@@ -20,7 +21,7 @@ router.put('/meal', async (req, res, next) => {
     }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', middleware.validateUser, async (req, res, next) => {
     try {
         res.json(await dietService.get(req.params.id));
     } catch (e) {
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
         const diet = await dietService.insert(req.body);
         res.json(diet);
@@ -37,7 +38,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/', async (req, res, next) => {
+router.put('/', middleware.validateUser, async (req, res, next) => {
     try {
         const diet = await dietService.update(req.body._id, req.body);
         res.json(diet);
@@ -46,7 +47,7 @@ router.put('/', async (req, res, next) => {
     }
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
         res.json(await dietService.list());
     } catch (e) {

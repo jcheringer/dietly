@@ -2,8 +2,13 @@ const mongoose = require('mongoose');
 const Diet = require('./diet');
 const Food = require('./food');
 const Recipe = require('./recipe');
+const User = require('./user');
 
 const diarySchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: User
+    },
     date: String,
     diet: {
         _id: {

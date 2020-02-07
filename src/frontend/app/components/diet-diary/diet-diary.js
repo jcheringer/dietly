@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import axios from 'axios';
 import _ from 'lodash';
 
+import http from '../../service/http-service';
 import Meal from '../meal/meal';
 import Style from './diet-diary.less';
 import CS from '../../../style/common.less';
@@ -36,7 +36,7 @@ export default function () {
             }
         };
 
-        axios.post('/api/diary', diary).catch(() => {
+        http.post('/api/diary', diary).catch(() => {
             //TODO: Send an error message
             item.checked = !item.checked;
             setMeals(mealsCopy);
@@ -50,7 +50,7 @@ export default function () {
 
         const date = currentDate.format('YYYY-MM-DD');
 
-        axios.get(`/api/diary/${ date }`).then(response => {
+        http.get(`/api/diary/${ date }`).then(response => {
             const diet = response.data.diet;
 
             if (!diet) {

@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 const Food = require('./food');
+const User = require('./user');
 
 const recipeSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: User
+    },
     name: String,
     ingredients: [
         {

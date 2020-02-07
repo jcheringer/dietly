@@ -1,9 +1,10 @@
+import http from '../../service/http-service';
+
 import { USER_LOGIN } from './action-types'
-import axios from 'axios';
 
 export const googleLogin = (data) => {
     return (dispatch) => {
-        const promise = axios.post('/api/user/login/google', data);
+        const promise = http.post('/api/user/login/google', data);
 
         dispatch({
             type: USER_LOGIN,

@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 const Diet = require('./diet');
+const User = require('./user');
 
 const dietScheduleSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Types.ObjectId,
+        ref: User
+    },
     1: {
         type: mongoose.Schema.Types.ObjectId,
         ref: Diet
