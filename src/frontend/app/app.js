@@ -6,7 +6,7 @@ import MainPage from './pages/main/main-page';
 import LoginPage from './pages/login/login-page';
 import Store from './store';
 
-export default function () {
+const app = () => {
     return (
         <Provider store={ Store }>
             <Router>
@@ -17,4 +17,6 @@ export default function () {
             </Router>
         </Provider>
     )
-}
+};
+
+export default app;

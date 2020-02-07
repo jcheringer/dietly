@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 
 import AuthService from '../../service/auth-service';
 import { googleLogin } from '../../store/actions/users-action'
 
 const loginPage = (props) => {
     const googleApi = window.gapi;
+
+    const history = useHistory();
     const [isGoogleReady, setGoogleReady] = useState(false);
 
     googleApi.load('auth2', () => {
@@ -25,6 +29,7 @@ const loginPage = (props) => {
 
             props.googleLogin({ email, idToken }).then((response) => {
                 AuthService.saveToken(response.data.token);
+                history.push(`/`);
             });
         });
     };

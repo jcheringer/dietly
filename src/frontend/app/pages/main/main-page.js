@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import React, { Fragment, useEffect } from 'react';
+import { Switch, Route, Link, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import DashboardPage from '../dashboard/dashboard-page';
 import MenuPage from '../menu/menu-page';
@@ -8,7 +9,15 @@ import DietEditPage from '../diet-edit/diet-edit-page';
 
 import './main-page.less';
 
-export default function () {
+const mainPage = (props) => {
+    const history = useHistory();
+
+    useEffect(() => {
+        if (!props.userData) {
+            history.push(`/login`);
+        }
+    }, [props.userData]);
+
     return (
         <Fragment>
             <header>
@@ -31,4 +40,10 @@ export default function () {
             </main>
         </Fragment>
     )
-}
+};
+
+const mapStateToProps = (state) => ({
+    userData: state.userState.user
+});
+
+export default connect(mapStateToProps)(mainPage);

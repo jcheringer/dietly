@@ -1,4 +1,4 @@
-import { USER_LOGIN_SUCCESS } from '../actions/action-types'
+import { USER_LOGIN_SUCCESS, CLEAR_USER_DATA } from '../actions/action-types'
 
 const initalState = {
     user: null
@@ -10,6 +10,12 @@ export default (state = initalState, action) => {
             return {
                 ...state,
                 user: action.data.user
+            }
+        }
+        case CLEAR_USER_DATA: {
+            return {
+                ...state,
+                user: null
             }
         }
         default: {
