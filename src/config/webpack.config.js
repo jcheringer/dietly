@@ -1,6 +1,21 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const dotenv = require('dotenv');
+
+const exportEnvVariables = () => {
+    const env = dotenv.config({ path: path.join(__dirname, './config.env') }).parsed || {};
+
+    let config =  {
+        CLIENT_ID: process.env.CLIENT_ID || env.CLIENT_ID
+    };
+
+    for (const [key, value] of Object.entries(config)) {
+        config[key] = JSON.stringify(value);
+    }
+    return config;
+};
 
 module.exports = {
     entry: './src/frontend/index.js',
@@ -52,6 +67,9 @@ module.exports = {
                 collapseWhitespace: true,
                 removeAttributeQuotes: true
             },
+        }),
+        new webpack.DefinePlugin({
+            config: exportEnvVariables()
         }),
     ]
 };

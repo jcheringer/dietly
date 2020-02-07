@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
-export default function () {
+import AuthService from '../../service/auth-service';
+import { googleLogin } from '../../store/actions/users-action'
+
+const loginPage = (props) => {
     const googleApi = window.gapi;
     const [isGoogleReady, setGoogleReady] = useState(false);
 
-    googleApi.load('auth2', function () {
+    googleApi.load('auth2', () => {
         googleApi.auth2.init({
-            client_id: '279371363425-3m2eqdvvooifsn6reb8o7ura7hrqelvi.apps.googleusercontent.com'
+            client_id: config.CLIENT_ID
         }).then(() => {
             setGoogleReady(true);
         });
@@ -20,8 +23,8 @@ export default function () {
             const email = googleUser.getBasicProfile().getEmail();
             const idToken = googleUser.getAuthResponse().id_token;
 
-            axios.post('/api/login', { email, idToken }).then(() => {
-
+            props.googleLogin({ email, idToken }).then((response) => {
+                AuthService.saveToken(response.data.token);
             });
         });
     };
@@ -34,4 +37,10 @@ export default function () {
             ) }
         </div>
     )
-}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    googleLogin: (data) => dispatch(googleLogin(data))
+});
+
+export default connect(null, mapDispatchToProps)(loginPage);

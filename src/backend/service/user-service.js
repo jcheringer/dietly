@@ -1,4 +1,7 @@
+const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
+
+const Exception = require('../util/exception');
 
 const User = require('../model/user');
 
@@ -43,7 +46,7 @@ const userService = {
         const { aud, email, name } = ticket.getPayload();
 
         if (aud !== process.env.CLIENT_ID) {
-            //Throw invalid token
+            throw new Exception('Falha ao realizar login. Usuário ou senha inválidos', 401);
         }
 
         let user = await userService.getByEmail(email);
@@ -52,7 +55,11 @@ const userService = {
             user = await userService.insert({ email, name });
         }
 
-        return user;
+        const token = jwt.sign({
+            id: user._id,
+        }, process.env.JWT_SECRET, { expiresIn: '72h' });
+
+        return { token: token, user: user };
     }
 };
 

@@ -1,4 +1,5 @@
-import axios from 'axios';
+import http from '../../service/http-service';
+
 import { GET_FOOD_LIST, SAVE_FOOD, REMOVE_FOOD } from './action-types';
 
 export const getFoodList = (forceUpdate = false) => {
@@ -11,7 +12,7 @@ export const getFoodList = (forceUpdate = false) => {
 
         dispatch({
             type: GET_FOOD_LIST,
-            promise: axios.get('/api/food')
+            promise: http.get('/api/food')
         });
     }
 };
@@ -22,7 +23,7 @@ export const saveFood = (food) => {
 
         dispatch({
             type: SAVE_FOOD,
-            promise: axios({ url: '/api/food', method: method, data: food })
+            promise: http({ url: '/api/food', method: method, data: food })
         });
     }
 };
@@ -31,7 +32,7 @@ export const removeFood = (foodId) => {
     return (dispatch) => {
         dispatch({
             type: REMOVE_FOOD,
-            promise: axios.delete(`/api/food/${ foodId }`)
+            promise: http.delete(`/api/food/${ foodId }`)
         })
     }
 };

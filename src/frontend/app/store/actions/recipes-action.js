@@ -1,5 +1,6 @@
+import http from '../../service/http-service';
+
 import { GET_RECIPE_LIST, SAVE_RECIPE, REMOVE_RECIPE } from './action-types';
-import axios from 'axios';
 
 export const getRecipeList = (forceUpdate = false) => {
     return (dispatch, getState) => {
@@ -11,7 +12,7 @@ export const getRecipeList = (forceUpdate = false) => {
 
         return dispatch({
             type: GET_RECIPE_LIST,
-            promise: axios.get('/api/recipe')
+            promise: http.get('/api/recipe')
         });
     }
 };
@@ -22,7 +23,7 @@ export const saveRecipe = (recipe) => {
 
         return dispatch({
             type: SAVE_RECIPE,
-            promise: axios({ url: '/api/recipe', method: method, data: recipe })
+            promise: http({ url: '/api/recipe', method: method, data: recipe })
         });
     }
 };
@@ -31,7 +32,7 @@ export const removeRecipe = (recipeId) => {
     return (dispatch) => {
         dispatch({
             type: REMOVE_RECIPE,
-            promise: axios.delete(`/api/recipe/${ recipeId }`)
+            promise: http.delete(`/api/recipe/${ recipeId }`)
         })
     }
 };

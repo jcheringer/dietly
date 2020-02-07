@@ -1,16 +1,18 @@
 const router = require('express').Router();
 
 const foodService = require('../service/food-service');
+const middleware = require('./middlewares');
 
-router.get('/', async (req, res, next) => {
+router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
-        res.json(await foodService.list());
+        const userId = res.locals.userData.id;
+        res.json(await foodService.list(userId));
     } catch (e) {
         next(e);
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
         const newFood = {
             name: req.body.name,
@@ -24,7 +26,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/', async (req, res, next) => {
+router.put('/', middleware.validateUser, async (req, res, next) => {
     try {
         const food = {
             name: req.body.name,
@@ -38,7 +40,7 @@ router.put('/', async (req, res, next) => {
     }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', middleware.validateUser, async (req, res, next) => {
     try {
         await foodService.delete(req.params.id);
         res.json(await foodService.list());

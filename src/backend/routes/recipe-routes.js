@@ -2,8 +2,9 @@ const router = require('express').Router();
 
 const recipeService = require('../service/recipe-service');
 const util = require('../util/util');
+const middleware = require('./middlewares');
 
-router.get('/', async (req, res, next) => {
+router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
         res.json(await recipeService.list());
     } catch (e) {
@@ -11,7 +12,7 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
         const recipe = {
             name: req.body.name,
@@ -25,7 +26,7 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/', async (req, res, next) => {
+router.put('/', middleware.validateUser, async (req, res, next) => {
     try {
         const recipe = {
             name: req.body.name,
@@ -39,7 +40,7 @@ router.put('/', async (req, res, next) => {
     }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', middleware.validateUser, async (req, res, next) => {
     try {
         await recipeService.delete(req.params.id);
         res.json(await recipeService.list());

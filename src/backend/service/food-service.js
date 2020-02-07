@@ -1,8 +1,8 @@
 const Food = require('../model/food');
 
 module.exports = {
-    async list() {
-        return Food.find().lean().exec();
+    async list(userId) {
+        return Food.find({ user: userId }).lean().exec();
     },
     async insert(data) {
         return new Food(data).save();
