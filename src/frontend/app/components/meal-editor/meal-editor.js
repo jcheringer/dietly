@@ -76,7 +76,7 @@ const mealEditor = (props) => {
 
         const method = mealId ? 'PUT' : 'POST';
 
-        axios({ url: '/api/meal', method: method, data: { dietId: props.dietId, meal: meal } }).then(() => {
+        axios({ url: '/api/diet/meal', method: method, data: { dietId: props.dietId, meal: meal } }).then(() => {
             props.getDiet(props.dietId);
             props.mealCancelEditClickHandler(false);
         });
