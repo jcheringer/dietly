@@ -34,5 +34,9 @@ module.exports = {
         }
 
         return jwt.decode(this.getToken());
+    },
+
+    isAuthenticated() {
+        return !!this.getToken();
     }
 };

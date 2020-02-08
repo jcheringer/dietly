@@ -9,15 +9,7 @@ import DietEditPage from '../diet-edit/diet-edit-page';
 
 import './main-page.less';
 
-const mainPage = (props) => {
-    const history = useHistory();
-
-    useEffect(() => {
-        if (!props.userData) {
-            history.push(`/login`);
-        }
-    }, [props.userData]);
-
+const mainPage = () => {
     return (
         <Fragment>
             <header>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -9,9 +9,6 @@ import { googleLogin } from '../../store/actions/users-action'
 const loginPage = (props) => {
     const googleApi = window.gapi;
 
-    const history = useHistory();
-    const [isGoogleReady, setGoogleReady] = useState(false);
-
     googleApi.load('auth2', () => {
         googleApi.auth2.init({
             client_id: config.CLIENT_ID
@@ -19,6 +16,9 @@ const loginPage = (props) => {
             setGoogleReady(true);
         });
     });
+
+    const history = useHistory();
+    const [isGoogleReady, setGoogleReady] = useState(false);
 
     const googleLoginHandler = () => {
         const googleAuth = googleApi.auth2.getAuthInstance();
@@ -33,6 +33,12 @@ const loginPage = (props) => {
             });
         });
     };
+
+    useEffect(() => {
+        if (AuthService.isAuthenticated()) {
+            history.push(`/`);
+        }
+    }, []);
 
     return (
         <div>
