@@ -46,13 +46,13 @@ const userService = {
         const { aud, email, name } = ticket.getPayload();
 
         if (aud !== process.env.CLIENT_ID) {
-            throw new Exception('Falha ao realizar login. Usuário ou senha inválidos', 401);
+            throw new Exception('Falha ao realizar login. Token do Google inválido', 401);
         }
 
         let user = await userService.getByEmail(email);
 
         if (!user) {
-            user = await userService.insert({ email, name });
+            user = await userService.insert({ email, name, googleLogin: true }); //FIXME: Save property google login
         }
 
         const token = jwt.sign({
