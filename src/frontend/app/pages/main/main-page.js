@@ -1,19 +1,30 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import { getUser } from '../../store/actions/users-action';
+import Auth from '../../service/auth-service';
 
 import DiaryPage from '../diary/diary-page';
 import MenuPage from '../menu/menu-page';
 import DietsPage from '../diets/diets-page';
 import DietEditPage from '../diet-edit/diet-edit-page';
 
+import ProfileImage from '../../components/profile-image/profile-image';
+
 import './main-page.less';
+import CS from '../../../style/common.less';
 
 const isDietPage = (match, location) => {
     return location.pathname.match(/^\/diet/);
 };
 
-const mainPage = () => {
+const mainPage = (props) => {
+    useEffect(() => {
+        const userData = Auth.getUserData();
+        props.getUser(userData.id);
+    }, []);
+
     return (
         <Fragment>
             <header>
@@ -29,6 +40,7 @@ const mainPage = () => {
                         <li>
                             <NavLink to="/menu" activeClassName="active">Cardápio</NavLink>
                         </li>
+                        <li className={ CS.Ml02 }><ProfileImage /></li>
                     </ul>
                 </div>
             </header>
@@ -48,4 +60,8 @@ const mapStateToProps = (state) => ({
     userData: state.userState.user
 });
 
-export default connect(mapStateToProps)(mainPage);
+const mapDispatchToProps = (dispatch) => ({
+    getUser: (userId) => dispatch(getUser(userId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(mainPage);

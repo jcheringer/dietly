@@ -1,0 +1,29 @@
+@import (reference) '../../../style/variables';
+
+.ProfileImage {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .Container {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 2px solid @secondary-color;
+        background-color: darken(@primary-color, 20%);
+        cursor: pointer;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+        }
+
+        i {
+            font-size: 4rem;
+            color: lighten(@secondary-color, 70%);
+        }
+    }
+}

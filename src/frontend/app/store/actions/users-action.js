@@ -1,6 +1,19 @@
 import http from '../../service/http-service';
 
-import { USER_LOGIN } from './action-types'
+import { GET_USER, USER_LOGIN } from './action-types'
+
+export const getUser = (userId, forceUpdate = false) => {
+    return (dispatch, getState) => {
+        if (!forceUpdate && getState().userState.user) {
+            return;
+        }
+
+        dispatch({
+            type: GET_USER,
+            promise: http.get(`/api/user/${ userId }`)
+        });
+    }
+};
 
 export const googleLogin = (data) => {
     return (dispatch) => {

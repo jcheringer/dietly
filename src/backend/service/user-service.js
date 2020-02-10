@@ -18,7 +18,8 @@ const userService = {
     async insert(data) {
         const user = {
             name: data.name,
-            email: data.email
+            email: data.email,
+            image: data.image
         };
 
         return new User(user).save();
@@ -26,7 +27,8 @@ const userService = {
     async update(id, data) {
         const user = {
             name: data.name,
-            email: data.email
+            email: data.email,
+            image: data.image
         };
 
         return User.findByIdAndUpdate(id, user, { new: true }).exec();
@@ -43,7 +45,7 @@ const userService = {
             audience: process.env.CLIENT_ID
         });
 
-        const { aud, email, name } = ticket.getPayload();
+        const { aud, email, name, picture } = ticket.getPayload();
 
         if (aud !== process.env.CLIENT_ID) {
             throw new Exception('Falha ao realizar login. Token do Google inválido', 401);
@@ -52,11 +54,14 @@ const userService = {
         let user = await userService.getByEmail(email);
 
         if (!user) {
-            user = await userService.insert({ email, name, googleLogin: true }); //FIXME: Save property google login
+            user = await userService.insert({ email, name, image: picture, googleLogin: true }); //FIXME: Save property google login
+        } else if (picture && !user.image) {
+            user.image = picture;
+            await userService.update(user._id, user);
         }
 
         const token = jwt.sign({
-            id: user._id,
+            id: user._id
         }, process.env.JWT_SECRET, { expiresIn: '72h' });
 
         return { token: token, user: user };
