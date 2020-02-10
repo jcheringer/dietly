@@ -1,6 +1,6 @@
 import http from '../../service/http-service';
 
-import { GET_DIET, GET_DIET_LIST, GET_DIET_SCHEDULE, SAVE_DIET_SCHEDULE } from './action-types';
+import { GET_DIET, REMOVE_DIET, GET_DIET_LIST, GET_DIET_SCHEDULE, SAVE_DIET_SCHEDULE } from './action-types';
 
 export const getDietList = (forceUpdate = false) => {
     return (dispatch, getState) => {
@@ -19,6 +19,13 @@ export const getDiet = (dietId) => (dispatch) => {
     return dispatch({
         type: GET_DIET,
         promise: http.get(`/api/diet/${ dietId }`)
+    });
+};
+
+export const removeDiet = (dietId) => (dispatch) => {
+    return dispatch({
+        type: REMOVE_DIET,
+        promise: http.delete(`/api/diet/${ dietId }`)
     });
 };
 

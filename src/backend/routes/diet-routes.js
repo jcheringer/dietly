@@ -34,6 +34,17 @@ router.get('/:id', middleware.validateUser, async (req, res, next) => {
     }
 });
 
+router.delete('/:id', middleware.validateUser, async (req, res, next) => {
+    try {
+        const userId = res.locals.userData.id;
+        await dietService.delete(req.params.id, userId);
+
+        res.json(await dietService.list(userId));
+    } catch (e) {
+        next(e);
+    }
+});
+
 router.post('/', middleware.validateUser, async (req, res, next) => {
     try {
         const userId = res.locals.userData.id;

@@ -2,16 +2,33 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import { getDietList } from '../../store/actions/diets-action';
+import { getDietList, removeDiet } from '../../store/actions/diets-action';
 
 import CS from '../../../style/common.less'
+import ConfirmationModal from '../../components/modal/confirmation-modal';
 
 const dietsPage = (props) => {
     const history = useHistory();
     const [dietList, setDietList] = useState([]);
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [confirmClickHandler, setConfirmClickHandler] = useState(null);
+
     const moveToDiet = (dietId) => {
         history.push(`/diet/${ dietId }`);
+    };
+
+    const dietRemoveHandler = (dietId, event) => {
+        event.stopPropagation();
+
+        setConfirmClickHandler(() => {
+            return () => {
+                props.removeDiet(dietId);
+                setShowConfirmation(false);
+            }
+        });
+
+        setShowConfirmation(true);
     };
 
     useEffect(() => {
@@ -26,10 +43,21 @@ const dietsPage = (props) => {
 
     return (
         <div className={ CS.CommonPage }>
+            { showConfirmation && (
+                <ConfirmationModal
+                    confirmClickHandler={ confirmClickHandler }
+                    cancelClickHandler={ () => setShowConfirmation(false) } />
+            ) }
+
             <button onClick={ () => moveToDiet(0) } className={ newDietButtonClasses }>Criar Nova Dieta</button>
             { dietList.map(diet => {
+                const cssClasses = [CS.Box, CS.Pad02, CS.DFlex, CS.AiCenter];
+
                 return (
-                    <div key={ diet._id } onClick={ () => moveToDiet(diet._id) } className={ [CS.Box, CS.Pad03].join(' ') }>{ diet.name }</div>
+                    <div key={ diet._id } onClick={ () => moveToDiet(diet._id) } className={ cssClasses.join(' ') }>
+                        <span className={ CS.Fgrow }>{ diet.name }</span>
+                        <i onClick={ (event) => dietRemoveHandler(diet._id, event) } className={ ['far fa-trash-alt', CS.BorderedIcon, CS.RedIcon].join(' ') } />
+                    </div>
                 )
             }) }
         </div>
@@ -44,7 +72,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getDietList: () => dispatch(getDietList())
+        getDietList: () => dispatch(getDietList()),
+        removeDiet: (dietId) => dispatch(removeDiet(dietId))
     }
 };
 

@@ -1,13 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
-import { Switch, Route, Link, useHistory } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Switch, Route, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import DashboardPage from '../dashboard/dashboard-page';
+import DiaryPage from '../diary/diary-page';
 import MenuPage from '../menu/menu-page';
 import DietsPage from '../diets/diets-page';
 import DietEditPage from '../diet-edit/diet-edit-page';
 
 import './main-page.less';
+
+const isDietPage = (match, location) => {
+    return location.pathname.match(/^\/diet/);
+};
 
 const mainPage = () => {
     return (
@@ -16,15 +20,21 @@ const mainPage = () => {
                 <div className="header-content">
                     <div className="logo">Dietly</div>
                     <ul>
-                        <li><Link to="/">Dashboard</Link></li>
-                        <li><Link to="/diets">Dietas</Link></li>
-                        <li><Link to="/menu">Cardápio</Link></li>
+                        <li>
+                            <NavLink to="/" activeClassName="active" exact>Diário</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/diets" activeClassName="active" isActive={ isDietPage }>Dietas</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/menu" activeClassName="active">Cardápio</NavLink>
+                        </li>
                     </ul>
                 </div>
             </header>
             <main>
                 <Switch>
-                    <Route path="/" component={ DashboardPage } exact />
+                    <Route path="/" component={ DiaryPage } exact />
                     <Route path="/diets" component={ DietsPage } />
                     <Route path="/diet/:dietId" component={ DietEditPage } />
                     <Route path="/menu" component={ MenuPage } />
