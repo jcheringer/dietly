@@ -3,10 +3,16 @@ import { connect } from 'react-redux';
 
 import Style from './profile-image.less';
 
-const profileImage = ({ user }) => {
+const profileImage = (props) => {
+    const user = props.user;
+
+    const profileClickHandler = () => {
+        props.onClick && props.onClick();
+    };
+
     return (
         <div className={ Style.ProfileImage }>
-            <div className={ Style.Container }>
+            <div className={ Style.Container } onClick={ profileClickHandler }>
                 { user && user.image ?
                     <img src={ user.image } />
                     :

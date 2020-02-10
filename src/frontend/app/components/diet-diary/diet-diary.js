@@ -66,9 +66,9 @@ export default function () {
     return (
         <div className={ Style.DietDiary }>
             <div className={ Style.DiaryTitle }>
-                <button onClick={ () => changeCurrentDate(-1) }>Prev</button>
+                <button onClick={ () => changeCurrentDate(-1) }>&lt; &lt;</button>
                 <h3>{ currentDate.format('dddd, DD [de] MMMM') }</h3>
-                <button onClick={ () => changeCurrentDate(1) }>Next</button>
+                <button onClick={ () => changeCurrentDate(1) }>&gt; &gt;</button>
             </div>
             { noDiet && (
                 <div className={ [CS.Box, CS.Pad02, CS.TexCenter].join(' ') }>

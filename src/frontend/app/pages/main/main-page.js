@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect } from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import { Switch, Route, NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getUser } from '../../store/actions/users-action';
+import withConfirmation from '../../hocs/with-confirmation';
 import Auth from '../../service/auth-service';
 
 import DiaryPage from '../diary/diary-page';
@@ -20,6 +21,19 @@ const isDietPage = (match, location) => {
 };
 
 const mainPage = (props) => {
+    const history = useHistory();
+
+    const logoutHandler = () => {
+        props.showConfirmation({
+            body: 'Tem certeza que deseja sair?',
+            confirmClickHandler: (setVisible) => {
+                Auth.removeToken();
+                history.push('/login');
+                setVisible(false)
+            }
+        });
+    };
+
     useEffect(() => {
         const userData = Auth.getUserData();
         props.getUser(userData.id);
@@ -40,7 +54,7 @@ const mainPage = (props) => {
                         <li>
                             <NavLink to="/menu" activeClassName="active">Cardápio</NavLink>
                         </li>
-                        <li className={ CS.Ml02 }><ProfileImage /></li>
+                        <li className={ CS.Ml02 }><ProfileImage onClick={ logoutHandler } /></li>
                     </ul>
                 </div>
             </header>
@@ -64,4 +78,4 @@ const mapDispatchToProps = (dispatch) => ({
     getUser: (userId) => dispatch(getUser(userId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(mainPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withConfirmation(mainPage));

@@ -55,7 +55,7 @@ const userService = {
 
         if (!user) {
             user = await userService.insert({ email, name, image: picture, googleLogin: true }); //FIXME: Save property google login
-        } else if (picture && !user.image) {
+        } else if (picture && (!user.image || user.image !== picture)) {
             user.image = picture;
             await userService.update(user._id, user);
         }
