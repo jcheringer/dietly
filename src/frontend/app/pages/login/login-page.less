@@ -1,0 +1,69 @@
+@import (reference) '../../../style/variables';
+
+.LoginPage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(255, 203, 109);
+    background: linear-gradient(180deg, rgba(255, 203, 109, 1) 0%, rgba(247, 173, 40, 1) 60%, rgba(152, 106, 24, 1) 100%);
+
+    h1 {
+        color: @secondary-color;
+        font-size: 4rem;
+        margin: 50px auto 0;
+    }
+
+    .Container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+
+        .Content {
+            width: 80%;
+            margin: auto;
+            background-color: fade(white, 50%);
+            padding: 20px;
+            border-radius: 5px;
+            transform: translateY(-20%);
+
+            input {
+                margin-right: 0;
+            }
+
+            .LabeledDiv {
+                display: flex;
+                margin: 20px 0;
+
+                hr {
+                    flex-grow: 1;
+                    border: none;
+                    border-bottom: 1px solid @secondary-color;
+                }
+
+                span {
+                    margin: 0 10px;
+                }
+            }
+
+            .GoogleButton {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .Icon {
+                    position: absolute;
+                    left: 10px;
+                    width: 20px;
+                    height: 20px;
+                    content: '';
+                    background: url("/images/google-icon.png") no-repeat;
+                    background-size: contain;
+                }
+            }
+        }
+    }
+}
