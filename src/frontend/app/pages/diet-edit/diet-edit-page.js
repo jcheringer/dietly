@@ -3,12 +3,13 @@ import { useParams, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { getDiet, getDietList } from '../../store/actions/diets-action';
 import http from '../../service/http-service';
+import { getDiet, getDietList } from '../../store/actions/diets-action';
 import Meal from '../../components/meal/meal';
 import MealEditor from '../../components/meal-editor/meal-editor';
-import ConfirmationModal from '../../components/modal/confirmation-modal';
 import DietScheduler from '../../components/diet-scheduler/diet-scheduler';
+
+import withConfirmation from '../../hocs/with-confirmation';
 
 import CS from '../../../style/common.less'
 
@@ -20,9 +21,6 @@ const dietEditPage = (props) => {
     const dietId = params.dietId;
     const [diet, setDiet] = useState({ name: '', meals: [] });
     const [isInserting, setInserting] = useState(false);
-
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [confirmClickHandler, setConfirmClickHandler] = useState(null);
 
     const dietNameChangeHandler = (event) => {
         const newDiet = { ...diet };
@@ -45,23 +43,18 @@ const dietEditPage = (props) => {
     };
 
     const mealRemoveClickHandler = (meal) => {
-        setConfirmClickHandler(() => {
-            return () => {
+        props.showConfirmation({
+            body: 'Tem certeza que deseja excluir a refeição?',
+            confirmClickHandler: (setVisible) => {
                 const newDiet = _.cloneDeep(diet);
                 const idx = newDiet.meals.findIndex(m => m._id === meal._id);
 
                 newDiet.meals.splice(idx, 1);
                 setDiet(newDiet);
                 saveDietClickHandler(newDiet);
-                setShowConfirmation(false);
+                setVisible(false);
             }
         });
-
-        setShowConfirmation(true);
-    };
-
-    const cancelConfirmClickHandler = () => {
-        setShowConfirmation(false);
     };
 
     useEffect(() => {
@@ -78,11 +71,6 @@ const dietEditPage = (props) => {
 
     return (
         <div className={ CS.CommonPage }>
-            { showConfirmation && (
-                <ConfirmationModal
-                    confirmClickHandler={ confirmClickHandler }
-                    cancelClickHandler={ cancelConfirmClickHandler } />
-            ) }
             { diet && (!diet._id || diet._id === dietId) && (
                 <div>
                     <div className={ [CS.DFlex, CS.AiCenter].join(' ') }>
@@ -131,4 +119,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(dietEditPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withConfirmation(dietEditPage));

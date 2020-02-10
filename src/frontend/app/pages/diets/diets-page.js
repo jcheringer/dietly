@@ -4,15 +4,13 @@ import { useHistory } from 'react-router-dom';
 
 import { getDietList, removeDiet } from '../../store/actions/diets-action';
 
+import withConfirmation from '../../hocs/with-confirmation';
+
 import CS from '../../../style/common.less'
-import ConfirmationModal from '../../components/modal/confirmation-modal';
 
 const dietsPage = (props) => {
     const history = useHistory();
     const [dietList, setDietList] = useState([]);
-
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [confirmClickHandler, setConfirmClickHandler] = useState(null);
 
     const moveToDiet = (dietId) => {
         history.push(`/diet/${ dietId }`);
@@ -21,14 +19,13 @@ const dietsPage = (props) => {
     const dietRemoveHandler = (dietId, event) => {
         event.stopPropagation();
 
-        setConfirmClickHandler(() => {
-            return () => {
+        props.showConfirmation({
+            body: 'Tem certeza que deseja excluir a dieta?',
+            confirmClickHandler: (setVisible) => {
                 props.removeDiet(dietId);
-                setShowConfirmation(false);
+                setVisible(false)
             }
         });
-
-        setShowConfirmation(true);
     };
 
     useEffect(() => {
@@ -43,12 +40,6 @@ const dietsPage = (props) => {
 
     return (
         <div className={ CS.CommonPage }>
-            { showConfirmation && (
-                <ConfirmationModal
-                    confirmClickHandler={ confirmClickHandler }
-                    cancelClickHandler={ () => setShowConfirmation(false) } />
-            ) }
-
             <button onClick={ () => moveToDiet(0) } className={ newDietButtonClasses }>Criar Nova Dieta</button>
             { dietList.map(diet => {
                 const cssClasses = [CS.Box, CS.Pad02, CS.DFlex, CS.AiCenter];
@@ -77,4 +68,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(dietsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withConfirmation(dietsPage));
