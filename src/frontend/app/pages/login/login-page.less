@@ -6,13 +6,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgb(255, 203, 109);
-    background: linear-gradient(180deg, rgba(255, 203, 109, 1) 0%, rgba(247, 173, 40, 1) 60%, rgba(152, 106, 24, 1) 100%);
+    background: linear-gradient(180deg, lighten(@primary-color, 15%) 0%, @primary-color 60%, darken(@primary-color, 15%) 100%);
+    overflow: auto;
 
     h1 {
+        height: 50px;
         color: @secondary-color;
         font-size: 4rem;
-        margin: 50px auto 0;
+        margin-bottom: 10px;
+        margin-top: 25px;
     }
 
     .Container {
@@ -20,22 +22,35 @@
         display: flex;
         align-items: center;
         flex-grow: 1;
+        margin-bottom: 85px;
 
         .Content {
             width: 80%;
-            margin: auto;
-            background-color: fade(white, 50%);
+            background-color: fade(white, 60%);
             padding: 20px;
             border-radius: 5px;
-            transform: translateY(-20%);
+            margin: auto;
 
             input {
                 margin-right: 0;
             }
 
+            .ChangeFormTip {
+                text-align: right;
+                margin-top: 10px;
+                font-size: 1.2rem;
+
+                a {
+                    color: @secondary-color;
+                    font-weight: bold;
+                    margin-left: 5px;
+                    margin-right: 5px;
+                }
+            }
+
             .LabeledDiv {
                 display: flex;
-                margin: 20px 0;
+                margin: 20px 0 30px;
 
                 hr {
                     flex-grow: 1;

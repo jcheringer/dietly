@@ -11,6 +11,8 @@ const scheduleRoutes = require('./routes/schedule-router');
 const diaryRoutes = require('./routes/diary-routes');
 const userRoutes = require('./routes/user-routes');
 
+const Constants = require('../constants');
+
 dotenv.config({ path: path.join(__dirname, '../config/config.env') });
 
 const app = express();
@@ -36,10 +38,10 @@ app.use('/*', (req, res) => {
 });
 
 //Default error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     const status = err.status || 500;
     const msg = err.message || 'Failed to handle request';
-    const code = err.code; //|| Constants.ERROR_CODES.GENERAL_ERROR;
+    const code = err.code || Constants.ERROR_CODES.GENERAL_ERROR;
     res.status(status).json({ msg, code });
 });
 

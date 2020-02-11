@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require('google-auth-library');
 
 const Exception = require('../util/exception');
 
 const User = require('../model/user');
+
+const TOKEN_EXPIRE_TIME = '72h';
 
 const userService = {
     async list() {
@@ -22,6 +25,10 @@ const userService = {
             image: data.image
         };
 
+        if (data.password) {
+            user.password = bcrypt.hashSync(data.password, 8);
+        }
+
         return new User(user).save();
     },
     async update(id, data) {
@@ -35,6 +42,68 @@ const userService = {
     },
     async delete(id) {
         return User.findByIdAndDelete(id).exec();
+    },
+    async register(data) {
+        const userData = {
+            name: data.name,
+            email: data.email,
+            password: data.password
+        };
+
+        const user = await userService.getByEmail(userData.email);
+
+        if (user) {
+            throw new Exception('Falha ao realizar cadastro. E-mail em uso', 400);
+        }
+
+        const newUser = await userService.insert(userData);
+
+        //TODO: Improve this
+        const newPlayerData = {
+            id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+        };
+
+        const token = jwt.sign({
+            id: newUser._id,
+            accessLevel: newUser.accessLevel
+        }, process.env.JWT_SECRET, { expiresIn: TOKEN_EXPIRE_TIME });
+
+        return { token: token, user: newPlayerData };
+    },
+    async commonLogin({ email, password }) {
+        const invalidLoginException = new Exception('Falha ao realizar login. Usuário ou senha inválidos', 401);
+
+        if (!email || !password) {
+            throw invalidLoginException;
+        }
+
+        const user = await userService.getByEmail(email);
+
+        if (!user) {
+            throw invalidLoginException;
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+            throw invalidLoginException;
+        }
+
+        //TODO: Improve this
+        const userData = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            image: user.image
+        };
+
+        const token = jwt.sign({
+            id: user._id,
+        }, process.env.JWT_SECRET, { expiresIn: TOKEN_EXPIRE_TIME });
+
+        return { token: token, user: userData };
     },
     async googleLogin(data) {
         const idToken = data.idToken;
@@ -60,11 +129,19 @@ const userService = {
             await userService.update(user._id, user);
         }
 
+        //TODO: Improve this
+        const userData = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            image: user.image
+        };
+
         const token = jwt.sign({
             id: user._id
-        }, process.env.JWT_SECRET, { expiresIn: '72h' });
+        }, process.env.JWT_SECRET, { expiresIn: TOKEN_EXPIRE_TIME });
 
-        return { token: token, user: user };
+        return { token: token, user: userData };
     }
 };
 

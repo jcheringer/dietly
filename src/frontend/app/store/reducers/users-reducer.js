@@ -1,4 +1,4 @@
-import { GET_USER_SUCCESS, USER_LOGIN_SUCCESS } from '../actions/action-types'
+import { GET_USER_SUCCESS, USER_LOGIN_SUCCESS, USER_REGISTER_SUCCESS } from '../actions/action-types'
 
 const initalState = {
     user: null
@@ -6,7 +6,8 @@ const initalState = {
 
 export default (state = initalState, action) => {
     switch (action.type) {
-        case USER_LOGIN_SUCCESS: {
+        case USER_LOGIN_SUCCESS:
+        case USER_REGISTER_SUCCESS: {
             return {
                 ...state,
                 user: action.data.user
