@@ -33,6 +33,5 @@ module.exports = {
     },
     async delete(recipeId, userId) {
         return Recipe.findOneAndDelete({ _id: recipeId, user: userId }).exec();
-
     }
 };

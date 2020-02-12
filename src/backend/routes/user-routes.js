@@ -4,8 +4,7 @@ const userService = require('../services/user-service');
 
 router.post('/register', async (req, res, next) => {
     try {
-        const user = await userService.register(req.body);
-        res.json(user);
+        res.json(await userService.register(req.body));
     } catch (e) {
         next(e);
     }
@@ -13,8 +12,7 @@ router.post('/register', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
     try {
-        const user = await userService.commonLogin(req.body);
-        res.json(user);
+        res.json(await userService.commonLogin(req.body));
     } catch (e) {
         next(e);
     }
@@ -22,8 +20,7 @@ router.post('/login', async (req, res, next) => {
 
 router.post('/login/google', async (req, res, next) => {
     try {
-        const user = await userService.googleLogin(req.body);
-        res.json(user);
+        res.json(await userService.googleLogin(req.body));
     } catch (e) {
         next(e);
     }

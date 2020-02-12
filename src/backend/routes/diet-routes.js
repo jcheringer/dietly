@@ -39,6 +39,7 @@ router.delete('/:id', middleware.validateUser, async (req, res, next) => {
         const userId = res.locals.userData.id;
         await dietService.delete(req.params.id, userId);
 
+        //TODO: Return success message and adjust front
         res.json(await dietService.list(userId));
     } catch (e) {
         next(e);

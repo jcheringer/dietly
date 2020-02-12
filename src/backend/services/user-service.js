@@ -38,6 +38,10 @@ const userService = {
             image: data.image
         };
 
+        if (data.password) {
+            user.password = bcrypt.hashSync(data.password, 8);
+        }
+
         return User.findByIdAndUpdate(id, user, { new: true }).exec();
     },
     async delete(id) {

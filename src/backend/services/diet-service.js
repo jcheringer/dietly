@@ -20,10 +20,10 @@ const dietService = {
             .lean()
             .exec();
 
-        const foods = await foodService.list(userId);
-        const recipes = await recipeService.list(userId);
-
         if (diet && diet.meals) {
+            const foods = await foodService.list(userId);
+            const recipes = await recipeService.list(userId);
+
             diet.meals.forEach(meal => normalizer.mealOutputNormalize(meal, null, foods, recipes));
         }
 
@@ -70,8 +70,9 @@ const dietService = {
         };
 
         if (mealId) {
-            meal._id = mealId;
             const idx = diet.meals.findIndex(m => m._id.toString() === mealId);
+
+            meal._id = mealId;
             diet.meals[idx] = meal;
         } else {
             diet.meals.push(meal);
