@@ -1,11 +1,12 @@
 const moment = require('moment');
 
-const util = require('../util/util');
-const Diary = require('../model/diary');
+const Diary = require('../models/diary');
 const dietScheduleService = require('./diet-schedule-service');
 const dietService = require('./diet-service');
 const foodService = require('./food-service');
 const recipeService = require('./recipe-service');
+
+const normalizer = require('../utils/normalizer');
 
 const diaryService = {
     async get(date, userId) {
@@ -35,7 +36,7 @@ const diaryService = {
                 const foods = await foodService.list(userId);
                 const recipes = await recipeService.list(userId);
 
-                diet.meals.forEach(meal => util.mealOutputNormalize(meal, dietOfDay, foods, recipes, true));
+                diet.meals.forEach(meal => normalizer.mealOutputNormalize(meal, dietOfDay, foods, recipes, true));
             }
 
             diary.diet = {
@@ -58,7 +59,7 @@ const diaryService = {
             }
         };
 
-        diary.diet.meals = diary.diet.meals.map(meal => util.mealInputNormalize(meal, false, true));
+        diary.diet.meals = diary.diet.meals.map(meal => normalizer.mealInputNormalize(meal, false, true));
 
         if (currentDiary) {
             await Diary.findOneAndUpdate({ _id: currentDiary._id, user: userId }, diary);

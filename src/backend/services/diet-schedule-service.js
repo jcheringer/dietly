@@ -1,4 +1,4 @@
-const DietSchedule = require('../model/diet-schedule');
+const DietSchedule = require('../models/diet-schedule');
 
 const blankSchedule = {
     1: null,

@@ -1,4 +1,4 @@
-const Food = require('../model/food');
+const Food = require('../models/food');
 
 module.exports = {
     async list(userId) {

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const middleware = require('./middlewares');
-const diaryService = require('../service/diary-service');
+const diaryService = require('../services/diary-service');
 
 router.get('/:date', middleware.validateUser, async (req, res, next) => {
     try {

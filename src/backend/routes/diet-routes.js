@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const middleware = require('./middlewares');
-const dietService = require('../service/diet-service');
+const dietService = require('../services/diet-service');
 
 router.post('/meal', middleware.validateUser, async (req, res, next) => {
     try {

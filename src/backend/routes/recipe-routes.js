@@ -1,8 +1,7 @@
 const router = require('express').Router();
 
-const util = require('../util/util');
 const middleware = require('./middlewares');
-const recipeService = require('../service/recipe-service');
+const recipeService = require('../services/recipe-service');
 
 router.get('/', middleware.validateUser, async (req, res, next) => {
     try {

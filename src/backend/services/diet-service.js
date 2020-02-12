@@ -1,7 +1,8 @@
-const Diet = require('../model/diet');
-const util = require('../util/util');
-const foodService = require('../service/food-service');
-const recipeService = require('../service/recipe-service');
+const Diet = require('../models/diet');
+const foodService = require('.//food-service');
+const recipeService = require('.//recipe-service');
+
+const normalizer = require('../utils/normalizer');
 
 const blankDiet = { name: '', meals: [] };
 
@@ -23,7 +24,7 @@ const dietService = {
         const recipes = await recipeService.list(userId);
 
         if (diet && diet.meals) {
-            diet.meals.forEach(meal => util.mealOutputNormalize(meal, null, foods, recipes));
+            diet.meals.forEach(meal => normalizer.mealOutputNormalize(meal, null, foods, recipes));
         }
 
         return diet;
@@ -37,7 +38,7 @@ const dietService = {
             meals: data.meals
         };
 
-        diet.meals = diet.meals.map(util.mealInputNormalize);
+        diet.meals = diet.meals.map(normalizer.mealInputNormalize);
 
         const newDiet = await new Diet(diet).save();
 
@@ -49,7 +50,7 @@ const dietService = {
             meals: data.meals
         };
 
-        diet.meals = diet.meals.map((meal) => util.mealInputNormalize(meal, true));
+        diet.meals = diet.meals.map((meal) => normalizer.mealInputNormalize(meal, true));
 
         await Diet.findOneAndUpdate({ _id: dietId, user: userId }, diet).exec();
 
@@ -64,8 +65,8 @@ const dietService = {
         const meal = {
             name: data.meal.name,
             time: data.meal.time,
-            recipes: data.meal.recipes.map(util.mealItemInputNormalize),
-            foods: data.meal.foods.map(util.mealItemInputNormalize)
+            recipes: data.meal.recipes.map(normalizer.mealItemInputNormalize),
+            foods: data.meal.foods.map(normalizer.mealItemInputNormalize)
         };
 
         if (mealId) {

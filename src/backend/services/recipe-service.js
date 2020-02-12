@@ -1,7 +1,7 @@
-const Recipe = require('../model/recipe');
+const Recipe = require('../models/recipe');
 const foodService = require('./food-service');
 
-const util = require('../util/util');
+const normalizer = require('../utils/normalizer');
 
 module.exports = {
     async list(userId) {
@@ -9,7 +9,7 @@ module.exports = {
         const foods = await foodService.list(userId);
 
         recipes.forEach(recipe => {
-            recipe.ingredients = recipe.ingredients.map(ing => util.mealItemOutputNormalize(ing, foods));
+            recipe.ingredients = recipe.ingredients.map(ing => normalizer.mealItemOutputNormalize(ing, foods));
         });
 
         return recipes;
@@ -18,7 +18,7 @@ module.exports = {
         const recipe = {
             user: userId,
             name: data.name,
-            ingredients: data.ingredients.map(util.mealItemInputNormalize)
+            ingredients: data.ingredients.map(normalizer.mealItemInputNormalize)
         };
 
         return new Recipe(recipe).save();
@@ -26,7 +26,7 @@ module.exports = {
     async update(recipeId, data, userId) {
         const recipe = {
             name: data.name,
-            ingredients: data.ingredients.map(util.mealItemInputNormalize)
+            ingredients: data.ingredients.map(normalizer.mealItemInputNormalize)
         };
 
         return Recipe.findOneAndUpdate({ _id: recipeId, user: userId }, recipe, { new: true }).exec();

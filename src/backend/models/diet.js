@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Food = require('../model/food');
-const Recipe = require('../model/recipe');
+const Food = require('.//food');
+const Recipe = require('.//recipe');
 const User = require('./user');
 
 const dietSchema = new mongoose.Schema({

@@ -2,9 +2,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { OAuth2Client } = require('google-auth-library');
 
-const Exception = require('../util/exception');
+const Exception = require('../utils/exception');
 
-const User = require('../model/user');
+const User = require('../models/user');
 
 const TOKEN_EXPIRE_TIME = '72h';
 

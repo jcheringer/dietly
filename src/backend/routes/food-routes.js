@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const middleware = require('./middlewares');
-const foodService = require('../service/food-service');
+const foodService = require('../services/food-service');
 
 router.get('/', middleware.validateUser, async (req, res, next) => {
     try {
